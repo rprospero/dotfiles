@@ -11,7 +11,9 @@ ${execi 600 bash ~/.xmonad/weather.sh}
 ^i(/home/me1alw/.xmonad/cpu.xbm) $cpu ${top name 1} \
 ^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ^i(/home/me1alw/.xmonad/diskette.xbm) ${fs_free}  \
-^i(/home/me1alw/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
+${if_match ${time %H} > 16} ^fg(red) ${endif}\
+^i(/home/me1alw/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} \
+${if_match ${time %H} > 16} ^fg() Click ${endif}|\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
 ${execi 60  sed -n '3p' ~/.xmonad/curr_cond} 
