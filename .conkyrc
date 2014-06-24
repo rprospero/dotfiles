@@ -19,11 +19,6 @@ ${if_match $memperc > 70} ^fg(red) ${endif}\
 ^i(/home/adam/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
-${if_up wlan0} \
-^ca(1,opera)${wireless_essid wlan0} ${wireless_link_qual_perc wlan0} ${downspeedf wlan0} ${upspeedf wlan0} ^ca()  \
-$else \
-^fg(red) Net Down ^fg()\
-$endif | \
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
