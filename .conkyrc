@@ -8,6 +8,10 @@ temperature_unit celsius
 TEXT
 ${execi 600 bash ~/.xmonad/weather.sh}
 ^tw() \
+${if_match "${acpiacadapter}" == "on-line"} ^i(/home/adam/.xmonad/play.xbm) $battery_time $endif \
+${if_match "${acpiacadapter}" != "on-line"} ^i(/home/adam/.xmonad/bat_low_01.xbm) $battery_time $endif\
+$battery_short \
+|\
 ${if_match $cpu > 70} ^fg(red) ${endif}\
 ^i(/home/adam/.xmonad/cpu.xbm) $cpu ${top name 1} \
 ${if_match $cpu > 70} ^fg() ${endif}\
@@ -15,6 +19,11 @@ ${if_match $memperc > 70} ^fg(red) ${endif}\
 ^i(/home/adam/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
+${if_up wlan0} \
+^ca(1,opera)${wireless_essid wlan0} ${wireless_link_qual_perc wlan0} ${downspeedf wlan0} ${upspeedf wlan0} ^ca()  \
+$else \
+^fg(red) Net Down ^fg()\
+$endif | \
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
