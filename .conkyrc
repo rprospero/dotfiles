@@ -1,0 +1,28 @@
+out_to_console yes
+out_to_x no
+update_interval 1
+temperature_unit celsius
+
+
+
+TEXT
+${execi 600 bash ~/.xmonad/weather.sh}
+^tw() \
+^i(/home/me1alw/.xmonad/cpu.xbm) $cpu ${top name 1} \
+^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
+^i(/home/me1alw/.xmonad/diskette.xbm) ${fs_free}  \
+^i(/home/me1alw/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
+ Current: \
+${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
+${execi 60  sed -n '3p' ~/.xmonad/curr_cond} 
+${diskio sda}
+${execi 60  sed -n '1p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '3p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '6p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '8p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '11p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '13p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '16p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '18p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '21p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '23p' ~/.xmonad/tod_ton}
