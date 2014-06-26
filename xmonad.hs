@@ -11,9 +11,9 @@ myWorkspaces = ["main","web","emacs","media","chat"]
 
 myManageHook = composeAll . concat $
   [
-    [ className =? b --> viewShift "web" | b <- myClassWebShifts],
-    [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts],
-    [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
+      [ className =? b --> viewShift "web" | b <- myClassWebShifts]
+    , [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts]
+    , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
