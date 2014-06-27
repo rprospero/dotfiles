@@ -25,7 +25,7 @@
 
 (defun adam-org-sunset () 
   (concat
-   (nth 6 (split-string (diary-sunrise-sunset)))
+   (nth 4 (split-string (diary-sunrise-sunset)))
    " Sunset"))
 
 (customize-set-variable 'tab-always-indent 'complete)
