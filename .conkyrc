@@ -20,6 +20,7 @@ ${if_match $memperc > 70} ^fg(red) ${endif}\
 ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
+${execi 60 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
 ${execi 60  sed -n '3p' ~/.xmonad/curr_cond} 
