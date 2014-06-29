@@ -15,7 +15,7 @@ ${if_match $memperc > 70} ^fg(red) ${endif}\
 ^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/me1alw/.xmonad/diskette.xbm) ${fs_free}  \
-^i(/home/me1alw/.xmonad/calendar.xbm) ${time %d/%m/%y %H:%M:%S} |\
+^i(/home/me1alw/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
 ^i(/home/me1alw/.xmonad/spkr_01.xbm)\
 ${execi 60 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
  Current: \
