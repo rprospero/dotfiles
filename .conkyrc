@@ -8,7 +8,7 @@ temperature_unit celsius
 TEXT
 ${execi 600 bash ~/.xmonad/weather.sh}
 ^tw() \
-${if_match "${acpiacadapter}" == "on-line"} ^i(/home/adam/.xmonad/play.xbm) $battery_time $endif \
+${if_match "${acpiacadapter}" == "on-line"} ^i(/home/adam/.xmonad/ac_01.xbm) $battery_time $endif \
 ${if_match "${acpiacadapter}" != "on-line"} ^i(/home/adam/.xmonad/bat_low_01.xbm) $battery_time $endif\
 $battery_short \
 |\
