@@ -8,19 +8,21 @@ import System.IO
 import Control.Monad (liftM2)
 import Graphics.X11.ExtraTypes.XF86
 
-myWorkspaces = ["main","web","emacs","media","chat"]
+myWorkspaces = ["main","web","emacs","documents","chat","media"]
 
 myManageHook = composeAll . concat $
   [
-    [ className =? b --> viewShift "web" | b <- myClassWebShifts],
-    [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts],
-    [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
+      [ className =? b --> viewShift "web" | b <- myClassWebShifts]
+    , [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts]
+    , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
+    , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
     myClassWebShifts = ["Firefox","Opera"]
     myClassEmacsShifts = ["Emacs"]
     myClassChatShifts = ["Pidgin","Thunderbird","Geary"]
+    myClassDocumentsShifts = ["Evince"]
 
 main = do
   xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 832 -l 2 -y -1 -bg black"

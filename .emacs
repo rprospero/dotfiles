@@ -25,7 +25,7 @@
 
 (defun adam-org-sunset () 
   (concat
-   (nth 6 (split-string (diary-sunrise-sunset)))
+   (nth 4 (split-string (diary-sunrise-sunset)))
    " Sunset"))
 
 (customize-set-variable 'tab-always-indent 'complete)
@@ -79,3 +79,12 @@
 
 (setq calendar-latitude 53.3836)
 (setq calendar-longitude 1.4669)
+
+
+(customize-set-variable
+ 'gnus-select-method
+ (quote
+  (nnimap "personal"
+	  (nnimap-address "imap.gmail.com")
+	  (nnimap-server-port 993)
+	  (nnimap-stream ssl))))
