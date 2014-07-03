@@ -72,7 +72,11 @@
 (customize-set-variable 'ispell-dictionary nil)
 (customize-set-variable 'org-agenda-include-diary nil)
 
-(customize-set-variable 'package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
+(customize-set-variable
+ 'package-archives
+ (quote
+  (("gnu" . "http://elpa.gnu.org/packages/")
+   ("melpa" . "http://melpa.milkbox.net/packages/"))))
 
 
 (setq calendar-latitude 53.3836)
