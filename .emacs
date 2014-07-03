@@ -83,6 +83,8 @@
 (setq calendar-latitude 53.3836)
 (setq calendar-longitude 1.4669)
 
+(ido-mode)
+
 
 (customize-set-variable
  'gnus-select-method
