@@ -72,13 +72,20 @@
 (customize-set-variable 'ispell-dictionary nil)
 (customize-set-variable 'org-agenda-include-diary nil)
 
-(customize-set-variable 'package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
+(customize-set-variable
+ 'package-archives
+ (quote
+  (("gnu" . "http://elpa.gnu.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")
+   ("melpa" . "http://melpa.milkbox.net/packages/"))))
 (customize-set-variable 'TeX-PDF-mode t)
 (customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 
 
 (setq calendar-latitude 53.3836)
 (setq calendar-longitude 1.4669)
+
+(ido-mode)
 
 
 (customize-set-variable
@@ -88,3 +95,6 @@
 	  (nnimap-address "imap.gmail.com")
 	  (nnimap-server-port 993)
 	  (nnimap-stream ssl))))
+
+
+(server-start)

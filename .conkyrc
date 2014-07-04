@@ -21,6 +21,7 @@ ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
 ^i(/home/adam/.xmonad/spkr_01.xbm)\
 ${execi 60 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
+${if_match ${time %H} > 16} ^fg() ${endif}|\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
 ${execi 60  sed -n '3p' ~/.xmonad/curr_cond} 

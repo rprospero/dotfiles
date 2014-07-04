@@ -1,5 +1,6 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.EZConfig (additionalKeys)
@@ -39,6 +40,7 @@ myConfig = defaultConfig {
                layoutHook = avoidStruts $ layoutHook defaultConfig,
                modMask = mod4Mask,
                workspaces = myWorkspaces,
+               startupHook = setWMName "LG3D",
                logHook = dynamicLogWithPP $ myPP
              }
              `additionalKeys`
