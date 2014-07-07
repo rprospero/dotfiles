@@ -1,4 +1,4 @@
-set editor=emacsclient
+set editor="emacsclient -nw"
 
 #-----------#
 # Passwords #
