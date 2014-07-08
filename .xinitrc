@@ -2,6 +2,8 @@
 
 export PATH=$PATH:~/.gem/ruby/2.1.0/bin/:~/maple17/bin
 
+emacs --daemon
+
 numlockx &
 
 dropboxd &
