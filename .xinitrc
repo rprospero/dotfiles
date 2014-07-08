@@ -1,5 +1,7 @@
 #!/bin/bash
 
+emacs --daemon
+
 numlockx &
 
 dropboxd &
