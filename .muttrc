@@ -72,8 +72,9 @@ folder-hook         imaps://a.washington@sheffield.ac.uk@imap.gmail.com/ "\
 #--------#
 # Macros #
 #--------#
-macro index <F1> "y12<return><return>" # jump to mailbox number 12 (user1 inbox)
-macro index <F2> "y6<return><return>"  # jump to mailbox number 6 (user2 inbox)
+macro index <F1> "y18<return><return>" # jump to mailbox number 12 (user1 inbox)
+macro index <F2> "y12<return><return>"  # jump to mailbox number 6 (user2 inbox)
+macro index <F3> "y6<return><return>"  # jump to mailbox number 6 (user2 inbox)
 #-----------------------#
 # Gmail-specific macros #
 #-----------------------#
