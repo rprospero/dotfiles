@@ -86,11 +86,6 @@
 (ido-mode)
 
 
-(customize-set-variable
- 'gnus-select-method
- (quote
-  (nnimap "personal"
-	  (nnimap-address "imap.gmail.com")
-	  (nnimap-server-port 993)
-	  (nnimap-stream ssl))))
 
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+(add-hook 'mail-mode-hook 'flyspell-mode)
