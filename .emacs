@@ -86,11 +86,4 @@
 (ido-mode)
 
 
-(customize-set-variable
- 'gnus-select-method
- (quote
-  (nnimap "personal"
-	  (nnimap-address "imap.gmail.com")
-	  (nnimap-server-port 993)
-	  (nnimap-stream ssl))))
 
