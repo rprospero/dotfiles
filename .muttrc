@@ -105,3 +105,5 @@ set header_cache    = ~/.mutt/hcache
 set sort            = threads
 # and sort threads by date
 set sort_aux        = last-date-received
+
+auto_view text/html
