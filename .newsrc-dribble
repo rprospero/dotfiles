@@ -1,0 +1,6 @@
+(gnus-group-change-level "gwene.com.blogspot.bestlatin" 3 8 nil nil)
+(gnus-group-set-info '("gwene.com.blogspot.bestlatin" 3 ((1 . 25)) ((seen (1 . 25)))))
+(gnus-group-change-level "gwene.org.archlinux.news" 3 9 nil nil)
+(gnus-group-change-level "gwene.com.ycombinator.news.20points" 3 9 nil nil)
+(gnus-group-set-info '("gwene.com.ycombinator.news.20points" 3 ((1 . 48916))))
+(gnus-group-set-info '("gwene.org.archlinux.news" 3 ((1 . 24))))
