@@ -102,3 +102,11 @@
 ;;Usenet stuff
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
 (customize-set-variable 'gnus-secondary-select-method '())
+
+(customize-set-variable
+ 'jabber-account-list
+ '(("rprospero@gmail.com" 
+    (:network-server . "talk.google.com")
+    (:connection-type . ssl))))
+
+
