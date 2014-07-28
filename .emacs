@@ -103,6 +103,9 @@
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
 (customize-set-variable 'gnus-secondary-select-method '())
 
+;;Browser stuff
+(customize-set-variable 'browse-url-browser-function 'eww-browse-url)
+
 (customize-set-variable
  'jabber-account-list
  '(("rprospero@gmail.com" 
