@@ -78,6 +78,8 @@
   (("gnu" . "http://elpa.gnu.org/packages/")
    ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
+(customize-set-variable 'TeX-PDF-mode t)
+(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 
 
 (setq calendar-latitude 53.3836)
