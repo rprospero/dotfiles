@@ -136,6 +136,9 @@
  t)
 
 
+;;Browser stuff
+(customize-set-variable 'browse-url-browser-function 'eww-browse-url)
+
 (customize-set-variable
  'jabber-account-list
  '(("rprospero@gmail.com" 
