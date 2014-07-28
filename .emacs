@@ -100,5 +100,5 @@
 (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 
 ;;Usenet stuff
-(customize-set-variable 'gnus-select-method '(nntp "news.gmane.org"))
+(customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
 (customize-set-variable 'gnus-secondary-select-method '())
