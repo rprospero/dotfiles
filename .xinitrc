@@ -4,7 +4,7 @@ emacs --daemon
 
 numlockx &
 
-dropboxd &
+devmon &
 
 xset -b
 
