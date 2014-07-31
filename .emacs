@@ -78,6 +78,8 @@
   (("gnu" . "http://elpa.gnu.org/packages/")
    ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
+(customize-set-variable 'TeX-PDF-mode t)
+(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 
 
 (setq calendar-latitude 53.3836)
@@ -96,9 +98,6 @@
 (add-hook 'python-mode-hook 'pylint-add-menu-items)
 (add-hook 'python-mode-hook 'pylint-add-key-bindings)
 
-(require 'flymake-python-pyflakes)
-(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
-
 ;;Usenet stuff
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
 (customize-set-variable 'gnus-secondary-select-method '())
@@ -113,3 +112,5 @@
     (:connection-type . ssl))))
 
 
+(require 'flymake-haskell-multi)
+(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)

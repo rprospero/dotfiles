@@ -8,16 +8,18 @@ temperature_unit celsius
 TEXT
 ${execi 600 bash ~/.xmonad/weather.sh}
 ^tw() \
+${if_match "${acpiacadapter}" == "on-line"} ^i(/home/adam/.xmonad/ac_01.xbm) $battery_time $endif \
+${if_match "${acpiacadapter}" != "on-line"} ^i(/home/adam/.xmonad/bat_low_01.xbm) $battery_time $endif\
+|\
 ${if_match $cpu > 70} ^fg(red) ${endif}\
-^i(/home/me1alw/.xmonad/cpu.xbm) $cpu ${top name 1} \
+^i(/home/adam/.xmonad/cpu.xbm) $cpu ${top name 1} \
 ${if_match $cpu > 70} ^fg() ${endif}\
 ${if_match $memperc > 70} ^fg(red) ${endif}\
-^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
+^i(/home/adam/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
-^i(/home/me1alw/.xmonad/diskette.xbm) ${fs_free}  \
-${if_match ${time %H} > 16} ^fg(red) ${endif}\
-^i(/home/me1alw/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
-^i(/home/me1alw/.xmonad/spkr_01.xbm)\
+^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
+^i(/home/adam/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
+^i(/home/adam/.xmonad/spkr_01.xbm)\
 ${execi 60 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
 ${if_match ${time %H} > 16} ^fg() ${endif}|\
  Current: \
@@ -26,11 +28,11 @@ ${execi 60  sed -n '3p' ~/.xmonad/curr_cond}
 ${diskio sda}
 ${execi 60  sed -n '1p' ~/.xmonad/tod_ton} \
 ${execi 60  sed -n '3p' ~/.xmonad/tod_ton} | \
-${execi 60  sed -n '6p' ~/.xmonad/tod_ton} \
-${execi 60  sed -n '8p' ~/.xmonad/tod_ton} | \
-${execi 60  sed -n '11p' ~/.xmonad/tod_ton} \
-${execi 60  sed -n '13p' ~/.xmonad/tod_ton} | \
-${execi 60  sed -n '16p' ~/.xmonad/tod_ton} \
-${execi 60  sed -n '18p' ~/.xmonad/tod_ton} | \
-${execi 60  sed -n '21p' ~/.xmonad/tod_ton} \
-${execi 60  sed -n '23p' ~/.xmonad/tod_ton}
+${execi 60  sed -n '5p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '7p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '10p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '12p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '15p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '17p' ~/.xmonad/tod_ton} | \
+${execi 60  sed -n '20p' ~/.xmonad/tod_ton} \
+${execi 60  sed -n '22p' ~/.xmonad/tod_ton}
