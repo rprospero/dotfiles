@@ -115,4 +115,4 @@
 ;;csharp
 (customize-set-variable
  'csharp-make-tool
- "msc")
+ "mcs")
