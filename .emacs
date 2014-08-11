@@ -114,3 +114,8 @@
 
 (require 'flymake-haskell-multi)
 (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+
+;;csharp
+(customize-set-variable
+ 'csharp-make-tool
+ "mcs")

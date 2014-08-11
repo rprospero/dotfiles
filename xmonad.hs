@@ -9,7 +9,7 @@ import System.IO
 import Control.Monad (liftM2)
 import Graphics.X11.ExtraTypes.XF86
 
-myWorkspaces = ["main","web","emacs","documents","chat","media"]
+myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
 myManageHook = composeAll . concat $
   [
