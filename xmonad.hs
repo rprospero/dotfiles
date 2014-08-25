@@ -1,13 +1,13 @@
-import XMonad
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.SetWMName
-import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run (spawnPipe)
-import XMonad.Util.EZConfig (additionalKeys)
-import qualified XMonad.StackSet as W
-import System.IO
-import Control.Monad (liftM2)
-import Graphics.X11.ExtraTypes.XF86
+import           Control.Monad                (liftM2)
+import           Graphics.X11.ExtraTypes.XF86
+import           System.IO
+import           XMonad
+import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.SetWMName
+import qualified XMonad.StackSet              as W
+import           XMonad.Util.EZConfig         (additionalKeys)
+import           XMonad.Util.Run              (spawnPipe)
 
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
