@@ -116,3 +116,13 @@
 (customize-set-variable
  'csharp-make-tool
  "mcs")
+
+;; Haskell Stuff
+
+(setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
+(add-to-list 'exec-path "~/.cabal/bin")
+(custom-set-variables '(haskell-tags-on-save t))
+
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init)))

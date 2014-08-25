@@ -1,13 +1,13 @@
-import XMonad
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.SetWMName
-import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run (spawnPipe)
-import XMonad.Util.EZConfig (additionalKeys)
-import qualified XMonad.StackSet as W
-import System.IO
-import Control.Monad (liftM2)
-import Graphics.X11.ExtraTypes.XF86
+import           Control.Monad                (liftM2)
+import           Graphics.X11.ExtraTypes.XF86
+import           System.IO
+import           XMonad
+import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.SetWMName
+import qualified XMonad.StackSet              as W
+import           XMonad.Util.EZConfig         (additionalKeys)
+import           XMonad.Util.Run              (spawnPipe)
 
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
@@ -22,14 +22,14 @@ myManageHook = composeAll . concat $
     viewShift = doF . liftM2 (.) W.greedyView W.shift
     myClassWebShifts = ["Firefox","Opera"]
     myClassEmacsShifts = ["Emacs"]
-    myClassChatShifts = ["Pidgin","Thunderbird","Geary"]
+    myClassChatShifts = ["Pidgin","Thunderbird","Geary","mutt"]
     myClassDocumentsShifts = ["Evince"]
 
 main = do
   xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 832 -l 2 -y -1 -bg black"
   xmonad myConfig
 
-  
+
 --myStatusBar = statusBar "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 1100 -l 2 -y -1" myPP toggleStrutsKey
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
