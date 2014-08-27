@@ -108,10 +108,6 @@
     (:network-server . "talk.google.com")
     (:connection-type . ssl))))
 
-
-(require 'flymake-haskell-multi)
-(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
-
 ;;csharp
 (customize-set-variable
  'csharp-make-tool
@@ -126,3 +122,5 @@
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+;(require 'flymake-haskell-multi)
+(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
