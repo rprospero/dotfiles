@@ -61,6 +61,8 @@
 (ad-activate 'LaTeX-fill-region-as-paragraph)
 
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
 
 (customize-set-variable 'custom-enabled-themes (quote (wheatgrass)))
 (customize-set-variable 'org-agenda-start-on-weekday nil)
