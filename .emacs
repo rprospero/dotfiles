@@ -126,3 +126,9 @@
 (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
 ;(require 'flymake-haskell-multi)
 (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+
+
+;; Custom hot-keys
+
+
+(global-set-key (kbd "C-x g") 'magit-status)
