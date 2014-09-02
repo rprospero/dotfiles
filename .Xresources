@@ -1,2 +1,4 @@
 XTerm*foreground: rgb:b2/b2/b2
 XTerm*background: rgb:08/08/08
+
+Emacs.font: DejaVu Sans Mono-9

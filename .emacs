@@ -61,6 +61,8 @@
 (ad-activate 'LaTeX-fill-region-as-paragraph)
 
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
 
 (customize-set-variable 'custom-enabled-themes (quote (wheatgrass)))
 (customize-set-variable 'org-agenda-start-on-weekday nil)
@@ -108,10 +110,6 @@
     (:network-server . "talk.google.com")
     (:connection-type . ssl))))
 
-
-(require 'flymake-haskell-multi)
-(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
-
 ;;csharp
 (customize-set-variable
  'csharp-make-tool
@@ -126,3 +124,11 @@
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+;(require 'flymake-haskell-multi)
+(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+
+
+;; Custom hot-keys
+
+
+(global-set-key (kbd "C-x g") 'magit-status)
