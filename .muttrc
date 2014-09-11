@@ -3,11 +3,14 @@ set editor="emacsclient -nw"
 #-----------#
 # Passwords #
 #-----------#
-set my_tmpsecret=`gpg2 -o ~/.sec/.tmp -d ~/.sec/pass.gpg`
-set my_gpass1=`awk '/personal/ {print $2}' ~/.sec/.tmp`
-set my_gpass2=`awk '/professional/ {print $2}' ~/.sec/.tmp`
-set my_gpass3=`awk '/work/ {print $2}' ~/.sec/.tmp`
-set my_del=`rm -f ~/.sec/.tmp`
+#set my_tmpsecret=`gpg2 -o ~/.sec/.tmp -d ~/.sec/pass.gpg`
+#set my_gpass1=`awk '/personal/ {print $2}' ~/.sec/.tmp`
+#set my_gpass2=`awk '/professional/ {print $2}' ~/.sec/.tmp`
+#set my_gpass3=`awk '/work/ {print $2}' ~/.sec/.tmp`
+#set my_del=`rm -f ~/.sec/.tmp`
+
+source "gpg2 -dq ~/.sec/pass.gpg |"
+
  
 #---------------#
 # Account Hooks #
@@ -15,7 +18,7 @@ set my_del=`rm -f ~/.sec/.tmp`
 account-hook . "unset imap_user; unset imap_pass; unset tunnel" # unset first!
 account-hook        "imaps://rprospero@imap.gmail.com/" "\
     set imap_user   = rprospero@gmail.com \
-        imap_pass   = $my_gpass1"
+        imap_pass   = \"$my_gpass1\""
 account-hook        "imaps://a.washington@sheffield.ac.uk@imap.gmail.com/" "\
     set imap_user   = a.washington@sheffield.ac.uk \
         imap_pass   = $my_gpass2"
@@ -38,7 +41,7 @@ folder-hook         imaps://rprospero@imap.gmail.com/ "\
         from        = 'Adam Washington <rprospero@gmail.com> ' \
         realname    = 'Adam Washington' \
         smtp_url    = smtps://rprospero@smtp.gmail.com \
-        smtp_pass   = $my_gpass1"
+        smtp_pass   = \"$my_gpass1\""
  
 # Setup for user2:
 set folder          = imaps://adam.l.washington@imap.gmail.com/
