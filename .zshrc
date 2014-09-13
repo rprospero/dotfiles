@@ -78,3 +78,5 @@ export PATH=$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:$PATH
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
