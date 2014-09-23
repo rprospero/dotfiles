@@ -79,4 +79,6 @@ export PATH=$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:$PATH
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias ghc-core="ghc -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
+
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
