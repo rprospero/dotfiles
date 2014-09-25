@@ -137,6 +137,7 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 
 ;; Enable windmove in orgmode
+(windmove-default-keybindings)
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
