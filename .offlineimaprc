@@ -395,4 +395,4 @@ realdelete = no
 remoteuser = rprospero@gmail.com
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
-folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
