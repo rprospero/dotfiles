@@ -12,15 +12,15 @@ ${if_match "${acpiacadapter}" == "on-line"} ^i(/home/adam/.xmonad/ac_01.xbm) $ba
 ${if_match "${acpiacadapter}" != "on-line"} ^i(/home/adam/.xmonad/bat_low_01.xbm) $battery_time $endif\
 |\
 ${if_match $cpu > 70} ^fg(red) ${endif}\
-^i(/home/adam/.xmonad/cpu.xbm) $cpu ${top name 1} \
+^i(/home/me1alw/.xmonad/cpu.xbm) $cpu ${top name 1} \
 ${if_match $cpu > 70} ^fg() ${endif}\
 ${if_match $memperc > 70} ^fg(red) ${endif}\
-^i(/home/adam/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
+^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
 ^i(/home/adam/.xmonad/spkr_01.xbm)\
-${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
+${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6 | cut -c 2,3} |\
 ${if_match ${time %H} > 16} ^fg() ${endif}|\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
