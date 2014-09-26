@@ -24,7 +24,10 @@ ${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6}|\
 ${if_match ${time %H} > 16} ^fg() ${endif}|\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
-${execi 60  sed -n '3p' ~/.xmonad/curr_cond} 
+${execi 60  sed -n '3p' ~/.xmonad/curr_cond} \
+| Mail ${unseen_mails /home/me1alw/Maildir/Professional/INBOX} \
+: ${unseen_mails /home/me1alw/Maildir/Personal/INBOX} \
+: ${unseen_mails /home/me1alw/Maildir/Work/INBOX} 
 ${diskio sda}
 ${execi 60  sed -n '1p' ~/.xmonad/tod_ton} \
 ${execi 60  sed -n '3p' ~/.xmonad/tod_ton} | \
