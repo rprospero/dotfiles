@@ -14,12 +14,12 @@ ${if_match $cpu > 70} ^fg() ${endif}\
 ${if_match $memperc > 70} ^fg(red) ${endif}\
 ^i(/home/me1alw/.xmonad/mem.xbm) ${memperc}% ${top_mem name 1}\
 ${if_match $memperc > 70} ^fg() ${endif}\
-^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
-^i(/home/adam/.xmonad/calendar.xbm) \
-| ${if_match ${time %H} > 17}^fg(red)${endif}\
+^i(/home/me1alw/.xmonad/diskette.xbm) ${fs_free}  \
+^i(/home/me1alw/.xmonad/calendar.xbm) \
+${if_match ${time %H} > 17}^fg(red)${endif}\
 ${time %m-%d-%H-%M} \
-${if_match ${time %H} > 17}^fg()${endif}|\
-^i(/home/adam/.xmonad/spkr_01.xbm)\
+${if_match ${time %H} > 17}^fg()${endif}\
+^i(/home/me1alw/.xmonad/spkr_01.xbm) \
 ${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6 | cut -c 2,3} |\
  Current: \
 ${execi 60  sed -n '4p' ~/.xmonad/curr_cond}°C \
