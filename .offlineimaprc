@@ -350,6 +350,8 @@ realdelete = no
 remoteuser = adam.l.washington@gmail.com
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
+
 # The trash folder name may be different from [Gmail]/Trash
 # for example on German Gmail, this setting should be
 #
@@ -383,6 +385,7 @@ realdelete = no
 remoteuser = a.washington@sheffield.ac.uk
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 [Repository GmailPersonal]
 
 type = Gmail
@@ -391,3 +394,5 @@ realdelete = no
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = rprospero@gmail.com
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
