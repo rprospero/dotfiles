@@ -1,0 +1,393 @@
+# Offlineimap sample configuration file
+
+# This file documents *all* possible options and can be quite scary.
+# Looking for a quick start?  Take a look at offlineimap.conf.minimal.
+# More details can be found in the included user documention, which is
+# also available at: http://docs.offlineimap.org/en/latest/
+
+# NOTE: Settings generally support python interpolation. This means
+# values can contain python format strings which refer to other values
+# in the same section, or values in a special DEFAULT section. This
+# allows you for example to use common settings for multiple accounts:
+#
+# [Repository Gmail1]
+# trashfolder: %(gmailtrashfolder)s
+#
+# [Repository Gmail2]
+# trashfolder: %(gmailtrashfolder)s
+#
+# [DEFAULT]
+# gmailtrashfolder = [Gmail]/Papierkorb
+#
+# would set the trashfolder setting for your German Gmail accounts.
+
+# NOTE2: This implies that any '%' needs to be encoded as '%%'
+
+##################################################
+# General definitions
+##################################################
+
+[general]
+
+# This specifies where offlineimap is to store its metadata.
+# This directory will be created if it does not already exist.
+
+#metadata = ~/.offlineimap
+
+# This variable specifies which accounts are defined.  Separate them
+# with commas.  Account names should be alphanumeric only.
+# You will need to specify one section per account below.  You may
+# not use "general" for an account name.
+
+accounts = Professional, Personal, Work
+
+# Offlineimap can synchronize more than one account at a time.  If you
+# want to enable this feature, set the below value to something
+# greater than 1.  To force it to synchronize only one account at a
+# time, set it to 1.
+#
+# Note: if you are using autorefresh and have more than one account,
+# you must set this number to be >= to the number of accounts you have;
+# since any given sync run never "finishes" due to a timer, you will never
+# sync your additional accounts if this is 1.
+
+#maxsyncaccounts = 1
+
+# You can specify one or more user interface modules for OfflineIMAP
+# to use.  OfflineIMAP will try the first in the list, and if it
+# fails, the secoqnd, and so forth.
+#
+# The pre-defined options are:
+# Blinkenlights -- A fancy (terminal) interface
+# TTYUI         -- a text-based (terminal) interface
+# Basic         -- Noninteractive interface suitable for cron'ing
+# Quiet         -- Noninteractive interface, generates no output
+#                  except for errors.
+# MachineUI     -- Interactive interface suitable for machine
+#                  parsing.
+#
+# You can override this with a command-line option -u.
+
+#ui = basic
+
+# If you try to synchronize messages to a folder which the IMAP server
+# considers read-only, OfflineIMAP will generate a warning.  If you want
+# to suppress these warnings, set ignore-readonly to yes.  Read-only
+# IMAP folders allow reading but not modification, so if you try to
+# change messages in the local copy of such a folder, the IMAP server
+# will prevent OfflineIMAP from propagating those changes to the IMAP
+# server.  Note that ignore-readonly is unrelated to the "readonly"
+# setting which prevents a repository from being modified at all.
+
+#ignore-readonly = no
+
+########## Advanced settings
+
+# You can give a Python source filename here and all config file
+# python snippets will be evaluated in the context of that file.
+# This allows you to e.g. define helper functions in the Python
+# source file and call them from this config file.  You can find
+# an example of this in the manual.
+#
+# pythonfile = ~/.offlineimap.py
+#
+
+# By default, OfflineIMAP will not exit due to a network error until
+# the operating system returns an error code.  Operating systems can sometimes
+# take forever to notice this.  Here you can activate a timeout on the
+# socket.  This timeout applies to individual socket reads and writes,
+# not to an overall sync operation.  You could perfectly well have a 30s
+# timeout here and your sync still take minutes.
+#
+# Values in the 30-120 second range are reasonable.
+#
+# The default is to have no timeout beyond the OS.  Times are given in seconds.
+#
+# socktimeout = 60
+
+# By default, OfflineIMAP will use fsync() to force data out to disk at
+# opportune times to ensure consistency.  This can, however, reduce
+# performance.  Users where /home is on SSD (Flash) may also wish to reduce
+# write cycles.  Therefore, you can disable OfflineIMAP's use of fsync().
+# Doing so will come at the expense of greater risk of message duplication
+# in the event of a system crash or power loss.  Default is fsync = true.
+# Set fsync = false to disable fsync.
+#
+# fsync = true
+
+##################################################
+# Mailbox name recorder
+##################################################
+
+[mbnames]
+
+# offlineimap can record your mailbox names in a format you specify.
+# You can define the header, each mailbox item, the separator,
+# and the footer.  Here is an example for Mutt.
+# If enabled is yes, all six setting must be specified, even if they
+# are just the empty string "".
+#
+# The header, peritem, sep, and footer are all Python expressions passed
+# through eval, so you can (and must) use Python quoting.
+#
+# The following hash key are available to the expansion for 'peritem':
+# - accountname: the name of the corresponding account;
+# - foldername: the name of the folder;
+# - localfolders: path to the local directory hosting all Maildir
+#   folders for the account.
+
+enabled = no
+filename = ~/Mutt/muttrc.mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
+# You can also specify a folderfilter.  It will apply to the
+# *translated* folder name here, and it takes TWO arguments:
+# accountname and foldername.  In all other ways, it will
+# behave identically to the folderfilter for accounts.  Please see
+# that section for more information and examples.
+#
+# Note that this filter can be used only to further restrict mbnames
+# to a subset of folders that pass the account's folderfilter.
+#
+#
+# You can customize the order in which mailbox names are listed in the
+# generated file by specifying a sort_keyfunc, which takes a single
+# dict argument containing keys 'accountname' and 'foldername'.  This
+# function will be called once for each mailbox, and should return a
+# suitable sort key that defines this mailbox' position in the custom
+# ordering.
+#
+# This is useful with e.g. Mutt-sidebar, which uses the mailbox order
+# from the generated file when listing mailboxes in the sidebar.
+#
+# Default setting is
+# sort_keyfunc = lambda d: (d['accountname'], d['foldername'])
+
+
+##################################################
+# Accounts
+##################################################
+
+# This is an account definition clause.  You'll have one of these
+# for each account listed in general/accounts above.
+
+[Account Professional]
+
+localrepository = GmailLocalProfessional
+remoterepository = GmailProfessional
+
+[Account Work]
+
+localrepository = GmailLocalWork
+remoterepository = GmailWork
+
+[Account Personal]
+
+localrepository = GmailLocalPersonal
+remoterepository = GmailPersonal
+
+########## Advanced settings
+
+# You can have offlineimap continue running indefinitely, automatically
+# syncing your mail periodically.  If you want that, specify how
+# frequently to do that (in minutes) here.  You can also specify
+# fractional minutes (ie, 3.25).
+
+# autorefresh = 5
+
+# OfflineImap can replace a number of full updates by quick
+# synchronizations.  It only synchronizes a folder if 1) a Maildir
+# folder has changed, or 2) if an IMAP folder has received new messages
+# or had messages deleted, ie it does not update if only IMAP flags have
+# changed.  Full updates need to fetch ALL flags for all messages, so
+# this makes quite a performance difference (especially if syncing
+# between two IMAP servers).
+# Specify 0 for never, -1 for always (works even in non-autorefresh
+# mode), or a positive integer <n> to do <n> quick updates before doing
+# another full synchronization (requires autorefresh).  Updates are
+# always performed after <autorefresh> minutes, be they quick or full.
+
+# quick = 10
+
+# You can specify a pre and post sync hook to execute a external command.
+# In this case a call to imapfilter to filter mail before the sync process
+# starts and a custom shell script after the sync completes.
+# The pre sync script has to complete before a sync to the account will
+# start.
+
+# presynchook = imapfilter
+# postsynchook = notifysync.sh
+
+# You can also specify parameters to the commands
+# presynchook = imapfilter -c someotherconfig.lua
+
+# OfflineImap caches the state of the synchronisation to e.g. be able to
+# determine if a mail has been deleted on one side or added on the
+# other.
+#
+# The default and historical backend is 'plain' which writes out the
+# state in plain text files. On Repositories with large numbers of
+# mails, the performance might not be optimal, as we write out the
+# complete file for each change.  Another new backend 'sqlite' is
+# available which stores the status in sqlite databases.
+#
+# If you switch the backend, you may want to delete the old cache
+# directory in ~/.offlineimap/Account-<account>/LocalStatus manually
+# once you are sure that things work.
+#
+#status_backend = plain
+
+# If you have a limited amount of bandwidth available you can exclude larger
+# messages (e.g. those with large attachments etc).  If you do this it
+# will appear to offlineimap that these messages do not exist at all.  They
+# will not be copied, have flags changed etc.  For this to work on an IMAP
+# server the server must have server side search enabled.  This works with Gmail
+# and most imap servers (e.g. cyrus etc)
+# The maximum size should be specified in bytes - e.g. 2000000 for approx 2MB
+
+# maxsize = 2000000
+
+
+# When you are starting to sync an already existing account you can tell
+# offlineimap to sync messages from only the last x days.  When you do
+# this messages older than x days will be completely ignored.  This can
+# be useful for importing existing accounts when you do not want to
+# download large amounts of archive email.
+#
+# Messages older than maxage days will not be synced, their flags will
+# not be changed, they will not be deleted etc.  For offlineimap it will
+# be like these messages do not exist.  This will perform an IMAP search
+# in the case of IMAP or Gmail and therefore requires that the server
+# support server side searching.  This will calculate the earliest day
+# that would be included in the search and include all messages from
+# that day until today.  e.g. maxage = 3 to sync only the last 3 days
+# mail
+#
+# maxage =
+
+
+# Maildir file format uses colon (:) separator between uniq name and info.
+# Unfortunatelly colon is not allowed character in windows file name. If you
+# enable maildir-windows-compatible option, offlineimap will be able to store
+# messages on windows drive, but you will probably loose compatibility with
+# other programs working with the maildir
+#
+#maildir-windows-compatible = no
+
+# Specifies if we want to sync GMail lables with the local repository.
+# Effective only for GMail IMAP repositories.
+#
+#synclabels = no
+
+# Name of the header to use for label storage.  Format for the header
+# value differs for different headers, because there are some de-facto
+# standards set by popular clients:
+# - X-Label or Keywords keep values separated with spaces; for these
+#   you, obviously, should not have label values that contain spaces;
+# - X-Keywords use comma (',') as the separator.
+# To be consistent with the usual To-like headers, for the rest of header
+# types we use comma as the separator.
+#
+#labelsheader = X-Keywords
+
+# Set of labels to be ignored.  Comma-separated list.  GMail-specific
+# labels all start with backslash ('\').
+#
+#ignorelabels = \Inbox, \Starred, \Sent, \Draft, \Spam, \Trash, \Important
+
+
+
+# OfflineIMAP can strip off some headers when your messages are propagated
+# back to the IMAP server.  This option carries the comma-separated list
+# of headers to trim off.  Header name matching is case-sensitive.
+#
+# This knob is respected only by IMAP-based accounts.  Value of labelsheader
+# for GMail-based accounts is automatically added to this list, you don't
+# need to specify it explicitely.
+#
+#filterheaders = X-Some-Weird-Header
+
+
+[Repository GmailLocalProfessional]
+
+type = GmailMaildir
+
+localfolders = ~/Maildir/Professional
+
+[Repository GmailLocalWork]
+
+type = GmailMaildir
+
+localfolders = ~/Maildir/Work
+
+[Repository GmailLocalPersonal]
+
+type = GmailMaildir
+
+localfolders = ~/Maildir/Personal
+
+
+[Repository GmailProfessional]
+
+# A repository using Gmail's IMAP interface.  Any configuration
+# parameter of `IMAP` type repositories can be used here.  Only
+# `remoteuser` (or `remoteusereval` ) is mandatory.  Default values
+# for other parameters are OK, and you should not need fiddle with
+# those.
+#
+# The Gmail repository will use hard-coded values for `remotehost`,
+# `remoteport`, `tunnel` and `ssl`.  (See
+# http://mail.google.com/support/bin/answer.py?answer=78799&topic=12814)
+# Any attempt to set those parameters will be silently ignored.
+
+type = Gmail
+realdelete = no
+
+# Specify the Gmail user name. This is the only mandatory parameter.
+remoteuser = adam.l.washington@gmail.com
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+# The trash folder name may be different from [Gmail]/Trash
+# for example on German Gmail, this setting should be
+#
+# trashfolder = [Gmail]/Papierkorb
+#
+# You should look for the localized names of the spam folder too:
+# "spamfolder" tunable will help you to override the standard name.
+
+# Enable 1-way synchronization. See above for explanation.
+#
+#readonly = False
+#
+# To enable GMail labels synchronisation, set the option synclabels
+# in the corresponding "Account" section.
+
+# OfflineIMAP can use multiple connections to the server in order
+# to perform multiple synchronization actions simultaneously.
+# This may place a higher burden on the server.  In most cases,
+# setting this value to 2 or 3 will speed up the sync, but in some
+# cases, it may slow things down.  The safe answer is 1.  You should
+# probably never set it to a value more than 5.
+
+#maxconnections = 2
+
+[Repository GmailWork]
+
+type = Gmail
+realdelete = no
+
+# Specify the Gmail user name. This is the only mandatory parameter.
+remoteuser = a.washington@sheffield.ac.uk
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+[Repository GmailPersonal]
+
+type = Gmail
+realdelete = no
+
+# Specify the Gmail user name. This is the only mandatory parameter.
+remoteuser = rprospero@gmail.com
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
