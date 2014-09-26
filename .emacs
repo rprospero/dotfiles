@@ -102,7 +102,18 @@
 
 ;;Usenet stuff
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
-(customize-set-variable 'gnus-secondary-select-method '())
+
+;; Mail stuff
+(customize-set-variable
+ 'gnus-secondary-select-method
+ (quote
+  ((nnmaildir "Professional"
+	      (directory "~/Maildir/Professional"))
+   (nnmaildir "Work"
+	      (directory "~/Maildir/Work"))
+   (nnmaildir "Personal"
+	      (directory "~/Maildir/Personal")))))
+
 
 (customize-set-variable
  'jabber-account-list
