@@ -105,7 +105,7 @@
 
 ;; Mail stuff
 (customize-set-variable
- 'gnus-secondary-select-method
+ 'gnus-secondary-select-methods
  (quote
   ((nnmaildir "Professional"
 	      (directory "~/Maildir/Professional"))
