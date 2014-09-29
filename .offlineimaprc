@@ -89,7 +89,7 @@ accounts = Professional, Personal, Work
 # source file and call them from this config file.  You can find
 # an example of this in the manual.
 #
-# pythonfile = ~/.offlineimap.py
+pythonfile = ~/.offlineimap.py
 #
 
 # By default, OfflineIMAP will not exit due to a network error until
@@ -348,6 +348,7 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = adam.l.washington@gmail.com
+remotepasseval = passwords["Professional"]
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
@@ -383,6 +384,7 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = a.washington@sheffield.ac.uk
+remotepasseval = passwords["Work"]
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
@@ -393,6 +395,7 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = rprospero@gmail.com
+remotepasseval = passwords["Personal"]
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
