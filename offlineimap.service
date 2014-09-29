@@ -1,0 +1,8 @@
+[Unit]
+Description=Start offlineimap as a daemon
+
+[Service]
+Nice=19
+IOSchedulingClass=2
+IOScedulingPriority=7
+ExecStart=/usr/bin/offlineimap
