@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs offline imap every five minutes
+
+[Timer]
+Persistent=true
+Unit=offlineimap.service
+OnUnitActiveSec=5m
+
+[Install]
+WantedBy=timers.target

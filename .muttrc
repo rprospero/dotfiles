@@ -71,7 +71,9 @@ folder-hook         imaps://a.washington@sheffield.ac.uk@imap.gmail.com/ "\
         realname    = 'Adam Washington' \
         smtp_url    = smtps://a.washington@sheffield.ac.uk@smtp.gmail.com \
         smtp_pass   = $my_gpass3"
- 
+
+folder-hook . "exec collapse-all"
+
 #--------#
 # Macros #
 #--------#
