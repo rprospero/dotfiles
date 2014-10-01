@@ -21,6 +21,7 @@ ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %m/%d %H:%M} \
 ^i(/home/adam/.xmonad/spkr_01.xbm)\
 ${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6 | cut -c 2,3} \
-| Mail ${unseen_mails /home/adam/Maildir/Professional/INBOX} \
+| ^i(/home/adam/dotfiles/mail.xbm) \
+${unseen_mails /home/adam/Maildir/Professional/INBOX} \
 : ${unseen_mails /home/adam/Maildir/Personal/INBOX} \
 : ${unseen_mails /home/adam/Maildir/Work/INBOX} 
