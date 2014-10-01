@@ -26,7 +26,7 @@ myManageHook = composeAll . concat $
     myClassDocumentsShifts = ["Evince"]
 
 main = do
-  xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 832 -l 2 -y -1 -bg black"
+  xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=11\" -w 832 -y -1 -bg black"
   xmonad myConfig
 
 
