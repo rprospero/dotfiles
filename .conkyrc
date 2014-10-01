@@ -19,7 +19,8 @@ ${if_match $memperc > 70} ^fg() ${endif}\
 ^i(/home/adam/.xmonad/diskette.xbm) ${fs_free}  \
 ^i(/home/adam/.xmonad/calendar.xbm) ${time %m-%d-%H-%M} \
 ^i(/home/adam/.xmonad/spkr_01.xbm)\
-${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6 | cut -c 2,3} |\
-| Mail ${unseen_mails /home/me1alw/Maildir/Professional/INBOX} \
+${execi 10 amixer -c 0 get Master | grep Mono: | cut -d " " -f6 | cut -c 2,3} \
+^i(/home/adam/dotfiles/mail.xbm) \
+${unseen_mails /home/me1alw/Maildir/Professional/INBOX} \
 : ${unseen_mails /home/me1alw/Maildir/Personal/INBOX} \
 : ${unseen_mails /home/me1alw/Maildir/Work/INBOX}
