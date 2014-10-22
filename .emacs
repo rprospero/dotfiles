@@ -114,6 +114,16 @@
    (nnmaildir "Personal"
 	      (directory "~/Maildir/Personal")))))
 
+(customize-set-variable
+ 'send-mail-function
+ (quote smtpmail-send-it))
+(customize-set-variable
+ 'sendmail-program
+ "msmtp")
+(customize-set-variable
+ 'message-send-mail-function
+ (quote message-send-mail-with-sendmail))
+
 
 (customize-set-variable
  'jabber-account-list
