@@ -123,6 +123,15 @@
 (customize-set-variable
  'message-send-mail-function
  (quote message-send-mail-with-sendmail))
+(customize-set-variable
+ 'message-sendmail-envelope-from
+ (quote header))
+(customize-set-variable
+ 'message-sendmail-extra-arguments
+ (quote ("--read-envelope-from")))
+(customize-set-variable
+ 'message-sendmail-f-is-evil
+ t)
 
 
 (customize-set-variable
