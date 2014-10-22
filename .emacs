@@ -114,6 +114,25 @@
    (nnmaildir "Personal"
 	      (directory "~/Maildir/Personal")))))
 
+(customize-set-variable
+ 'send-mail-function
+ (quote smtpmail-send-it))
+(customize-set-variable
+ 'sendmail-program
+ "msmtp")
+(customize-set-variable
+ 'message-send-mail-function
+ (quote message-send-mail-with-sendmail))
+(customize-set-variable
+ 'message-sendmail-envelope-from
+ (quote header))
+(customize-set-variable
+ 'message-sendmail-extra-arguments
+ (quote ("--read-envelope-from")))
+(customize-set-variable
+ 'message-sendmail-f-is-evil
+ t)
+
 
 ;;Browser stuff
 (customize-set-variable 'browse-url-browser-function 'eww-browse-url)
