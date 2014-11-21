@@ -21,3 +21,8 @@ nm-applet &
 #exec openbox
 xsetroot -cursor_name left_ptr
 
+#start the keyring daemon
+eval $(gnome-keyring-daemon -s)
+export GNOME_KEYRING_CONTROL
+export SSH_AUTH_SOCK
+###
