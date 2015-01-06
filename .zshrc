@@ -51,7 +51,9 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64:$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:$PATH
+export XAPPLRESDIR=/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/X11/app-defaults
+export LD_LIBRARY_PATH=/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64/
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
