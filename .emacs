@@ -189,10 +189,7 @@
 (twit)
 
 (require 'powerline)
-
-(require 'moe-theme)
-(moe-dark)
-(powerline-moe-theme)
+(powerline-center-theme)
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
