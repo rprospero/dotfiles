@@ -1,3 +1,5 @@
+(package-initialize)
+
 (setq w32-apps-modifier 'super)
 (custom-set-variables
  '(org-agenda-include-diary nil)
@@ -181,3 +183,16 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
+;; Twitter Stuff
+(require 'twittering-mode)
+(setq twittering-use-master-password t)
+(twit)
+
+(require 'powerline)
+
+(require 'moe-theme)
+(moe-dark)
+(powerline-moe-theme)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
