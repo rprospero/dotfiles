@@ -26,8 +26,8 @@ myManageHook = composeAll . concat $
     myClassDocumentsShifts = ["Evince"]
 
 main = do
-  xmproc <- spawn "xmobar"
-  xmonad myConfig
+  xmproc <- xmobar myConfig
+  xmonad xmproc
 
 
 --myStatusBar = statusBar "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 1100 -l 2 -y -1" myPP toggleStrutsKey
@@ -40,8 +40,7 @@ myConfig = defaultConfig {
                layoutHook = avoidStruts $ layoutHook defaultConfig,
                modMask = mod4Mask,
                workspaces = myWorkspaces,
-               startupHook = setWMName "LG3D",
-               logHook = dynamicLogWithPP $ myPP
+               startupHook = setWMName "LG3D"
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "slock")
