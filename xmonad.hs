@@ -49,6 +49,7 @@ myConfig = defaultConfig {
              , ((0, xK_Print), spawn "scrot")
              , ((mod4Mask, xK_p), spawn "$(~/.cabal/bin/yeganesh -x -- -b -nb black)")
              , ((mod4Mask, xK_e), spawn "emacsclient -c")
+             , ((mod4Mask, xK_t), spawn "thunar")
              , ((mod4Mask .|. shiftMask, xK_Return), spawn "xterm")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
