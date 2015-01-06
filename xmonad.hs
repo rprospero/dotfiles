@@ -30,8 +30,6 @@ main = do
   xmonad xmproc
 
 
---myStatusBar = statusBar "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=12\" -w 1100 -l 2 -y -1" myPP toggleStrutsKey
-
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 
@@ -48,19 +46,9 @@ myConfig = defaultConfig {
              , ((0, xK_Print), spawn "scrot")
              , ((mod4Mask, xK_p), spawn "$(~/.cabal/bin/yeganesh -x -- -b -nb black)")
              , ((mod4Mask, xK_e), spawn "emacsclient -c")
+             , ((mod4Mask, xK_t), spawn "thunar")
              , ((mod4Mask .|. shiftMask, xK_Return), spawn "xterm")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
              ]
-
-
-
-myPP = dzenPP {ppOutput = printStatus . ("^tw()"++)}
-
-
-printStatus :: String -> IO ()
-printStatus s = do
-   h <- openFile "/tmp/urgent" WriteMode
-   hPutStrLn h s --(filter isLower s)
---   hClose h
