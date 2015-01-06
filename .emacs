@@ -180,6 +180,11 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
+;; Twitter Stuff
+(require 'twittering-mode)
+(setq twittering-use-master-password t)
+(twit)
+
 (require 'powerline)
 
 (require 'moe-theme)
