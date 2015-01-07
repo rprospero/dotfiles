@@ -5,6 +5,7 @@
 emacs --daemon
 
 numlockx &
+xscreensaver &
 
 xset -b
 
