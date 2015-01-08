@@ -1,3 +1,5 @@
+(package-initialize)
+
 (setq w32-apps-modifier 'super)
 (custom-set-variables
  '(org-agenda-include-diary nil)
@@ -114,6 +116,25 @@
    (nnmaildir "Personal"
 	      (directory "~/Maildir/Personal")))))
 
+(customize-set-variable
+ 'send-mail-function
+ (quote smtpmail-send-it))
+(customize-set-variable
+ 'sendmail-program
+ "msmtp")
+(customize-set-variable
+ 'message-send-mail-function
+ (quote message-send-mail-with-sendmail))
+(customize-set-variable
+ 'message-sendmail-envelope-from
+ (quote header))
+(customize-set-variable
+ 'message-sendmail-extra-arguments
+ (quote ("--read-envelope-from")))
+(customize-set-variable
+ 'message-sendmail-f-is-evil
+ t)
+
 
 (customize-set-variable
  'jabber-account-list
@@ -150,3 +171,32 @@
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+;; Helm bindings
+(require 'helm-config)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(customize-set-variable 'helm-split-window-in-side-p t)
+(helm-mode 1)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+
+;; Twitter Stuff
+(require 'twittering-mode)
+(setq twittering-use-master-password t)
+(twit)
+
+(require 'powerline)
+
+(require 'moe-theme)
+(moe-dark)
+(powerline-moe-theme)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook 'company-mode)
