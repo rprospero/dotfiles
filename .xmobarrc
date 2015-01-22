@@ -30,9 +30,10 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                                 ("Professional ","~/Maildir/Professional/INBOX"),
                                 ("Work ","~/Maildir/Work/INBOX")] "mail"
 		    , Run DiskU [("/", "<free>"),("/home","<free>")] ["-L", "20", "-H", "50", "-m", "1", "-p", "3"] 20
+		    , Run Com "/home/adam/dotfiles/reddit.py" [] "reddit" 100
+                    , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %cpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% | %mail% |}\
-                    \{ <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/>%date%</fc>| %EGCC% | %uname%"
+       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %multicpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% | %mail% | %reddit%}\ %StdinReader% \{ <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/>%date%</fc>| %EGCN% | %uname%"
        }
