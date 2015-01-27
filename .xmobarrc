@@ -30,7 +30,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                                 ("Professional ","~/Maildir/Professional/INBOX"),
                                 ("Work ","~/Maildir/Work/INBOX")] "mail"
 		    , Run DiskU [("/", "<free>"),("/home","<free>")] ["-L", "20", "-H", "50", "-m", "1", "-p", "3"] 20
-		    , Run Com "/home/adam/dotfiles/reddit.py" [] "reddit" 100
+		    , Run Com "/home/adam/dotfiles/reddit.py" [] "reddit" 600
                     , Run StdinReader
                     ]
        , sepChar = "%"
