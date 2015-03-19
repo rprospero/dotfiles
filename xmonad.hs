@@ -22,7 +22,7 @@ myManageHook = composeAll . concat $
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
     , [ className =? b --> viewShift "media" | b <- myClassMediaShifts]
-    , [ (className =? "Gimp-2.6" <&&> fmap ("tool" `isSuffixOf`) role) --> doFloat]
+    , [ (role =? "gimp-toolbox" <||> role =? "gimp-dock") --> doFloat]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -40,9 +40,7 @@ main = do
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
-myLayoutHook = onWorkspace "media" gimpLayout $ layoutHook defaultConfig
-    where
-      gimpLayout = withIM (11/64) (Role "gimp-toolbox") $ ResizableTall 2 (1/118) (11/20) [1] ||| Full
+myLayoutHook = layoutHook defaultConfig
 
 myConfig = defaultConfig {
                manageHook = manageDocks <+> myManageHook,
