@@ -1,6 +1,7 @@
 import           Control.Monad                (liftM2)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.IO
+import           Data.List (isSuffixOf)
 import           XMonad
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
@@ -21,6 +22,7 @@ myManageHook = composeAll . concat $
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
     , [ className =? b --> viewShift "media" | b <- myClassMediaShifts]
+    , [ (className =? "Gimp-2.6" <&&> fmap ("tool" `isSuffixOf`) role) --> doFloat]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -29,6 +31,7 @@ myManageHook = composeAll . concat $
     myClassChatShifts = ["Pidgin","Thunderbird","Geary","mutt"]
     myClassDocumentsShifts = ["Evince"]
     myClassMediaShifts = ["Gimp"]
+    role = stringProperty "WM_WINDOW_ROLE"
 
 main = do
   xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=11\" -w 832 -y -1 -bg black"
@@ -37,7 +40,7 @@ main = do
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
-myLayoutHook = onWorkspace "*" gimpLayout $ layoutHook defaultConfig
+myLayoutHook = onWorkspace "media" gimpLayout $ layoutHook defaultConfig
     where
       gimpLayout = withIM (11/64) (Role "gimp-toolbox") $ ResizableTall 2 (1/118) (11/20) [1] ||| Full
 
