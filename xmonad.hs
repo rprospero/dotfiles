@@ -21,7 +21,6 @@ myManageHook = composeAll . concat $
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
     , [ className =? b --> viewShift "media" | b <- myClassMediaShifts]
-    , [ onWorkspace "*" gimpLayout $ layoutHook defaultConfig]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -29,8 +28,7 @@ myManageHook = composeAll . concat $
     myClassEmacsShifts = ["Emacs"]
     myClassChatShifts = ["Pidgin","Thunderbird","Geary","mutt"]
     myClassDocumentsShifts = ["Evince"]
-    myClassDocumentsShifts = ["Gimp"]
-    gimpLayout = withIM (11/64) (Role "gimp-toolbox") $ ResizableTall 2 (1/118) (11/20) [1] ||| Full
+    myClassMediaShifts = ["Gimp"]
 
 main = do
   xmproc <- spawn "conky -c ~/.xmonad/.conkyrc | dzen2 -fg cyan -fn \"inconsolata:pixelsize=11\" -w 832 -y -1 -bg black"
@@ -39,14 +37,17 @@ main = do
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
+myLayoutHook = onWorkspace "*" gimpLayout $ layoutHook defaultConfig
+    where
+      gimpLayout = withIM (11/64) (Role "gimp-toolbox") $ ResizableTall 2 (1/118) (11/20) [1] ||| Full
 
 myConfig = defaultConfig {
                manageHook = manageDocks <+> myManageHook,
-               layoutHook = avoidStruts $ layoutHook defaultConfig,
+               layoutHook = avoidStruts $ myLayoutHook,
                modMask = mod4Mask,
                workspaces = myWorkspaces,
                startupHook = setWMName "LG3D",
-               logHook = dynamicLogWithPP $ myPP
+               logHook = dynamicLogWithPP $ xmobarPP
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "slock")
