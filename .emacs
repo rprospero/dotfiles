@@ -249,3 +249,5 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (holiday-float 5 1 1 "May Day Brank Holiday")
    (holiday-float 8 1 -1 "Late Summer Bank Holidays")
    )))
+
+(load-theme 'cyberpunk)
