@@ -200,3 +200,26 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'prog-mode-hook 'company-mode)
+
+(defun kdialog-popup (title msg)
+  "Show a popup if we're on X, or echo it otherwise; TITLE is the title
+of the message, MSG is the context.
+
+Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
+"
+
+  (interactive)
+  (if 
+      (eq window-system 'x)
+      (shell-command
+       (concat "kdialog --title \"" title 
+	       "\" --passivepopup \""  msg
+	       "\""))
+    (message (concat title ": " msg))))
+
+(defun kdialog-appt-display (min-to-appt new-time msg)
+  (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
+(setq appt-disp-window-function (function kdialog-appt-display))
+
+(kdialog-appt-display 3 10 "Message")
+
