@@ -221,5 +221,31 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
 
-(kdialog-appt-display 3 10 "Message")
+(customize-set-variable
+ 'org-agenda-day-face-function
+ (function
+  jd:org-agenda-day-face-holidays-function))
 
+;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
+(defun my-org-agenda-day-face-holidays-function (date)
+  "Compute DATE face for holidays."
+  (unless (org-agenda-todayp date)
+    (dolist (file (org-agenda-files nil 'ifmode))
+      (let ((face
+	     (dolist (entry (org-agenda-get-day-entries file date))
+	       (let ((category (with-temp-buffer
+				 (insert entry)
+				 (org-get-category (point-min)))))
+		 (when (or (string= "Holidays" category)
+			   (string= "Vacation" category))
+		   (return 'org-agenda-date-weekend))))))
+	(when face (return face))))))
+
+(customize-set-variable
+ 'holiday-other-holidays 
+ (quote 
+  (
+   (holiday-float 5 1 -1 "Spring Bank Holiday")
+   (holiday-float 5 1 1 "May Day Brank Holiday")
+   (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+   )))
