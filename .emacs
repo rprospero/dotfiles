@@ -251,3 +251,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    )))
 
 (load-theme 'tronesque-theme)
+
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+;(setq guide-key/guide-key-sequence t)
+(setq guide-key-tip/enabled)
+(guide-key-mode 1)  ; Enable guide-key-mode
+
