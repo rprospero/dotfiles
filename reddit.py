@@ -18,6 +18,8 @@ data= {"api_type":"json",
 r1 = requests.post(url, data=data, headers={"User-Agent":"adams-compulsive-message-checker"})
 results = json.loads(requests.get(url2, cookies=r1.cookies, data=data, headers={"User-Agent":"adams-compulsive-message-checker"}).text)
 count=len(results['data']['children'])
+with open("/tmp/reddit.txt","w") as outfile:
+    outfile.write(str(results['data']['children']))
 if count > 0:
     line  = "<fc=#ff3f37>"
     line += "<icon=/home/adam/dotfiles/mail.xbm/> "
