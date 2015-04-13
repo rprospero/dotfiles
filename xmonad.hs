@@ -22,6 +22,7 @@ myManageHook = composeAll . concat $
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
     , [ className =? b --> viewShift "media" | b <- myClassMediaShifts]
+    , [ stringProperty "WM_NAME" =? "Figure 1" --> doShift "documents"]
     , [ (role =? "gimp-toolbox" <||> role =? "gimp-dock") --> doFloat]
   ]
   where
