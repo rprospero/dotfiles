@@ -250,4 +250,4 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (holiday-float 8 1 -1 "Late Summer Bank Holidays")
    )))
 
-(load-theme 'cyberpunk)
+(load-theme 'tronesque-theme)
