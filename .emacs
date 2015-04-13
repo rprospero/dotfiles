@@ -263,5 +263,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (holiday-float 8 1 -1 "Late Summer Bank Holidays")
    )))
 
-(load-theme 'cyberpunk)
+(load-theme 'tronesque-theme)
 
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+;(setq guide-key/guide-key-sequence t)
+(setq guide-key-tip/enabled)
+(guide-key-mode 1)  ; Enable guide-key-mode
