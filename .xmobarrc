@@ -12,7 +12,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
        , iconOffset = 9
        , allDesktops = True
        , overrideRedirect = True
-       , commands = [ Run Weather "EGCC" ["-t","<station>: <tempC>C",
+       , commands = [ Run Weather "EGCN" ["-t","<tempC>C <windMph>Mph",
                                           "-L","18","-H","25",
                                           "--normal","green",
                                           "--high","red",
@@ -26,7 +26,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     , Run Memory ["-t","<usedratio>%"] 10
                     , Run Swap ["-t","<usedratio>%"] 10
                     , Run Com "uname" ["-s","-r"] "" 36000
-    		    , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+    		    , Run Date "%a %_d %b %Y %H:%M:%S" "date" 10
 		    , Run Mail [("Personal ","~/Maildir/Personal/INBOX"),
                                 ("Professional ","~/Maildir/Professional/INBOX"),
                                 ("Work ","~/Maildir/Work/INBOX")] "mail"
@@ -36,5 +36,5 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %multicpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% | %mail% | %reddit%}\ %StdinReader% \{ <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/>%date%</fc>| %EGCN% | %uname%"
+       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %multicpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% | %reddit%}\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
        }
