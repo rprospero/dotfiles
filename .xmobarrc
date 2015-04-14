@@ -9,6 +9,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
        , persistent = False
        , hideOnStart = False
        , iconRoot = "."
+       , iconOffset = 9
        , allDesktops = True
        , overrideRedirect = True
        , commands = [ Run Weather "EGCC" ["-t","<station>: <tempC>C",
