@@ -195,12 +195,6 @@
 (setq twittering-use-master-password t)
 (twit)
 
-(require 'powerline)
-
-(require 'moe-theme)
-(moe-dark)
-(powerline-moe-theme)
-
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'prog-mode-hook 'company-mode)
@@ -261,4 +255,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 ;(setq guide-key/guide-key-sequence t)
 (setq guide-key-tip/enabled)
 (guide-key-mode 1)  ; Enable guide-key-mode
+
+(which-function-mode 't)
+(smart-mode-line-enable)
+(set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
+(sml/apply-theme 'respectful)
 
