@@ -137,7 +137,7 @@
 
 
 ;;Browser stuff
-(customize-set-variable 'browse-url-browser-function 'browse-url-w3)
+(customize-set-variable 'browse-url-browser-function 'eww-browse-url)
 
 (customize-set-variable
  'jabber-account-list
