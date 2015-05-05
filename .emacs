@@ -259,3 +259,51 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 (sml/apply-theme 'respectful)
 
+
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    (push '("<=" . ?≤) prettify-symbols-alist)
+	    (push '("**2" . ?²) prettify-symbols-alist)
+	    (prettify-symbols-mode)))
+
+(add-hook 'python-mode-hook
+	  (lambda ()
+	    (push '("<=" . ?≤) prettify-symbols-alist)
+	    (push '(">=" . ?≥) prettify-symbols-alist)
+	    (push '("!=" . ?≠) prettify-symbols-alist)
+	    (push '("np.pi" . ?π) prettify-symbols-alist)
+	    (push '("np.sum" . ?Σ) prettify-symbols-alist)
+	    (push '("np.sqrt" . ?√) prettify-symbols-alist)
+	    (push '("sqrt" . ?√) prettify-symbols-alist)
+	    (push '("sum" . ?Σ) prettify-symbols-alist)
+	    (push '("alpha" . ?α) prettify-symbols-alist)
+	    (push '("sigma" . ?σ) prettify-symbols-alist)
+	    (push '("lambda" . ?λ) prettify-symbols-alist)
+	    (push '("**2" . ?²) prettify-symbols-alist)
+	    (prettify-symbols-mode)))
+
+(add-hook
+ 'haskell-mode-hook
+ (lambda ()
+   (turn-on-haskell-indent)
+   (push '("\\" . ?λ) prettify-symbols-alist)
+   (push '("->" . ?→) prettify-symbols-alist)
+   (push '("<-" . ?←) prettify-symbols-alist)
+   (push '("=>" . ?⇒) prettify-symbols-alist)
+   (push '("not" . ?¬) prettify-symbols-alist)
+   (push '("==" . ?≟) prettify-symbols-alist)
+   (push '("/=" . ?≠) prettify-symbols-alist)
+   (push '("<=" . ?≤) prettify-symbols-alist)
+   (push '(">=" . ?≥) prettify-symbols-alist)
+   (push '("=" . ?≡) prettify-symbols-alist)
+   (push '("pi" . ?π) prettify-symbols-alist)
+   (push '(">>" . ?≫) prettify-symbols-alist)
+   (push '("<<" . ?≪) prettify-symbols-alist)
+   (push '("++" . ?⧺) prettify-symbols-alist)
+   (push '("*" . ?⋅) prettify-symbols-alist)
+   (push '(" . " . ?∘) prettify-symbols-alist)
+   (push '("<*>" . ?⊛) prettify-symbols-alist)
+   (push '("<+>" . ?⊕) prettify-symbols-alist)
+   (push '("::" . ?⁝) prettify-symbols-alist)
+   (prettify-symbols-mode)))
+
