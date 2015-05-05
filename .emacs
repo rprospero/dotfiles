@@ -323,6 +323,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (push '("::" . ?⁝) prettify-symbols-alist)
    (prettify-symbols-mode)))
 
+(require 'unbound)
+
 (customize-save-variable
  'indent-tabs-mode
  nil)
