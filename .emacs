@@ -279,8 +279,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
 	    (push '("<=" . ?≤) prettify-symbols-alist)
-	    (push '("**2" . ?²) prettify-symbols-alist)
-	    (prettify-symbols-mode)))
+	    (push '("**2" . ?²) prettify-symbols-alist)))
 
 (add-hook 'python-mode-hook
 	  (lambda ()
@@ -295,8 +294,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 	    (push '("alpha" . ?α) prettify-symbols-alist)
 	    (push '("sigma" . ?σ) prettify-symbols-alist)
 	    (push '("lambda" . ?λ) prettify-symbols-alist)
-	    (push '("**2" . ?²) prettify-symbols-alist)
-	    (prettify-symbols-mode)))
+	    (push '("**2" . ?²) prettify-symbols-alist)))
 
 (add-hook
  'haskell-mode-hook
@@ -320,8 +318,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (push '(" . " . ?∘) prettify-symbols-alist)
    (push '("<*>" . ?⊛) prettify-symbols-alist)
    (push '("<+>" . ?⊕) prettify-symbols-alist)
-   (push '("::" . ?⁝) prettify-symbols-alist)
-   (prettify-symbols-mode)))
+   (push '("::" . ?⁝) prettify-symbols-alist)))
 
 (require 'unbound)
 
@@ -330,3 +327,4 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
  nil)
 
 (global-whitespace-cleanup-mode)
+(global-prettify-symbols-mode t)
