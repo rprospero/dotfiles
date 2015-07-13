@@ -314,3 +314,4 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (global-whitespace-cleanup-mode)
 (global-prettify-symbols-mode t)
 
+(global-set-key "\C-z" 'shell)
