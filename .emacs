@@ -186,6 +186,9 @@
 (global-set-key (kbd "C-x 8 RET") 'helm-unicode)
 (global-set-key (kbd "M-$") 'helm-flyspell-correct)
 
+(set-fontset-font "fontset-default" nil 
+                  (font-spec :size 20 :name "DejaVu Sans"))
+
 (customize-set-variable 'helm-split-window-in-side-p t)
 (helm-mode 1)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
