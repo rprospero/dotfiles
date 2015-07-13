@@ -183,6 +183,9 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-s SPC") 'helm-swoop)
+(global-set-key (kbd "C-x 8 RET") 'helm-unicode)
+(global-set-key (kbd "M-$") 'helm-flyspell-correct)
+
 (customize-set-variable 'helm-split-window-in-side-p t)
 (helm-mode 1)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
