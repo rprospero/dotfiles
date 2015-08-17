@@ -207,7 +207,7 @@
 (add-hook 'prog-mode-hook 'company-mode)
 
 (require 'god-mode)
-(global-set-key (kbd "<escape>") 'god-local-mode)
+(global-set-key (kbd "<Scroll_Lock>") 'god-local-mode)
 
 (defun my-update-cursor ()
   (setq cursor-type (if (or god-local-mode buffer-read-only)
