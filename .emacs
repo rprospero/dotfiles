@@ -18,6 +18,9 @@
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (add-hook 'org-mode-hook 'flyspell-mode)
 
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook 'visual-line-mode)
+
 (global-set-key "\C-xk" 'kill-this-buffer)
 
 (defun adam-org-sunrise () 
