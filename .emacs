@@ -101,9 +101,7 @@
 
 
 ;;Python checking stuff
-(autoload 'pylint "pylint")
-(add-hook 'python-mode-hook 'pylint-add-menu-items)
-(add-hook 'python-mode-hook 'pylint-add-key-bindings)
+(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 
 ;;Usenet stuff
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
