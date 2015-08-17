@@ -1,10 +1,9 @@
 [Unit]
-Description=Runs offline imap every five minutes
+Description=Offlineimap Query Timer
 
 [Timer]
-Persistent=true
+OnUnitInactiveSec=15m
 Unit=offlineimap.service
-OnUnitActiveSec=5m
 
 [Install]
-WantedBy=timers.target
+WantedBy=mail.target

@@ -1,8 +1,10 @@
 [Unit]
-Description=Start offlineimap as a daemon
+Description=Offlineimap Service
 
 [Service]
-Nice=19
-IOSchedulingClass=2
-IOScedulingPriority=7
-ExecStart=/usr/bin/offlineimap
+Type=oneshot
+ExecStart=/usr/bin/offlineimap -o
+User=adam
+
+[Install]
+WantedBy=mail.target
