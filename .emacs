@@ -219,7 +219,6 @@
 (add-hook 'god-mode-disabled-hook 'my-update-cursor)
 
 (add-to-list 'god-exempt-major-modes 'magit-mode)
-
 (defun kdialog-popup (title msg)
   "Show a popup if we're on X, or echo it otherwise; TITLE is the title
 of the message, MSG is the context.
