@@ -51,7 +51,7 @@ accounts = Professional, Personal, Work
 # since any given sync run never "finishes" due to a timer, you will never
 # sync your additional accounts if this is 1.
 
-#maxsyncaccounts = 1
+maxsyncaccounts = 3
 
 # You can specify one or more user interface modules for OfflineIMAP
 # to use.  OfflineIMAP will try the first in the list, and if it
@@ -178,16 +178,19 @@ footer = "\n"
 
 localrepository = GmailLocalProfessional
 remoterepository = GmailProfessional
+autorefresh = 5
 
 [Account Work]
 
 localrepository = GmailLocalWork
 remoterepository = GmailWork
+autorefresh = 5
 
 [Account Personal]
 
 localrepository = GmailLocalPersonal
 remoterepository = GmailPersonal
+autorefresh = 5
 
 ########## Advanced settings
 
