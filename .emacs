@@ -99,9 +99,13 @@
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'flyspell-mode)
 
+(defun flymake-keys ()
+  (local-set-key [(meta down)] 'flymake-goto-next-error)
+  (local-set-key [(meta up)] 'flymake-goto-prev-error))
 
 ;;Python checking stuff
 (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
+(add-hook 'python-mode-hook 'flymake-keys)
 
 ;;Usenet stuff
 (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
