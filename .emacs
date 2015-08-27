@@ -211,7 +211,7 @@
 (add-hook 'prog-mode-hook 'company-mode)
 
 (require 'god-mode)
-(global-set-key (kbd "<Scroll_Lock>") 'god-local-mode)
+(global-set-key (kbd "<Scroll_Lock>") 'god-mode-all)
 
 (defun my-update-cursor ()
   (setq cursor-type (if (or god-local-mode buffer-read-only)
@@ -223,6 +223,8 @@
 (add-hook 'god-mode-disabled-hook 'my-update-cursor)
 
 (add-to-list 'god-exempt-major-modes 'magit-mode)
+(add-to-list 'god-exempt-major-modes 'Group)
+(add-to-list 'god-exempt-major-modes 'Messages)
 (defun kdialog-popup (title msg)
   "Show a popup if we're on X, or echo it otherwise; TITLE is the title
 of the message, MSG is the context.
