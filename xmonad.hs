@@ -57,7 +57,7 @@ myConfig = defaultConfig {
              , ((mod4Mask, xK_p), spawn "$(~/.cabal/bin/yeganesh -x -- -b -nb black)")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
              , ((mod4Mask, xK_t), spawn "thunar")
-             , ((mod4Mask .|. shiftMask, xK_Return), spawn "xterm")
+             , ((mod4Mask .|. shiftMask, xK_Return), spawn "urxvt")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
