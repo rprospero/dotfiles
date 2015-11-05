@@ -102,7 +102,10 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-(customize-set-variable 'custom-enabled-themes (quote (wheatgrass)))
+(use-package tronesque-theme
+  :ensure
+  :init
+  (customize-set-variable 'custom-enabled-themes (quote (tronesque))))
 
 (customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 (customize-set-variable 'ispell-dictionary nil)
