@@ -107,7 +107,6 @@
   :init
   (customize-set-variable 'custom-enabled-themes (quote (tronesque))))
 
-(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 (customize-set-variable 'ispell-dictionary nil)
 
 (customize-set-variable
@@ -117,8 +116,6 @@
    ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
 (customize-set-variable 'TeX-PDF-mode t)
-(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
-
 
 (ido-mode)
 
@@ -190,15 +187,18 @@
 
 ;; Haskell Stuff
 
-(setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
-(add-to-list 'exec-path "~/.cabal/bin")
-(custom-set-variables '(haskell-tags-on-save t))
+(use-package haskell-mode
+  :ensure t
+;  :diminish haskell-mode
+  :config
+  (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
+  (add-to-list 'exec-path "~/.cabal/bin")
+  (custom-set-variables '(haskell-tags-on-save t))
 
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
-(add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-;(require 'flymake-haskell-multi)
-(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
 
 
 ;; Custom hot-keys
@@ -340,7 +340,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (add-hook
  'haskell-mode-hook
  (lambda ()
-   (turn-on-haskell-indent)
    (push '("\\" . ?λ) prettify-symbols-alist)
    (push '("->" . ?→) prettify-symbols-alist)
    (push '("<-" . ?←) prettify-symbols-alist)
