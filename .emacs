@@ -335,9 +335,14 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (guide-key-mode 1)  ; Enable guide-key-mode
 
 (which-function-mode 't)
-(smart-mode-line-enable)
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
-(sml/apply-theme 'respectful)
+
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (smart-mode-line-enable)
+  :config
+  (sml/apply-theme 'respectful))
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
