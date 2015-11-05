@@ -55,7 +55,6 @@
     
     (add-hook 'org-mode-hook 'auto-fill-mode)
     (add-hook 'org-mode-hook 'flyspell-mode)))
-;; (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
@@ -224,17 +223,18 @@
          ("C-x C-f" . helm-find-files)
          ("M-s SPC" . helm-swoop)
          ("C-x 8 RET" . helm-unicode)
-         ("M-$" . helm-flyspell-correct)))
+         ("M-$" . helm-flyspell-correct))
+  :config
+  (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-z" 'helm-select-action helm-map))
+
 
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 12 :name "DejaVu Sans"))
 
 (customize-set-variable 'helm-split-window-in-side-p t)
 (helm-mode 1)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-
 
 ;; Twitter Stuff
 (use-package twittering-mode
