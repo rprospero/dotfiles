@@ -306,6 +306,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :diminish guide-key-mode
   :config
+  (customize-set-variable 'guide-key/recursive-key-sequence-flag t)
   (setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
   (setq guide-key-tip/enabled))
 (guide-key-mode 1)  ; Enable guide-key-mode
