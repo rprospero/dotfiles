@@ -23,7 +23,7 @@
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'text-mode-hook 'visual-line-mode)
 
-(global-set-key "\C-xk" 'kill-this-buffer)
+(bind-key "C-x k" 'kill-this-buffer)
 
 (defun adam-org-sunrise () 
   (concat
@@ -37,9 +37,9 @@
 
 (customize-set-variable 'tab-always-indent 'complete)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+(bind-key "C-c l" 'org-store-link)
+(bind-key "C-c a" 'org-agenda)
+(bind-key "C-c b" 'org-iswitchb)
 
 (defun count-words (&optional begin end)
   "count words between BEGIN and END (region); if no region defined, count words in buffer"
@@ -357,4 +357,4 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (global-whitespace-cleanup-mode)
 (global-prettify-symbols-mode t)
 
-(global-set-key "\C-z" 'shell)
+(bind-key "C-z" 'shell)
