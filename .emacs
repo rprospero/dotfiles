@@ -142,6 +142,11 @@
  'message-sendmail-f-is-evil
  t)
 
+(defun gnus-keys ()
+  (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+
+(add-hook 'gnus-summary-mode-hook 'gnus-keys)
+
 
 ;;Browser stuff
 (customize-set-variable 'browse-url-browser-function 'eww-browse-url)
