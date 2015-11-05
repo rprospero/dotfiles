@@ -4,6 +4,15 @@
 
 (setq w32-apps-modifier 'super)
 
+(use-package jabber
+  :defer t
+  :config
+  (customize-set-variable
+   'jabber-account-list
+   '(("rprospero@gmail.com" 
+      (:network-server . "talk.google.com")
+      (:connection-type . ssl)))))
+
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
@@ -13,7 +22,7 @@
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
-    (custom-set-variables
+    (customize-set-variables
      '(org-agenda-include-diary nil)
      '(org-agenda-start-on-weekday nil))
     (add-hook 'org-mode-hook
@@ -35,6 +44,15 @@
     (customize-set-variable 'org-confirm-babel-evaluate nil)
     (customize-set-variable 'org-src-fontify-natively t)
     (customize-set-variable 'org-agenda-include-diary nil)
+
+    (customize-set-variable
+     'holiday-other-holidays 
+     (quote 
+      (
+       (holiday-float 5 1 -1 "Spring Bank Holiday")
+       (holiday-float 5 1 1 "May Day Brank Holiday")
+       (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+       )))
 
     ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
     (defun my-org-agenda-day-face-holidays-function (date)
@@ -133,52 +151,48 @@
 (add-hook 'python-mode-hook 'flymake-keys)
 
 ;;Usenet stuff
-(customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
-
 ;; Mail stuff
-(customize-set-variable
- 'gnus-secondary-select-methods
- (quote
-  ((nnmaildir "Professional"
-	      (directory "~/Maildir/Professional"))
-   (nnmaildir "Work"
-	      (directory "~/Maildir/Work"))
-   (nnmaildir "Personal"
-	      (directory "~/Maildir/Personal")))))
+(use-package gnus
+  :config
+  (progn
+    (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
+    (customize-set-variable
+     'gnus-secondary-select-methods
+     (quote
+      ((nnmaildir "Professional"
+                  (directory "~/Maildir/Professional"))
+       (nnmaildir "Work"
+                  (directory "~/Maildir/Work"))
+       (nnmaildir "Personal"
+                  (directory "~/Maildir/Personal")))))
 
-(customize-set-variable
- 'send-mail-function
- (quote smtpmail-send-it))
-(customize-set-variable
- 'sendmail-program
- "msmtp")
-(customize-set-variable
- 'message-send-mail-function
- (quote message-send-mail-with-sendmail))
-(customize-set-variable
- 'message-sendmail-envelope-from
- (quote header))
-(customize-set-variable
- 'message-sendmail-extra-arguments
- (quote ("--read-envelope-from")))
-(customize-set-variable
- 'message-sendmail-f-is-evil
- t)
+    (customize-set-variable
+     'send-mail-function
+     (quote smtpmail-send-it))
+    (customize-set-variable
+     'sendmail-program
+     "msmtp")
+    (customize-set-variable
+     'message-send-mail-function
+     (quote message-send-mail-with-sendmail))
+    (customize-set-variable
+     'message-sendmail-envelope-from
+     (quote header))
+    (customize-set-variable
+     'message-sendmail-extra-arguments
+     (quote ("--read-envelope-from")))
+    (customize-set-variable
+     'message-sendmail-f-is-evil
+     t)
 
-(defun gnus-keys ()
-  (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+    (defun gnus-keys ()
+      (local-set-key ["S-delete"] 'gnus-summary-delete-article))
 
-(add-hook 'gnus-summary-mode-hook 'gnus-keys)
+    (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
 
 
 ;;Browser stuff
 (customize-set-variable 'browse-url-browser-function 'eww-browse-url)
-
-(customize-set-variable
- 'jabber-account-list
- '(("rprospero@gmail.com" 
-    (:network-server . "talk.google.com")
-    (:connection-type . ssl))))
 
 ;;csharp
 (customize-set-variable
@@ -193,7 +207,7 @@
   :config
   (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
   (add-to-list 'exec-path "~/.cabal/bin")
-  (custom-set-variables '(haskell-tags-on-save t))
+  (customize-set-variable 'haskell-tags-on-save t)
 
   (autoload 'ghc-init "ghc" nil t)
   (autoload 'ghc-debug "ghc" nil t)
@@ -252,7 +266,26 @@
              :ensure t
              :defer t
              :init
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+             :config
+             (set-face-attribute 'rainbow-delimiters-depth-1-face nil
+                                 :foreground (face-attribute 'default :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-2-face nil
+                                 :foreground (face-attribute 'outline-1 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-3-face nil
+                                 :foreground (face-attribute 'outline-2 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-4-face nil
+                                 :foreground (face-attribute 'outline-3 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-5-face nil
+                                 :foreground (face-attribute 'outline-4 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-6-face nil
+                                 :foreground (face-attribute 'outline-5 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-7-face nil
+                                 :foreground (face-attribute 'outline-6 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-8-face nil
+                                 :foreground (face-attribute 'outline-7 :foreground))
+             (set-face-attribute 'rainbow-delimiters-depth-9-face nil
+                                 :foreground (face-attribute 'outline-8 :foreground)))
 
 (use-package company
   :ensure t
@@ -294,16 +327,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (defun kdialog-appt-display (min-to-appt new-time msg)
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
-
-
-(customize-set-variable
- 'holiday-other-holidays 
- (quote 
-  (
-   (holiday-float 5 1 -1 "Spring Bank Holiday")
-   (holiday-float 5 1 1 "May Day Brank Holiday")
-   (holiday-float 8 1 -1 "Late Summer Bank Holidays")
-   )))
 
 (use-package guide-key
   :ensure t
