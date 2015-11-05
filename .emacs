@@ -3,43 +3,74 @@
   (require 'use-package))
 
 (setq w32-apps-modifier 'super)
-(custom-set-variables
- '(org-agenda-include-diary nil)
- '(org-agenda-start-on-weekday nil))
 
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (variable-pitch-mode t)
-	    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
+  :config
+  (progn
+    (setq calendar-latitude 53.3836)
+    (setq calendar-longitude 1.4669)
+
+    (custom-set-variables
+     '(org-agenda-include-diary nil)
+     '(org-agenda-start-on-weekday nil))
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (variable-pitch-mode t)
+                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+
+    (defun adam-org-sunrise () 
+      (concat
+       (nth 1 (split-string (diary-sunrise-sunset)))
+       " Sunrise"))
+    (defun adam-org-sunset () 
+      (concat
+       (nth 4 (split-string (diary-sunrise-sunset)))
+       " Sunset"))
+    
+    (customize-set-variable 'org-agenda-start-on-weekday nil)
+    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (customize-set-variable 'org-confirm-babel-evaluate nil)
+    (customize-set-variable 'org-src-fontify-natively t)
+    (customize-set-variable 'org-agenda-include-diary nil)
+
+    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
+    (defun my-org-agenda-day-face-holidays-function (date)
+      "Compute DATE face for holidays."
+      (unless (org-agenda-todayp date)
+        (dolist (file (org-agenda-files nil 'ifmode))
+          (let ((face
+                 (dolist (entry (org-agenda-get-day-entries file date))
+                   (let ((category (with-temp-buffer
+                                     (insert entry)
+                                     (org-get-category (point-min)))))
+                     (when (or (string= "Holidays" category)
+                               (string= "Vacation" category))
+                       (return 'org-agenda-date-weekend))))))
+            (when face (return face))))))
+
+    (customize-set-variable
+     'org-agenda-day-face-function
+     (function
+      jd:org-agenda-day-face-holidays-function))
+    
+    (add-hook 'org-mode-hook 'auto-fill-mode)
+    (add-hook 'org-mode-hook 'flyspell-mode)))
 
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-
-(add-hook 'org-mode-hook 'auto-fill-mode)
-(add-hook 'org-mode-hook 'flyspell-mode)
+(customize-set-variable 'TeX-PDF-mode t)
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'text-mode-hook 'visual-line-mode)
 
-(global-set-key "\C-xk" 'kill-this-buffer)
-
-(defun adam-org-sunrise () 
-  (concat
-   (nth 1 (split-string (diary-sunrise-sunset)))
-   " Sunrise"))
-
-(defun adam-org-sunset () 
-  (concat
-   (nth 4 (split-string (diary-sunrise-sunset)))
-   " Sunset"))
+(bind-key "C-x k" 'kill-this-buffer)
 
 (customize-set-variable 'tab-always-indent 'complete)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
 
 (defun count-words (&optional begin end)
   "count words between BEGIN and END (region); if no region defined, count words in buffer"
@@ -71,15 +102,12 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-(customize-set-variable 'custom-enabled-themes (quote (wheatgrass)))
-(customize-set-variable 'org-agenda-start-on-weekday nil)
-(customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-(customize-set-variable 'org-confirm-babel-evaluate nil)
-(customize-set-variable 'org-src-fontify-natively t)
+(use-package tronesque-theme
+  :ensure
+  :init
+  (customize-set-variable 'custom-enabled-themes (quote (tronesque))))
 
-(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 (customize-set-variable 'ispell-dictionary nil)
-(customize-set-variable 'org-agenda-include-diary nil)
 
 (customize-set-variable
  'package-archives
@@ -88,11 +116,6 @@
    ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
 (customize-set-variable 'TeX-PDF-mode t)
-(customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
-
-
-(setq calendar-latitude 53.3836)
-(setq calendar-longitude 1.4669)
 
 (ido-mode)
 
@@ -164,15 +187,18 @@
 
 ;; Haskell Stuff
 
-(setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
-(add-to-list 'exec-path "~/.cabal/bin")
-(custom-set-variables '(haskell-tags-on-save t))
+(use-package haskell-mode
+  :ensure t
+;  :diminish haskell-mode
+  :config
+  (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
+  (add-to-list 'exec-path "~/.cabal/bin")
+  (custom-set-variables '(haskell-tags-on-save t))
 
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
-(add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-;(require 'flymake-haskell-multi)
-(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
 
 
 ;; Custom hot-keys
@@ -200,7 +226,12 @@
          ("C-x C-f" . helm-find-files)
          ("M-s SPC" . helm-swoop)
          ("C-x 8 RET" . helm-unicode)
-         ("M-$" . helm-flyspell-correct)))
+         ("M-$" . helm-flyspell-correct))
+  :config
+  (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-z" 'helm-select-action helm-map))
+
 
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 12 :name "DejaVu Sans"))
@@ -210,10 +241,6 @@
 
 (customize-set-variable 'helm-split-window-in-side-p t)
 (helm-mode 1)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-
 
 ;; Twitter Stuff
 (use-package twittering-mode
@@ -230,7 +257,8 @@
 (use-package company
   :ensure t
   :config
-  (add-hook 'prog-mode-hook 'company-mode))
+  (add-hook 'prog-mode-hook 'company-mode)
+  :diminish company-mode)
 
 (use-package god-mode
   :bind (("<Scroll_Lock>" . god-mode-all))
@@ -267,25 +295,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
 
-(customize-set-variable
- 'org-agenda-day-face-function
- (function
-  jd:org-agenda-day-face-holidays-function))
-
-;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
-(defun my-org-agenda-day-face-holidays-function (date)
-  "Compute DATE face for holidays."
-  (unless (org-agenda-todayp date)
-    (dolist (file (org-agenda-files nil 'ifmode))
-      (let ((face
-	     (dolist (entry (org-agenda-get-day-entries file date))
-	       (let ((category (with-temp-buffer
-				 (insert entry)
-				 (org-get-category (point-min)))))
-		 (when (or (string= "Holidays" category)
-			   (string= "Vacation" category))
-		   (return 'org-agenda-date-weekend))))))
-	(when face (return face))))))
 
 (customize-set-variable
  'holiday-other-holidays 
@@ -298,7 +307,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package guide-key
   :ensure t
+  :diminish guide-key-mode
   :config
+  (customize-set-variable 'guide-key/recursive-key-sequence-flag t)
   (setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
   (setq guide-key-tip/enabled))
 (guide-key-mode 1)  ; Enable guide-key-mode
@@ -308,6 +319,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 (sml/apply-theme 'respectful)
 
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -332,7 +344,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (add-hook
  'haskell-mode-hook
  (lambda ()
-   (turn-on-haskell-indent)
    (push '("\\" . ?λ) prettify-symbols-alist)
    (push '("->" . ?→) prettify-symbols-alist)
    (push '("<-" . ?←) prettify-symbols-alist)
@@ -359,7 +370,13 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
  'indent-tabs-mode
  nil)
 
-(global-whitespace-cleanup-mode)
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :diminish whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode))
+
+
 (global-prettify-symbols-mode t)
 
-(global-set-key "\C-z" 'shell)
+(bind-key "C-z" 'shell)
