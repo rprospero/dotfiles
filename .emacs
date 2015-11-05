@@ -3,43 +3,72 @@
   (require 'use-package))
 
 (setq w32-apps-modifier 'super)
-(custom-set-variables
- '(org-agenda-include-diary nil)
- '(org-agenda-start-on-weekday nil))
 
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (variable-pitch-mode t)
-	    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
+  :config
+  (progn
+    (custom-set-variables
+     '(org-agenda-include-diary nil)
+     '(org-agenda-start-on-weekday nil))
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (variable-pitch-mode t)
+                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+
+    (defun adam-org-sunrise () 
+      (concat
+       (nth 1 (split-string (diary-sunrise-sunset)))
+       " Sunrise"))
+    (defun adam-org-sunset () 
+      (concat
+       (nth 4 (split-string (diary-sunrise-sunset)))
+       " Sunset"))
+    
+    (customize-set-variable 'org-agenda-start-on-weekday nil)
+    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (customize-set-variable 'org-confirm-babel-evaluate nil)
+    (customize-set-variable 'org-src-fontify-natively t)
+    (customize-set-variable 'org-agenda-include-diary nil)
+
+    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
+    (defun my-org-agenda-day-face-holidays-function (date)
+      "Compute DATE face for holidays."
+      (unless (org-agenda-todayp date)
+        (dolist (file (org-agenda-files nil 'ifmode))
+          (let ((face
+                 (dolist (entry (org-agenda-get-day-entries file date))
+                   (let ((category (with-temp-buffer
+                                     (insert entry)
+                                     (org-get-category (point-min)))))
+                     (when (or (string= "Holidays" category)
+                               (string= "Vacation" category))
+                       (return 'org-agenda-date-weekend))))))
+            (when face (return face))))))
+
+    (customize-set-variable
+     'org-agenda-day-face-function
+     (function
+      jd:org-agenda-day-face-holidays-function))
+    
+    (add-hook 'org-mode-hook 'auto-fill-mode)
+    (add-hook 'org-mode-hook 'flyspell-mode)))
+;; (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-
-(add-hook 'org-mode-hook 'auto-fill-mode)
-(add-hook 'org-mode-hook 'flyspell-mode)
+(customize-set-variable 'TeX-PDF-mode t)
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'text-mode-hook 'visual-line-mode)
 
 (bind-key "C-x k" 'kill-this-buffer)
 
-(defun adam-org-sunrise () 
-  (concat
-   (nth 1 (split-string (diary-sunrise-sunset)))
-   " Sunrise"))
-
-(defun adam-org-sunset () 
-  (concat
-   (nth 4 (split-string (diary-sunrise-sunset)))
-   " Sunset"))
-
 (customize-set-variable 'tab-always-indent 'complete)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(bind-key "C-c l" 'org-store-link)
-(bind-key "C-c a" 'org-agenda)
-(bind-key "C-c b" 'org-iswitchb)
 
 (defun count-words (&optional begin end)
   "count words between BEGIN and END (region); if no region defined, count words in buffer"
@@ -72,14 +101,9 @@
 (menu-bar-mode -1)
 
 (customize-set-variable 'custom-enabled-themes (quote (wheatgrass)))
-(customize-set-variable 'org-agenda-start-on-weekday nil)
-(customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-(customize-set-variable 'org-confirm-babel-evaluate nil)
-(customize-set-variable 'org-src-fontify-natively t)
 
 (customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 (customize-set-variable 'ispell-dictionary nil)
-(customize-set-variable 'org-agenda-include-diary nil)
 
 (customize-set-variable
  'package-archives
@@ -265,25 +289,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
 
-(customize-set-variable
- 'org-agenda-day-face-function
- (function
-  jd:org-agenda-day-face-holidays-function))
-
-;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
-(defun my-org-agenda-day-face-holidays-function (date)
-  "Compute DATE face for holidays."
-  (unless (org-agenda-todayp date)
-    (dolist (file (org-agenda-files nil 'ifmode))
-      (let ((face
-	     (dolist (entry (org-agenda-get-day-entries file date))
-	       (let ((category (with-temp-buffer
-				 (insert entry)
-				 (org-get-category (point-min)))))
-		 (when (or (string= "Holidays" category)
-			   (string= "Vacation" category))
-		   (return 'org-agenda-date-weekend))))))
-	(when face (return face))))))
 
 (customize-set-variable
  'holiday-other-holidays 
