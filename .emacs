@@ -1,4 +1,6 @@
 (package-initialize)
+(eval-when-compile
+  (require 'use-package))
 
 (setq w32-apps-modifier 'super)
 (custom-set-variables
@@ -140,6 +142,11 @@
  'message-sendmail-f-is-evil
  t)
 
+(defun gnus-keys ()
+  (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+
+(add-hook 'gnus-summary-mode-hook 'gnus-keys)
+
 
 ;;Browser stuff
 (customize-set-variable 'browse-url-browser-function 'eww-browse-url)
@@ -170,26 +177,33 @@
 
 ;; Custom hot-keys
 
-
-(global-set-key (kbd "C-x g") 'magit-status)
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
 
 ;; Enable windmove in orgmode
-(windmove-default-keybindings)
-(add-hook 'org-shiftup-final-hook 'windmove-up)
-(add-hook 'org-shiftleft-final-hook 'windmove-left)
-(add-hook 'org-shiftdown-final-hook 'windmove-down)
-(add-hook 'org-shiftright-final-hook 'windmove-right)
+(use-package windmove
+  :ensure t
+  :init
+  (windmove-default-keybindings)
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right))
 
 ;; Helm bindings
-;(require 'helm-config)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "M-s SPC") 'helm-swoop)
-(global-set-key (kbd "C-x 8 RET") 'helm-unicode)
-(global-set-key (kbd "M-$") 'helm-flyspell-correct)
+(use-package helm
+  :bind (("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-c h" . helm-command-prefix)
+         ("C-x b" . helm-mini)
+         ("C-x C-f" . helm-find-files)
+         ("M-s SPC" . helm-swoop)
+         ("C-x 8 RET" . helm-unicode)
+         ("M-$" . helm-flyspell-correct)))
+
+(set-fontset-font "fontset-default" nil 
+                  (font-spec :size 12 :name "DejaVu Sans"))
 
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 20 :name "DejaVu Sans"))
@@ -202,16 +216,30 @@
 
 
 ;; Twitter Stuff
-(require 'twittering-mode)
-(setq twittering-use-master-password t)
-(twit)
+(use-package twittering-mode
+             :bind (("C-c t" . twit))
+             :config
+             (setq twittering-use-master-password t))
 
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'prog-mode-hook 'company-mode)
+(use-package rainbow-delimiters
+             :ensure t
+             :defer t
+             :init
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(require 'god-mode)
-(global-set-key (kbd "<Scroll_Lock>") 'god-mode-all)
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'company-mode))
+
+(use-package god-mode
+  :bind (("<Scroll_Lock>" . god-mode-all))
+  :config
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+  (add-to-list 'god-exempt-major-modes 'magit-mode)
+  (add-to-list 'god-exempt-major-modes 'Group)
+  (add-to-list 'god-exempt-major-modes 'Messages))
 
 (defun my-update-cursor ()
   (setq cursor-type (if (or god-local-mode buffer-read-only)
@@ -219,12 +247,6 @@
                       'bar)))
 (setq cursor-type 'bar)
 
-(add-hook 'god-mode-enabled-hook 'my-update-cursor)
-(add-hook 'god-mode-disabled-hook 'my-update-cursor)
-
-(add-to-list 'god-exempt-major-modes 'magit-mode)
-(add-to-list 'god-exempt-major-modes 'Group)
-(add-to-list 'god-exempt-major-modes 'Messages)
 (defun kdialog-popup (title msg)
   "Show a popup if we're on X, or echo it otherwise; TITLE is the title
 of the message, MSG is the context.
@@ -274,10 +296,11 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    (holiday-float 8 1 -1 "Late Summer Bank Holidays")
    )))
 
-(require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
-;(setq guide-key/guide-key-sequence t)
-(setq guide-key-tip/enabled)
+(use-package guide-key
+  :ensure t
+  :config
+  (setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
+  (setq guide-key-tip/enabled))
 (guide-key-mode 1)  ; Enable guide-key-mode
 
 (which-function-mode 't)
