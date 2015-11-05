@@ -4,6 +4,15 @@
 
 (setq w32-apps-modifier 'super)
 
+(use-package jabber
+  :defer t
+  :config
+  (customize-set-variable
+   'jabber-account-list
+   '(("rprospero@gmail.com" 
+      (:network-server . "talk.google.com")
+      (:connection-type . ssl)))))
+
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
