@@ -227,7 +227,8 @@
 (use-package company
   :ensure t
   :config
-  (add-hook 'prog-mode-hook 'company-mode))
+  (add-hook 'prog-mode-hook 'company-mode)
+  :diminish company-mode)
 
 (use-package god-mode
   :bind (("<Scroll_Lock>" . god-mode-all))
@@ -295,6 +296,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package guide-key
   :ensure t
+  :diminish guide-key-mode
   :config
   (setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
   (setq guide-key-tip/enabled))
