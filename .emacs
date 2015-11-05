@@ -316,6 +316,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 (sml/apply-theme 'respectful)
 
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
