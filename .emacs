@@ -10,6 +10,9 @@
          ("C-c b" . org-iswitchb))
   :config
   (progn
+    (setq calendar-latitude 53.3836)
+    (setq calendar-longitude 1.4669)
+
     (custom-set-variables
      '(org-agenda-include-diary nil)
      '(org-agenda-start-on-weekday nil))
@@ -113,9 +116,6 @@
 (customize-set-variable 'TeX-PDF-mode t)
 (customize-set-variable 'haskell-mode-hook (quote (turn-on-haskell-indent)))
 
-
-(setq calendar-latitude 53.3836)
-(setq calendar-longitude 1.4669)
 
 (ido-mode)
 
