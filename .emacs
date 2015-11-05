@@ -356,7 +356,13 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
  'indent-tabs-mode
  nil)
 
-(global-whitespace-cleanup-mode)
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :diminish whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode))
+
+
 (global-prettify-symbols-mode t)
 
 (bind-key "C-z" 'shell)
