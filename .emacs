@@ -403,3 +403,5 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (global-prettify-symbols-mode t)
 
 (bind-key "C-z" 'shell)
+
+(setq inhibit-startup-screen t)
