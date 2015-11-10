@@ -119,10 +119,8 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-(use-package tronesque-theme
-  :ensure
-  :init
-  (customize-set-variable 'custom-enabled-themes (quote (tronesque))))
+(use-package grandshell-theme
+  :ensure)
 
 (customize-set-variable 'ispell-dictionary nil)
 
