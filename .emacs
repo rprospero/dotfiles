@@ -22,9 +22,8 @@
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
-    (customize-set-variables
-     '(org-agenda-include-diary nil)
-     '(org-agenda-start-on-weekday nil))
+    (customize-set-variable 'org-agenda-include-diary nil)
+    (customize-set-variable 'org-agenda-start-on-weekday nil)
     (add-hook 'org-mode-hook
               (lambda ()
                 (variable-pitch-mode t)
