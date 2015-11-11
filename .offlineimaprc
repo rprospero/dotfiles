@@ -349,7 +349,7 @@ realdelete = no
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = adam.l.washington@gmail.com
 remotepasseval = passwords["Professional"]
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+cert_fingerprint=cc018e31e185ff1035b957be6acb4fb6fb800178
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 
@@ -385,7 +385,7 @@ realdelete = no
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = a.washington@sheffield.ac.uk
 remotepasseval = passwords["Work"]
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+cert_fingerprint=cc018e31e185ff1035b957be6acb4fb6fb800178
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 [Repository GmailPersonal]
@@ -396,6 +396,6 @@ realdelete = no
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = rprospero@gmail.com
 remotepasseval = passwords["Personal"]
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+cert_fingerprint=cc018e31e185ff1035b957be6acb4fb6fb800178
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
