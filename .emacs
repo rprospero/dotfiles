@@ -229,6 +229,8 @@
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right))
 
+(winner-mode)
+
 ;; Helm bindings
 (use-package helm
   :bind (("M-y" . helm-show-kill-ring)
