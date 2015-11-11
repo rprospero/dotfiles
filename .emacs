@@ -5,13 +5,18 @@
 (setq w32-apps-modifier 'super)
 
 (use-package jabber
+  :ensure t
   :defer t
   :config
-  (customize-set-variable
-   'jabber-account-list
-   '(("rprospero@gmail.com" 
-      (:network-server . "talk.google.com")
-      (:connection-type . ssl)))))
+  (let
+      ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
+    (customize-set-variable
+     'jabber-account-list
+     `(("rprospero@gmail.com"
+        (:port . 5223)
+        (:password . ,passwd)
+        (:network-server . "talk.google.com")
+        (:connection-type . ssl))))))
 
 (use-package org
   :bind (("C-c l" . org-store-link)
