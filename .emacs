@@ -28,6 +28,12 @@
         (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string))))
   (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar))
 
+(use-package emojify
+  :ensure t
+  :init
+  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
