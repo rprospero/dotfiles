@@ -18,6 +18,12 @@
         (:network-server . "talk.google.com")
         (:connection-type . ssl))))))
 
+(use-package emojify
+  :ensure t
+  :init
+  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
