@@ -1,18 +1,13 @@
 import           Control.Monad                (liftM2)
 import           Graphics.X11.ExtraTypes.XF86
-import           System.IO
-import           Data.List (isSuffixOf)
 import           XMonad
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import qualified XMonad.StackSet              as W
 import           XMonad.Util.EZConfig         (additionalKeys)
-import           XMonad.Util.Run              (spawnPipe)
-import           XMonad.Layout.IM
-import           XMonad.Layout.PerWorkspace
-import           XMonad.Layout.ResizableTile
 
+myWorkspaces :: [String]
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
 myManageHook = composeAll . concat $
@@ -34,6 +29,7 @@ myManageHook = composeAll . concat $
     myClassMediaShifts = ["Gimp"]
     role = stringProperty "WM_WINDOW_ROLE"
 
+main :: IO ()
 main = do
   xmproc <- xmobar myConfig
   xmonad xmproc
