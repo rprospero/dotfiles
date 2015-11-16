@@ -26,6 +26,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     , Run Memory ["-t","<usedratio>%","-w","3"] 10
                     , Run Swap ["-t","<usedratio>%","-w","3"] 10
                     , Run Com "uname" ["-s","-r"] "" 36000
+                    , Run Com "cat" ["/tmp/jabber_notify"] "jabber" 1000
     		    , Run Date "%a %_d %b %Y %H:%M:%S" "date" 10
 		    , Run Mail [("Personal ","~/Maildir/Personal/INBOX"),
                                 ("Professional ","~/Maildir/Professional/INBOX"),
@@ -35,5 +36,5 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/>%multicpu% <icon=/home/adam/dotfiles/mem.xbm/>%memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% |  %mail%} \ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
+       , template = "<icon=/home/adam/dotfiles/cpu.xbm/>%multicpu% <icon=/home/adam/dotfiles/mem.xbm/>%memory% * %swap% | %eno1% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% |  %mail% | %jabber%} \ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
        }

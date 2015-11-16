@@ -8,15 +8,25 @@
   :ensure t
   :defer t
   :config
-  (let
-      ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
-    (customize-set-variable
-     'jabber-account-list
-     `(("rprospero@gmail.com"
-        (:port . 5223)
-        (:password . ,passwd)
-        (:network-server . "talk.google.com")
-        (:connection-type . ssl))))))
+  (progn
+    (let
+        ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
+      (customize-set-variable
+       'jabber-account-list
+       `(("rprospero@gmail.com"
+          (:port . 5223)
+          (:password . ,passwd)
+          (:network-server . "talk.google.com")
+          (:connection-type . ssl)))))
+    (defun send-message-xmobar (msg)
+      (if *jabber-connected*
+          (call-process-shell-command
+           (format "echo \"%s\" > /tmp/jabber_notify" msg))))
+    (defun jabber-notify-xmobar ()
+      (if (equal "0" jabber-activity-count-string)
+          (send-message-xmobar "")
+        (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string))))
+  (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar))
 
 (use-package org
   :bind (("C-c l" . org-store-link)
