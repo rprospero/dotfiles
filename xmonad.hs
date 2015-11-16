@@ -17,7 +17,7 @@ myManageHook = composeAll . concat $
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
     , [ className =? b --> viewShift "media" | b <- myClassMediaShifts]
-    , [ stringProperty "WM_NAME" =? ("Figure "++show b) --> doShift "documents" | b <- [1..9]]
+    , [ stringProperty "WM_NAME" =? ("Figure "++show b) --> doShift "documents" | b <- [1..9] :: [Int]]
     , [ (role =? "gimp-toolbox" <||> role =? "gimp-dock") --> doFloat]
   ]
   where
@@ -35,13 +35,12 @@ main = do
   xmonad xmproc
 
 
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
-
+myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
 myLayoutHook = layoutHook defaultConfig
 
 myConfig = defaultConfig {
                manageHook = manageDocks <+> myManageHook,
-               layoutHook = avoidStruts $ myLayoutHook,
+               layoutHook = avoidStruts myLayoutHook,
                modMask = mod4Mask,
                workspaces = myWorkspaces,
                startupHook = setWMName "LG3D"

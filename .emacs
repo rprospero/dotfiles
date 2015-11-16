@@ -9,24 +9,24 @@
   :defer t
   :config
   (progn
-    (let
-        ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
-      (customize-set-variable
-       'jabber-account-list
-       `(("rprospero@gmail.com"
-          (:port . 5223)
-          (:password . ,passwd)
-          (:network-server . "talk.google.com")
-          (:connection-type . ssl)))))
-    (defun send-message-xmobar (msg)
-      (if *jabber-connected*
-          (call-process-shell-command
-           (format "echo \"%s\" > /tmp/jabber_notify" msg))))
-    (defun jabber-notify-xmobar ()
-      (if (equal "0" jabber-activity-count-string)
-          (send-message-xmobar "")
-        (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string))))
-  (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar))
+   (let
+    ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
+    (customize-set-variable
+     'jabber-account-list
+     `(("rprospero@gmail.com"
+        (:port . 5223)
+        (:password . ,passwd)
+        (:network-server . "talk.google.com")
+        (:connection-type . ssl)))))
+   (defun send-message-xmobar (msg)
+          (if t
+              (call-process-shell-command
+               (format "echo \"%s\" > /tmp/jabber_notify" msg))))
+   (defun jabber-notify-xmobar ()
+          (if (equal "0" jabber-activity-count-string)
+            (send-message-xmobar "")
+            (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string)))
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar)))
 
 (use-package emojify
   :ensure t
@@ -221,7 +221,6 @@
 
 (use-package haskell-mode
   :ensure t
-;  :diminish haskell-mode
   :config
   (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
   (add-to-list 'exec-path "~/.cabal/bin")
@@ -230,7 +229,30 @@
   (autoload 'ghc-init "ghc" nil t)
   (autoload 'ghc-debug "ghc" nil t)
   (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook
+   'haskell-mode-hook
+   (lambda ()
+     (push '("\\" . ?λ) prettify-symbols-alist)
+     (push '("->" . ?→) prettify-symbols-alist)
+     (push '("<-" . ?←) prettify-symbols-alist)
+     (push '("=>" . ?⇒) prettify-symbols-alist)
+     (push '("not" . ?¬) prettify-symbols-alist)
+     (push '("==" . ?≟) prettify-symbols-alist)
+     (push '("/=" . ?≠) prettify-symbols-alist)
+     (push '("<=" . ?≤) prettify-symbols-alist)
+     (push '(">=" . ?≥) prettify-symbols-alist)
+     (push '("=" . ?≡) prettify-symbols-alist)
+     (push '("pi" . ?π) prettify-symbols-alist)
+     (push '(">>" . ?≫) prettify-symbols-alist)
+     (push '("<<" . ?≪) prettify-symbols-alist)
+     (push '("++" . ?⧺) prettify-symbols-alist)
+     (push '("*" . ?⋅) prettify-symbols-alist)
+     (push '(" . " . ?∘) prettify-symbols-alist)
+     (push '("<*>" . ?⊛) prettify-symbols-alist)
+     (push '("<+>" . ?⊕) prettify-symbols-alist)
+     (push '("::" . ?⁝) prettify-symbols-alist))))
 
 
 ;; Custom hot-keys
@@ -389,28 +411,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 	    (push '("lambda" . ?λ) prettify-symbols-alist)
 	    (push '("**2" . ?²) prettify-symbols-alist)))
 
-(add-hook
- 'haskell-mode-hook
- (lambda ()
-   (push '("\\" . ?λ) prettify-symbols-alist)
-   (push '("->" . ?→) prettify-symbols-alist)
-   (push '("<-" . ?←) prettify-symbols-alist)
-   (push '("=>" . ?⇒) prettify-symbols-alist)
-   (push '("not" . ?¬) prettify-symbols-alist)
-   (push '("==" . ?≟) prettify-symbols-alist)
-   (push '("/=" . ?≠) prettify-symbols-alist)
-   (push '("<=" . ?≤) prettify-symbols-alist)
-   (push '(">=" . ?≥) prettify-symbols-alist)
-   (push '("=" . ?≡) prettify-symbols-alist)
-   (push '("pi" . ?π) prettify-symbols-alist)
-   (push '(">>" . ?≫) prettify-symbols-alist)
-   (push '("<<" . ?≪) prettify-symbols-alist)
-   (push '("++" . ?⧺) prettify-symbols-alist)
-   (push '("*" . ?⋅) prettify-symbols-alist)
-   (push '(" . " . ?∘) prettify-symbols-alist)
-   (push '("<*>" . ?⊛) prettify-symbols-alist)
-   (push '("<+>" . ?⊕) prettify-symbols-alist)
-   (push '("::" . ?⁝) prettify-symbols-alist)))
 
 (require 'unbound)
 
