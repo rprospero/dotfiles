@@ -1,3 +1,6 @@
+(setq custom-file "~/dotfiles/.emacs-custom.el")
+(load custom-file)
+
 (package-initialize)
 (eval-when-compile
   (require 'use-package))
