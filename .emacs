@@ -1,8 +1,22 @@
+(setq custom-file "~/dotfiles/.emacs-custom.el")
+(load custom-file)
+
 (package-initialize)
 (eval-when-compile
   (require 'use-package))
 
 (setq w32-apps-modifier 'super)
+
+(use-package multi-line
+  :ensure t
+  :bind (("C-c d" . multi-line)))
+
+(use-package encourage-mode
+  :ensure t
+  :init (encourage-mode))
+
+(use-package selectric-mode
+  :ensure t)
 
 (use-package jabber
   :ensure t
@@ -45,6 +59,7 @@
 
     (customize-set-variable 'org-agenda-include-diary nil)
     (customize-set-variable 'org-agenda-start-on-weekday nil)
+    (customize-set-variable 'org-return-follows-link t)
     (add-hook 'org-mode-hook
               (lambda ()
                 (variable-pitch-mode t)
