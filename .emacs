@@ -4,6 +4,17 @@
 
 (setq w32-apps-modifier 'super)
 
+(use-package multi-line
+  :ensure t
+  :bind (("C-c d" . multi-line)))
+
+(use-package encourage-mode
+  :ensure t
+  :init (encourage-mode))
+
+(use-package selectric-mode
+  :ensure t)
+
 (use-package jabber
   :ensure t
   :defer t
