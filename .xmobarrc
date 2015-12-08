@@ -22,7 +22,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
 					  "-t","<rx>KB <tx>KB"] 10
                     , Run MultiCpu ["-L","3","-H","50","-w","3",
                                "--normal","green","--high","red",
-			       "-t","<autototal>"] 10
+			       "-t","<autovbar>"] 10
                     , Run Memory ["-t","<usedratio>%","-w","3"] 10
                     , Run Swap ["-t","<usedratio>%","-w","3"] 10
                     , Run Com "uname" ["-s","-r"] "" 36000
