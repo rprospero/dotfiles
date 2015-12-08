@@ -12,8 +12,8 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
        , iconOffset = 9
        , allDesktops = True
        , overrideRedirect = True
-       , commands = [ Run Weather "EGCN" ["-t","<tempC>C <windMph>Mph",
-                                          "-L","18","-H","25",
+       , commands = [ Run Weather "EGCN" ["-t","<skyCondition> <tempC>C <windMph><windCardinal>",
+                                          "-L","10","-H","30",
                                           "--normal","green",
                                           "--high","red",
                                           "--low","lightblue"] 36000
