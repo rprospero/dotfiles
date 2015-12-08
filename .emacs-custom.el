@@ -77,7 +77,6 @@
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(package-enable-at-startup nil)
  '(paradox-automatically-star t)
- '(paradox-github-token "d83fb5a925bbd74a6c6a03951c64733bde76a697")
  '(send-mail-function (quote smtpmail-send-it))
  '(sendmail-program "msmtp")
  '(tab-always-indent (quote complete))
