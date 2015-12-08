@@ -35,5 +35,5 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/>%multicpu% <icon=/home/adam/dotfiles/mem.xbm/>%memory% | %dynnetwork% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% %mail% %jabber%}\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
+       , template = "<icon=/home/adam/dotfiles/cpu.xbm/>%multicpu% <icon=/home/adam/dotfiles/mem.xbm/>%memory% <icon=/home/adam/dotfiles/net_wired.xbm/> %dynnetwork% <icon=/home/adam/dotfiles/diskette.xbm/> %disku% %mail% %jabber%}\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
        }
