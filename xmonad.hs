@@ -29,14 +29,27 @@ myManageHook = composeAll . concat $
     myClassMediaShifts = ["Gimp"]
     role = stringProperty "WM_WINDOW_ROLE"
 
-main :: IO ()
-main = do
-  xmproc <- xmobar myConfig
-  xmonad xmproc
+toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
+toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
+main :: IO ()
+main = xmonad =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 
 myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
 myLayoutHook = layoutHook defaultConfig
+
+myPP :: PP
+myPP = xmobarPP { ppLayout = myLayoutPrinter
+                , ppVisible = xmobarColor "#bbbb00" "black" . wrap "(" ")"
+                , ppHidden = xmobarColor "#888888" "black"
+                , ppUrgent = xmobarColor "#FF0000" "black" . wrap "!" "!"
+  }
+
+myLayoutPrinter :: String -> String
+myLayoutPrinter "Full" = "<icon=/home/adam/dotfiles/layout_full.xbm/>"
+myLayoutPrinter "Tall" = "<icon=/home/adam/dotfiles/layout_tall.xbm/>"
+myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xbm/>"
+myLayoutPrinter x = x
 
 myConfig = defaultConfig {
                manageHook = manageDocks <+> myManageHook,

@@ -12,8 +12,8 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
        , iconOffset = 7
        , allDesktops = True
        , overrideRedirect = True
-       , commands = [ Run Weather "EGCN" ["-t","<tempC>C <windMph>Mph",
-                                          "-L","18","-H","25",
+       , commands = [ Run Weather "EGCN" ["-t","<skyCondition> <tempC>C <windMph><windCardinal>",
+                                          "-L","10","-H","30",
                                           "--normal","green",
                                           "--high","red",
                                           "--low","lightblue"] 36000
@@ -26,7 +26,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     , Run Memory ["-t","<usedratio>%","-w","3"] 10
                     , Run Swap ["-t","<usedratio>%","-w","3"] 10
                     , Run Com "uname" ["-s","-r"] "" 36000
-                    , Run Com "cat" ["/tmp/jabber_notify"] "jabber" 1000
+                    , Run Com "cat" ["/tmp/jabber_notify"] "jabber" 10
     		    , Run Date "%a %_d %b %Y %H:%M:%S" "date" 10
 		    , Run Mail [("Personal ","~/Maildir/Personal/INBOX"),
                                 ("Professional ","~/Maildir/Professional/INBOX"),

@@ -39,7 +39,7 @@
    (defun jabber-notify-xmobar ()
           (if (equal "0" jabber-activity-count-string)
             (send-message-xmobar "")
-            (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string)))
+            (send-message-xmobar (format "<fc=red,black>%s new messages</fc>" jabber-activity-count-string))))
    (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar)))
 
 (use-package emojify
