@@ -23,8 +23,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     , Run Cpu ["-L","3","-H","50",
                                "--normal","green","--high","red",
 			       "-t","<total>%"] 10
-                    , Run Memory ["-t","<usedratio>%"] 10
-                    , Run Swap ["-t","<usedratio>%"] 10
+                    , Run Memory ["-t","<usedvbar>"] 10
                     , Run Com "uname" ["-s","-r"] "" 36000
                     , Run Com "cat" ["/tmp/jabber_notify"] "jabber" 10
     		    , Run Date "%a %_d %b %Y %H:%M:%S" "date" 10
@@ -36,5 +35,5 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %multicpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% * %swap% | %dynnetwork% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% }\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
+       , template = "<icon=/home/adam/dotfiles/cpu.xbm/> %multicpu% <icon=/home/adam/dotfiles/mem.xbm/> %memory% | %dynnetwork% | <icon=/home/adam/dotfiles/diskette.xbm/> %disku% }\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
        }
