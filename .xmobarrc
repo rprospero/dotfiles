@@ -8,8 +8,8 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
        , pickBroadest = False
        , persistent = False
        , hideOnStart = False
-       , iconRoot = "."
-       , iconOffset = 7
+       , iconRoot = "/home/adam/dotfiles/"
+       , iconOffset = -7
        , allDesktops = True
        , overrideRedirect = True
        , commands = [ Run Weather "EGCN" ["-t","<skyCondition> <tempC>C <windMph><windCardinal>",
@@ -35,5 +35,5 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=/home/adam/dotfiles/cpu.xbm/>%multicpu% <icon=/home/adam/dotfiles/mem.xbm/>%memory% <icon=/home/adam/dotfiles/net_wired.xbm/> %dynnetwork% <icon=/home/adam/dotfiles/diskette.xbm/> %disku% <icon=/home/adam/dotfiles/mail.xbm/> %mail% %jabber%}\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=/home/adam/dotfiles/calendar.xbm/> %date%</fc>"
+       , template = "<icon=cpu.xbm/>%multicpu% <icon=mem.xbm/>%memory% <icon=net_wired.xbm/> %dynnetwork% <icon=diskette.xbm/> %disku% <icon=mail.xbm/> %mail% %jabber%}\ %StdinReader% \{ %EGCN% <fc=#ee9a00><icon=calendar.xbm/> %date%</fc>"
        }
