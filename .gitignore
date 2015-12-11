@@ -2,3 +2,5 @@
 *.hi
 /redditpass.txt
 *.hi
+/xmonad
+/xmonad.o
