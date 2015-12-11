@@ -42,13 +42,13 @@
      (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- '(ispell-dictionary nil t)
+ '(ispell-dictionary nil)
  '(jabber-debug-keep-process-buffers t)
  '(jabber-debug-log-xml t)
- '(message-send-mail-function (quote message-send-mail-with-sendmail) t)
- '(message-sendmail-envelope-from (quote header) t)
- '(message-sendmail-extra-arguments (quote ("--read-envelope-from")) t)
- '(message-sendmail-f-is-evil t t)
+ '(message-send-mail-function (quote message-send-mail-with-sendmail))
+ '(message-sendmail-envelope-from (quote header))
+ '(message-sendmail-extra-arguments (quote ("--read-envelope-from")))
+ '(message-sendmail-f-is-evil t)
  '(org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
  '(org-agenda-files
    (quote
