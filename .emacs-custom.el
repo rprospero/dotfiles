@@ -77,6 +77,7 @@
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(package-enable-at-startup nil)
  '(paradox-automatically-star t)
+ '(scheme-program-name "meep")
  '(send-mail-function (quote smtpmail-send-it))
  '(sendmail-program "msmtp")
  '(tab-always-indent (quote complete))
