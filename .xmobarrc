@@ -35,8 +35,10 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=cpu.xbm/>%multicpu% \
+       , template = "<action=`urxvt -e top`> \
+                    \<icon=cpu.xbm/>%multicpu% \
                     \<icon=mem.xbm/>%memory% \
+                    \</action> \
                     \<icon=net_wired.xbm/> %dynnetwork% \
                     \<icon=diskette.xbm/> %disku% \
                     \<icon=mail.xbm/> %mail% \
