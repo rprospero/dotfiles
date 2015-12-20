@@ -30,7 +30,7 @@ Config { font = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
 		    , Run Mail [("Personal ","~/Maildir/Personal/INBOX"),
                                 ("Professional ","~/Maildir/Professional/INBOX"),
                                 ("Work ","~/Maildir/Work/INBOX")] "mail"
-		    , Run DiskU [("/", "<free>"),("/home","<free>")] ["-L", "20", "-H", "50", "-m", "1", "-p", "3"] 20
+		    , Run DiskU [("/", "<freevbar>"),("/home","<freevbar>")] ["-L", "20", "-H", "50", "-m", "1", "-p", "3"] 20
                     , Run StdinReader
                     ]
        , sepChar = "%"
