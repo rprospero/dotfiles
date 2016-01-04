@@ -63,7 +63,10 @@
     (add-hook 'org-mode-hook
               (lambda ()
                 (variable-pitch-mode t)
-                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
 
     (defun adam-org-sunrise () 
       (concat
