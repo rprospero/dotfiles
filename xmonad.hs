@@ -2,6 +2,7 @@ import           Control.Monad                (liftM2)
 import           Graphics.X11.ExtraTypes.XF86
 import           XMonad
 import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import qualified XMonad.StackSet              as W
@@ -33,7 +34,7 @@ toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
-main = xmonad =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
+main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 
 myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
 myLayoutHook = layoutHook defaultConfig
@@ -52,6 +53,7 @@ myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xb
 myLayoutPrinter x = x
 
 myConfig = defaultConfig {
+               handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
                modMask = mod4Mask,
