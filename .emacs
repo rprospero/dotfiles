@@ -448,3 +448,17 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (bind-key "C-z" 'shell)
 
 (setq inhibit-startup-screen t)
+
+(use-package keyfreq
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+
+(require 'keyfreq)
+
+(zone-select-add-program 'zone-pgm-rainbow)
+(zone-select-add-program 'zone-pgm-sl)
+
+
+
+  
