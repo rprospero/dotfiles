@@ -360,7 +360,18 @@
   (add-hook 'god-mode-disabled-hook 'my-update-cursor)
   (add-to-list 'god-exempt-major-modes 'magit-mode)
   (add-to-list 'god-exempt-major-modes 'Group)
-  (add-to-list 'god-exempt-major-modes 'Messages))
+  (add-to-list 'god-exempt-major-modes 'Messages)
+  (define-minor-mode mortal-mode
+    "Allow temporary departures from god-mode."
+    :lighter " mortal"
+    :keymap '(([return] . (lambda ()
+                            "Exit mortal-mode and resume god mode." (interactive)
+                            (god-local-mode-resume)
+                            (mortal-mode 0))))
+    (when mortal-mode
+      (god-local-mode-pause)))
+
+  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
 
 (defun my-update-cursor ()
   (setq cursor-type (if (or god-local-mode buffer-read-only)
