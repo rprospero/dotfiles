@@ -471,5 +471,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (zone-select-add-program 'zone-pgm-sl)
 
 
-
-  
+(flycheck-define-checker proselint
+  "A linter for plain prose"
+  :command ("proselint" source)
+  :standard-input f
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
+  :modes (markdown-mode text-mode org-mode))
