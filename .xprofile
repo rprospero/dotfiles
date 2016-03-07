@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH=$PATH:~/.gem/ruby/2.1.0/bin/:~/maple17/bin
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 emacs --daemon
 
