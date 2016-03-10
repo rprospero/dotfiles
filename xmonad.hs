@@ -39,11 +39,17 @@ main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
 myLayoutHook = layoutHook defaultConfig
 
+iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
+iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
+iconifyWorkspaces "documents" = "<icon=/home/adam/Downloads/docs.xbm/>"
+iconifyWorkspaces x = x
+
 myPP :: PP
 myPP = xmobarPP { ppLayout = myLayoutPrinter
-                , ppVisible = xmobarColor "#bbbb00" "black" . wrap "(" ")"
-                , ppHidden = xmobarColor "#888888" "black"
-                , ppUrgent = xmobarColor "#FF0000" "black" . wrap "!" "!"
+                , ppVisible = xmobarColor "#bbbb00" "black" . wrap "(" ")" . iconifyWorkspaces
+                , ppHidden = xmobarColor "#888888" "black" . iconifyWorkspaces
+                , ppUrgent = xmobarColor "#FF0000" "black" . wrap "!" "!" . iconifyWorkspaces
+                , ppCurrent = xmobarColor "#FFFF00" "black" . wrap "[" "]" . iconifyWorkspaces
   }
 
 myLayoutPrinter :: String -> String
