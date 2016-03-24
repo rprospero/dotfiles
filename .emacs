@@ -158,9 +158,6 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-(use-package grandshell-theme
-  :ensure)
-
 (customize-set-variable 'ispell-dictionary nil)
 
 (customize-set-variable
@@ -470,6 +467,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (zone-select-add-program 'zone-pgm-rainbow)
 (zone-select-add-program 'zone-pgm-sl)
 
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :config
+  (color-theme-sanityinc-tomorrow-bright))
 
 (flycheck-define-checker proselint
   "A linter for plain prose"
