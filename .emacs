@@ -437,8 +437,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 	    (push '("lambda" . ?λ) prettify-symbols-alist)
 	    (push '("**2" . ?²) prettify-symbols-alist)))
 
-
-(require 'unbound)
+(use-package unbound
+  :ensure t)
 
 (customize-save-variable
  'indent-tabs-mode
@@ -458,27 +458,37 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (setq inhibit-startup-screen t)
 
 (use-package keyfreq
+  :ensure t
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
-(require 'keyfreq)
+(use-package zone-select
+  :ensure t)
 
-(zone-select-add-program 'zone-pgm-rainbow)
-(zone-select-add-program 'zone-pgm-sl)
+(use-package zone-rainbow
+  :config
+  (zone-select-add-program 'zone-pgm-rainbow))
+
+(use-package zone-sl
+  :config
+  (zone-select-add-program 'zone-pgm-sl))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
   :config
   (color-theme-sanityinc-tomorrow-bright))
 
-(flycheck-define-checker proselint
-  "A linter for plain prose"
-  :command ("proselint" source)
-  :standard-input f
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
-  :modes (markdown-mode text-mode org-mode))
+(use-package flycheck
+  :config
+  (flycheck-define-checker
+   proselint
+   "A linter for plain prose"
+   :command ("proselint" source)
+   :standard-input f
+   :error-patterns
+   ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
+   :modes (markdown-mode text-mode org-mode)))
 
 (use-package ace-isearch
   :config
