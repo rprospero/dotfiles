@@ -20,4 +20,4 @@ xsetroot -cursor_name left_ptr -solid black
 #export GNOME_KEYRING_CONTROL
 #export SSH_AUTH_SOCK
 ###
-xmonad 
+~/.xmonad/xmonad
