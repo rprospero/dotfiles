@@ -1,4 +1,4 @@
-(setq custom-file "~/dotfiles/.emacs-custom.el")
+(setq custom-file "~/Code/dotfiles/.emacs-custom.el")
 (load custom-file)
 
 (package-initialize)
