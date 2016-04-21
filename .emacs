@@ -111,9 +111,11 @@
      'org-agenda-day-face-function
      (function
       jd:org-agenda-day-face-holidays-function))
+    (require 'org-notify)
     
     (add-hook 'org-mode-hook 'auto-fill-mode)
     (add-hook 'org-mode-hook 'flyspell-mode)))
+  
 
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
