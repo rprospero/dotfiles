@@ -495,3 +495,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package ace-isearch
   :config
   (global-ace-isearch-mode +1))
+
+(use-package switch-window
+  :ensure t
+  :bind
+  (("C-x o" . switch-window)))
