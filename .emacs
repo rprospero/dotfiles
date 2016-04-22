@@ -1,9 +1,15 @@
-(setq custom-file "~/dotfiles/.emacs-custom.el")
-(load custom-file)
-
 (package-initialize)
 (eval-when-compile
   (require 'use-package))
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  ;; :config
+  ;; (color-theme-sanityinc-tomorrow-bright)
+  )
+
+(setq custom-file "~/dotfiles/.emacs-custom.el")
+(load custom-file)
 
 (setq w32-apps-modifier 'super)
 
@@ -465,11 +471,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package zone-sl
   :config
   (zone-select-add-program 'zone-pgm-sl))
-
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :config
-  (color-theme-sanityinc-tomorrow-bright))
 
 (use-package flycheck
   :config
