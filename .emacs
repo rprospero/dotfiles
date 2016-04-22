@@ -500,3 +500,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :bind
   (("C-x o" . switch-window)))
+
+(use-package ledger-mode
+  :ensure t)
