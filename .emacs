@@ -502,3 +502,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package ace-isearch
   :config
   (global-ace-isearch-mode +1))
+
+(add-to-list 'load-path "/Users/adam/Code/nnreddit")
+
+(require 'nnreddit)
