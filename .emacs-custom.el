@@ -18,6 +18,11 @@
    (quote
     ("f0d8af755039aa25cd0792ace9002ba885fd14ac8e8807388ab00ec84c9497d7" "8fed5e4b89cf69107d524c4b91b4a4c35bcf1b3563d5f306608f0c48f580fdf8" "90edd91338ebfdfcd52ecd4025f1c7f731aced4c9c49ed28cfbebb3a3654840b" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "cedd3b4295ac0a41ef48376e16b4745c25fa8e7b4f706173083f16d5792bb379" "f0a99f53cbf7b004ba0c1760aa14fd70f2eabafe4e62a2b3cf5cabae8203113b" default)))
  '(diff-switches "-u")
+ '(display-buffer-alist
+   (quote
+    (("agenda.org"
+      (display-buffer-reuse-window display-buffer-use-some-window)
+      (nil)))))
  '(emojify-display-style (quote unicode))
  '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
  '(flymake-python-pyflakes-executable "flake8")
