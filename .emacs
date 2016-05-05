@@ -118,6 +118,14 @@
      (function
       jd:org-agenda-day-face-holidays-function))
     (require 'org-notify)
+    (setq org-agenda-custom-commands
+          '(("c" . "My Custom Agendas")
+            ("cu" "Unscheduled TODO"
+             ((todo ""
+                    ((org-agenda-overriding-header "\nUnscheduled TODO")
+                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
+             nil
+             nil)))
     
     (add-hook 'org-mode-hook 'auto-fill-mode)
     (add-hook 'org-mode-hook 'flyspell-mode)))
