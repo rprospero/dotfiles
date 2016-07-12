@@ -238,7 +238,19 @@
       (local-set-key ["S-delete"] 'gnus-summary-delete-article))
 
     (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
+    ;; (gnus-add-configuration
+    ;;  '(article
+    ;;    (horizontal 1.0
+    ;;                (vertical 60 (group 1.0))
+    ;;                (vertical 1.0
+    ;;                          (summary 0.16 point)
+    ;;                          (article 1.0)))))
 
+    ;; (gnus-add-configuration
+    ;;  '(summary
+    ;;    (horizontal 1.0
+    ;;                (vertical 60 (group 1.0))
+    ;;                (vertical 1.0 (summary 1.0 point)))))))
 
 
 ;;csharp
