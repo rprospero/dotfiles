@@ -4,12 +4,26 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-PDF-mode t t)
- '(browse-url-browser-function (quote eww-browse-url))
+ '(TeX-view-program-list (quote (("Okular" "okular --unique %o#src:%n%b"))))
+ '(TeX-view-program-selection
+   (quote
+    (((output-dvi style-pstricks)
+      "dvips and gv")
+     (output-dvi "Okular")
+     (output-pdf "Evince")
+     (output-html "xdg-open"))))
+ '(browse-url-browser-function (quote browse-url-firefox))
  '(csharp-make-tool "mcs" t)
  '(custom-enabled-themes (quote (sanityinc-tomorrow-bright)))
  '(custom-safe-themes
    (quote
     ("1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+ '(diff-switches "-u")
+ '(display-buffer-alist
+   (quote
+    (("agenda.org"
+      (display-buffer-reuse-window display-buffer-use-some-window)
+      (nil)))))
  '(emojify-display-style (quote unicode))
  '(exec-path
    (quote

@@ -5,6 +5,12 @@
 (eval-when-compile
   (require 'use-package))
 
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  ;; :config
+  ;; (color-theme-sanityinc-tomorrow-bright)
+  )
+
 (setq w32-apps-modifier 'super)
 
 (use-package multi-line
@@ -111,7 +117,7 @@
      'org-agenda-day-face-function
      (function
       jd:org-agenda-day-face-holidays-function))
-
+    (require 'org-notify)
     (setq org-agenda-custom-commands
           '(("c" . "My Custom Agendas")
             ("cu" "Unscheduled TODO"
@@ -123,6 +129,7 @@
     
     (add-hook 'org-mode-hook 'auto-fill-mode)
     (add-hook 'org-mode-hook 'flyspell-mode)))
+  
 
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
@@ -222,10 +229,20 @@
       (local-set-key ["S-delete"] 'gnus-summary-delete-article))
 
     (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
+    ;; (gnus-add-configuration
+    ;;  '(article
+    ;;    (horizontal 1.0
+    ;;                (vertical 60 (group 1.0))
+    ;;                (vertical 1.0
+    ;;                          (summary 0.16 point)
+    ;;                          (article 1.0)))))
 
+    ;; (gnus-add-configuration
+    ;;  '(summary
+    ;;    (horizontal 1.0
+    ;;                (vertical 60 (group 1.0))
+    ;;                (vertical 1.0 (summary 1.0 point)))))))
 
-;;Browser stuff
-(customize-set-variable 'browse-url-browser-function 'eww-browse-url)
 
 ;;csharp
 (customize-set-variable
@@ -275,16 +292,6 @@
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
-
-;; Enable windmove in orgmode
-(use-package windmove
-  :ensure t
-  :init
-  (windmove-default-keybindings)
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right))
 
 (winner-mode)
 
@@ -474,11 +481,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (zone-select-add-program 'zone-pgm-sl))
 
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :config
-  (color-theme-sanityinc-tomorrow-bright))
-
 (use-package flycheck
   :config
   (flycheck-define-checker
@@ -501,3 +503,20 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
+
+(use-package ace-window
+  :ensure t
+  :bind
+  (("M-z" . ace-window))
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package ledger-mode
+  :ensure t)
+
+;;nnreddit stuff.  Should eventually be turned into a package
+(add-to-list 'load-path "~/Code/nnreddit")
+(require 'nnreddit)
+;; (add-to-list 'gnus-secondary-select-methods
+;;              '(nnreddit ""))
+
