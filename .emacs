@@ -490,9 +490,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode)))
 
-(use-package ace-isearch
-  :config
-  (global-ace-isearch-mode +1))
+;; (use-package ace-isearch
+;;   :config
+;;   (global-ace-isearch-mode +1))
 
 (add-to-list 'load-path "/Users/adam/Code/nnreddit")
 
