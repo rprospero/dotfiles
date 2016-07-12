@@ -534,12 +534,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f1> v" . counsel-describe-variable)
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
-           ("<f2> u" . counsel-unicode-char)
-           ("C-c g" . counsel-git)
-           ("C-c j" . counsel-git-grep)
-           ("C-c k" . counsel-ag)
-           ("C-x l" . counsel-locate)
-           ("C-S-o" . counsel-rhythmbox))
+           ("<f2> u" . counsel-unicode-char))
   :ensure t
   :config
   (ivy-mode 1)
