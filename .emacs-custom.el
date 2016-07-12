@@ -12,7 +12,7 @@
      (output-dvi "Okular")
      (output-pdf "Evince")
      (output-html "xdg-open"))))
- '(browse-url-browser-function (quote eww-browse-url))
+ '(browse-url-browser-function (quote browse-url-firefox))
  '(csharp-make-tool "mcs" t)
  '(custom-safe-themes
    (quote

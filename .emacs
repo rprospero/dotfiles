@@ -240,8 +240,6 @@
     (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
 
 
-;;Browser stuff
-(customize-set-variable 'browse-url-browser-function 'eww-browse-url)
 
 ;;csharp
 (customize-set-variable
