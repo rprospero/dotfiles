@@ -493,10 +493,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (global-ace-isearch-mode +1))
 
-(use-package switch-window
+(use-package ace-window
   :ensure t
   :bind
-  (("C-x o" . switch-window)))
+  (("M-z" . ace-window))
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package ledger-mode
   :ensure t)
