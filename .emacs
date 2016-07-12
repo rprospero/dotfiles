@@ -494,6 +494,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 ;;   :config
 ;;   (global-ace-isearch-mode +1))
 
-(add-to-list 'load-path "/Users/adam/Code/nnreddit")
+;; (add-to-list 'load-path "/Users/adam/Code/nnreddit")
 
-(require 'nnreddit)
+;; (require 'nnreddit)
+
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
