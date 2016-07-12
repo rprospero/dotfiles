@@ -502,3 +502,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package ledger-mode
   :ensure t)
+
+;;nnreddit stuff.  Should eventually be turned into a package
+(add-to-list 'load-path "~/Code/nnreddit")
+(require 'nnreddit)
+;; (add-to-list 'gnus-secondary-select-methods
+;;              '(nnreddit ""))
