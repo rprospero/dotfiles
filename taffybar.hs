@@ -75,7 +75,7 @@ main = do
       net = pollingBarNew cpuCfg 1 netCallback
       tray = systrayNew
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
-                                        , barHeight = 25
+                                        , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
                                                          clock, icon"calendar.xbm",
