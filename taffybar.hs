@@ -85,5 +85,6 @@ main = do
                                                          myFSMonitor "/",
                                                          myFSMonitor "/data",
                                                          myFSMonitor "/home",
-                                                         icon "diskette.xbm"]
+                                                         icon "diskette.xbm",
+                                                         notifyAreaNew defaultNotificationConfig{notificationMaxTimeout=36000}]
                                         }
