@@ -1,5 +1,6 @@
 import           Control.Monad                (liftM2)
 import           Graphics.X11.ExtraTypes.XF86
+import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
@@ -34,7 +35,8 @@ toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
-main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
+-- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
+main = xmonad . ewmh . pagerHints $ myConfig
 
 myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
 myLayoutHook = layoutHook defaultConfig

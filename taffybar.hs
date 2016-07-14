@@ -70,14 +70,13 @@ main = do
       pager = taffyPagerNew defaultPagerConfig
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
-      mpris = mprisNew defaultMPRISConfig
       mem = pollingBarNew memCfg 1 memCallback
       cpu = pollingBarNew cpuCfg 0.5 cpuCallback
       net = pollingBarNew cpuCfg 1 netCallback
       tray = systrayNew
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
                                         , barHeight = 25
-                                        , barPosition = Top
+                                        , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
                                                          clock, icon"calendar.xbm",
                                                          mem, icon "mem.xbm",
