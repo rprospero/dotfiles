@@ -70,8 +70,8 @@ main = do
       pager = taffyPagerNew defaultPagerConfig
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
-      mem = pollingBarNew memCfg 1 memCallback
-      cpu = pollingBarNew cpuCfg 0.5 cpuCallback
+      mem = pollingBarNew memCfg 5 memCallback
+      cpu = pollingBarNew cpuCfg 5 cpuCallback
       net = pollingBarNew cpuCfg 1 netCallback
       tray = systrayNew
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
