@@ -374,6 +374,7 @@
   (add-to-list 'god-exempt-major-modes 'magit-mode)
   (add-to-list 'god-exempt-major-modes 'Group)
   (add-to-list 'god-exempt-major-modes 'Messages)
+  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :lighter " mortal"
