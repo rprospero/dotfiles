@@ -470,7 +470,43 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (global-prettify-symbols-mode t)
 
-(bind-key "C-z" 'shell)
+;;;;Shell Stuff
+(bind-key "C-z" 'eshell)
+
+(defconst pcmpl-cabal-commands
+  '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build" "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen" "haddock" "hscolour" "copy" "register" "sandbox" "exec" "repl"))
+
+(defun pcmpl-cabal-get-execs ()
+  (with-temp-buffer
+    (message "Loading")
+    (insert (shell-command-to-string "cat *.cabal"))
+    (goto-char (point-min))
+    (let ((ref-list))
+      (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
+        (message "Insert")
+        (add-to-list 'ref-list (match-string 1)))
+      ref-list)))
+
+(defun pcomplete/cabal ()
+  "Completion for `cabal'"
+  (pcomplete-here* pcmpl-cabal-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("run")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+(defconst pcmpl-stack-commands
+  '( "build" "install" "uninstall" "test" "bench" "haddock" "new" "templates" "init" "solver" "setup" "path" "unpack" "update" "upgrade" "upload" "sdist" "dot" "exec" "ghc" "ghci" "repl" "runghc" "runhaskell" "eval" "clean" "list" "query" "ide" "docker" "config" "image" "hpc")
+  "List of Stack Commands")
+
+(defun pcomplete/stack ()
+  "Completion for `stack'"
+  (pcomplete-here* pcmpl-stack-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("exec")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
 
 (setq inhibit-startup-screen t)
 
