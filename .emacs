@@ -46,7 +46,12 @@
           (if (equal "0" jabber-activity-count-string)
             (send-message-xmobar "")
             (send-message-xmobar (format "<fc=red,black><icon=/home/adam/dotfiles/pacman.xbm/>%s</fc>" jabber-activity-count-string))))
-   (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar)))
+   (defun jabber-notify-taffy ()
+     (if (equal "0" jabber-activity-count-string) t
+       (notifications-notify
+        :title "Jabber"
+        :body jabber-activity-count-string)))
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 (use-package emojify
   :ensure t
