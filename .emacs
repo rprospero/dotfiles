@@ -51,6 +51,7 @@
        (notifications-notify
         :title "Jabber"
         :body jabber-activity-count-string)))
+   (add-hook 'jabber-post-connect-hooks 'jabber-autoaway-start)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 (use-package emojify
