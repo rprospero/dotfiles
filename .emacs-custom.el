@@ -10,7 +10,7 @@
     (((output-dvi style-pstricks)
       "dvips and gv")
      (output-dvi "Okular")
-     (output-pdf "Evince")
+     (output-pdf "open")
      (output-html "xdg-open"))))
  '(browse-url-browser-function (quote browse-url-firefox))
  '(csharp-make-tool "mcs" t)
