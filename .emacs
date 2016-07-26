@@ -191,14 +191,6 @@
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'flyspell-mode)
 
-(defun flymake-keys ()
-  (local-set-key [(meta down)] 'flymake-goto-next-error)
-  (local-set-key [(meta up)] 'flymake-goto-prev-error))
-
-;;Python checking stuff
-(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
-(add-hook 'python-mode-hook 'flymake-keys)
-
 ;;Usenet stuff
 ;; Mail stuff
 (use-package gnus
@@ -515,8 +507,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t)
 
 ;;nnreddit stuff.  Should eventually be turned into a package
-(add-to-list 'load-path "~/Code/nnreddit")
-(require 'nnreddit)
+;; (add-to-list 'load-path "~/Code/nnreddit")
+;; (require 'nnreddit)
 ;; (add-to-list 'gnus-secondary-select-methods
 ;;              '(nnreddit ""))
 
