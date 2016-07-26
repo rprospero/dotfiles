@@ -37,6 +37,7 @@
  '(message-sendmail-envelope-from (quote header) t)
  '(message-sendmail-extra-arguments (quote ("--read-envelope-from")) t)
  '(message-sendmail-f-is-evil t t)
+ '(org-babel-load-languages (quote ((emacs-lisp . t) (python . t) (shell . t))))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
