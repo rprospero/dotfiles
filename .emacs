@@ -469,7 +469,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (global-prettify-symbols-mode t)
 
-(bind-key "C-z" 'shell)
+(bind-key "C-z" 'eshell)
 
 (setq inhibit-startup-screen t)
 
