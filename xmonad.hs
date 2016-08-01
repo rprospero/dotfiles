@@ -6,6 +6,7 @@ import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
+import           XMonad.Layout.Circle
 import qualified XMonad.StackSet              as W
 import           XMonad.Util.EZConfig         (additionalKeys)
 
@@ -38,8 +39,8 @@ main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 main = xmonad . ewmh . pagerHints $ myConfig
 
-myLayoutHook :: Choose Tall (Choose (Mirror Tall) Full) Window
-myLayoutHook = layoutHook defaultConfig
+myLayoutHook :: Choose (Choose Tall (Choose (Mirror Tall) Full)) Circle Window
+myLayoutHook = layoutHook def ||| Circle
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
