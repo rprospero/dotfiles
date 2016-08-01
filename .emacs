@@ -543,10 +543,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode)))
 
-(use-package ace-isearch
-  :config
-  (global-ace-isearch-mode +1))
-
 (use-package ace-window
   :ensure t
   :bind
@@ -593,3 +589,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (ivy-purpose-setup))
+
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
