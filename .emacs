@@ -581,3 +581,15 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t))
+
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
+  (purpose-compile-user-configuration))
+
+(use-package ivy-purpose
+  :ensure t
+  :config
+  (ivy-purpose-setup))
