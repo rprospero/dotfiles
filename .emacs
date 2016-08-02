@@ -18,6 +18,7 @@
   :bind (("C-c d" . multi-line)))
 
 (use-package encourage-mode
+  :diminish encourage-mode
   :ensure t
   :init (encourage-mode))
 
@@ -438,6 +439,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (sml/apply-theme 'respectful))
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+(diminish 'hs-minor-mode "")
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -560,7 +562,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 ;;              '(nnreddit ""))
 
 (use-package ivy
-  :ensure t)
+  :ensure t
+  :diminish ivy-mode)
 
 (use-package counsel
   :bind   (("C-s" . swiper)
