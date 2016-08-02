@@ -577,6 +577,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
            ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
   :ensure t
   :config
   (ivy-mode 1)
