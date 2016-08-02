@@ -52,6 +52,7 @@
        (notifications-notify
         :title "Jabber"
         :body jabber-activity-count-string)))
+   (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 (use-package emojify
