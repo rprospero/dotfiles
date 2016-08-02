@@ -8,7 +8,7 @@
   ;; (color-theme-sanityinc-tomorrow-bright)
   )
 
-(setq custom-file "~/dotfiles/.emacs-custom.el")
+(setq custom-file "./.emacs-custom.el")
 (load custom-file)
 
 (setq w32-apps-modifier 'super)
