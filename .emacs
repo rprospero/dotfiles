@@ -32,8 +32,8 @@
   (progn
    (let
     ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
-    (customize-set-variable
-     'jabber-account-list
+    (setq
+     jabber-account-list
      `(("rprospero@gmail.com"
         (:port . 5223)
         (:password . ,passwd)
