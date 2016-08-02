@@ -601,3 +601,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+
+(use-package monokai-theme
+  :ensure t)
+
+(use-package paradox
+  :ensure t)
