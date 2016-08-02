@@ -18,6 +18,7 @@
   :bind (("C-c d" . multi-line)))
 
 (use-package encourage-mode
+  :diminish encourage-mode
   :ensure t
   :init (encourage-mode))
 
@@ -51,7 +52,7 @@
        (notifications-notify
         :title "Jabber"
         :body jabber-activity-count-string)))
-   (add-hook 'jabber-post-connect-hooks 'jabber-autoaway-start)
+   (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 (use-package emojify
@@ -439,6 +440,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (sml/apply-theme 'respectful))
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+(diminish 'hs-minor-mode "")
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -544,10 +546,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode)))
 
-(use-package ace-isearch
-  :config
-  (global-ace-isearch-mode +1))
-
 (use-package ace-window
   :ensure t
   :bind
@@ -565,12 +563,22 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 ;;              '(nnreddit ""))
 
 (use-package ivy
-  :ensure t)
+  :ensure t
+  :diminish ivy-mode)
+
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
+  (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (purpose-compile-user-configuration))
 
 (use-package counsel
   :bind   (("C-s" . swiper)
            ("C-c C-r" . ivy-resume)
            ("<f6>" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
            ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
            ("<f1> f" . counsel-describe-function)
@@ -578,19 +586,18 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
            ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
   :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t))
 
-(use-package window-purpose
-  :ensure t
-  :config
-  (purpose-mode)
-  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
-  (purpose-compile-user-configuration))
-
 (use-package ivy-purpose
   :ensure t
   :config
   (ivy-purpose-setup))
+
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
