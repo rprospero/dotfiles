@@ -313,6 +313,7 @@
 
 ;; Helm bindings
 (use-package helm
+  :diminish helm-mode
   :bind (("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
          ("C-c h" . helm-command-prefix)
@@ -536,6 +537,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (zone-select-add-program 'zone-pgm-sl))
 
 (use-package flycheck
+  :diminish flycheck-mode
   :config
   (flycheck-define-checker
    proselint
@@ -603,3 +605,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+
+(diminish 'auto-fill-mode "")
+(diminish 'visual-line-mode "")
+(diminish 'flyspell-mode "")
