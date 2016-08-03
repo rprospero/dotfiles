@@ -606,6 +606,15 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
 
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'jabber-chat-mode-hook 'writegood-mode)
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+
 (diminish 'auto-fill-mode "")
 (diminish 'visual-line-mode "")
 (diminish 'flyspell-mode "")
