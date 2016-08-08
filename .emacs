@@ -18,6 +18,7 @@
   :bind (("C-c d" . multi-line)))
 
 (use-package encourage-mode
+  :diminish encourage-mode
   :ensure t
   :init (encourage-mode))
 
@@ -31,8 +32,8 @@
   (progn
    (let
     ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
-    (customize-set-variable
-     'jabber-account-list
+    (setq
+     jabber-account-list
      `(("rprospero@gmail.com"
         (:port . 5223)
         (:password . ,passwd)
@@ -46,7 +47,13 @@
           (if (equal "0" jabber-activity-count-string)
             (send-message-xmobar "")
             (send-message-xmobar (format "<fc=red,black><icon=/home/adam/dotfiles/pacman.xbm/>%s</fc>" jabber-activity-count-string))))
-   (add-hook 'jabber-activity-update-hook 'jabber-notify-xmobar)))
+   (defun jabber-notify-taffy ()
+     (if (equal "0" jabber-activity-count-string) t
+       (notifications-notify
+        :title "Jabber"
+        :body jabber-activity-count-string)))
+   (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 (use-package emojify
   :ensure t
@@ -287,20 +294,22 @@
 
 (winner-mode)
 
-;; ;; Helm bindings
-;; (use-package helm
-;;   :bind (("M-y" . helm-show-kill-ring)
-;;          ("M-x" . helm-M-x)
-;;          ("C-c h" . helm-command-prefix)
-;;          ("C-x b" . helm-mini)
-;;          ("C-x C-f" . helm-find-files)
-;;          ("M-s SPC" . helm-swoop)
-;;          ("C-x 8 RET" . helm-unicode)
-;;          ("M-$" . helm-flyspell-correct))
-;;   :config
-;;   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-;;   (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-;;   (bind-key "C-z" 'helm-select-action helm-map))
+;; Helm bindings
+(use-package helm
+  :diminish helm-mode
+  :bind (("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-c h" . helm-command-prefix)
+         ("C-x b" . helm-mini)
+         ("C-x C-f" . helm-find-files)
+         ("M-s SPC" . helm-swoop)
+         ("C-x 8 RET" . helm-unicode)
+         ("M-$" . helm-flyspell-correct))
+  :config
+  (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+  (bind-key "C-z" 'helm-select-action helm-map))
+
 
 
 ;; (set-fontset-font "fontset-default" nil 
@@ -357,6 +366,7 @@
   (add-to-list 'god-exempt-major-modes 'magit-mode)
   (add-to-list 'god-exempt-major-modes 'Group)
   (add-to-list 'god-exempt-major-modes 'Messages)
+  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :lighter " mortal"
@@ -415,6 +425,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (sml/apply-theme 'respectful))
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+(diminish 'hs-minor-mode "")
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -452,7 +463,43 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (global-prettify-symbols-mode t)
 
+;;;;Shell Stuff
 (bind-key "C-z" 'eshell)
+
+(defconst pcmpl-cabal-commands
+  '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build" "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen" "haddock" "hscolour" "copy" "register" "sandbox" "exec" "repl"))
+
+(defun pcmpl-cabal-get-execs ()
+  (with-temp-buffer
+    (message "Loading")
+    (insert (shell-command-to-string "cat *.cabal"))
+    (goto-char (point-min))
+    (let ((ref-list))
+      (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
+        (message "Insert")
+        (add-to-list 'ref-list (match-string 1)))
+      ref-list)))
+
+(defun pcomplete/cabal ()
+  "Completion for `cabal'"
+  (pcomplete-here* pcmpl-cabal-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("run")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+(defconst pcmpl-stack-commands
+  '( "build" "install" "uninstall" "test" "bench" "haddock" "new" "templates" "init" "solver" "setup" "path" "unpack" "update" "upgrade" "upload" "sdist" "dot" "exec" "ghc" "ghci" "repl" "runghc" "runhaskell" "eval" "clean" "list" "query" "ide" "docker" "config" "image" "hpc")
+  "List of Stack Commands")
+
+(defun pcomplete/stack ()
+  "Completion for `stack'"
+  (pcomplete-here* pcmpl-stack-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("exec")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
 
 (setq inhibit-startup-screen t)
 
@@ -474,6 +521,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (zone-select-add-program 'zone-pgm-sl))
 
 (use-package flycheck
+  :diminish flycheck-mode
   :config
   (flycheck-define-checker
    proselint
@@ -483,14 +531,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
    :error-patterns
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode)))
-
-;; (use-package ace-isearch
-;;   :config
-;;   (global-ace-isearch-mode +1))
-
-;; (add-to-list 'load-path "/Users/adam/Code/nnreddit")
-
-;; (require 'nnreddit)
 
 (use-package exec-path-from-shell
   :config
@@ -513,12 +553,24 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 ;;              '(nnreddit ""))
 
 (use-package ivy
-  :ensure t)
+  :ensure t
+  :diminish ivy-mode)
+
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
+  (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
+  (purpose-compile-user-configuration))
 
 (use-package counsel
   :bind   (("C-s" . swiper)
            ("C-c C-r" . ivy-resume)
            ("<f6>" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
            ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
            ("<f1> f" . counsel-describe-function)
@@ -526,19 +578,49 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
            ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
   :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t))
 
-(use-package window-purpose
-  :ensure t
-  :config
-  (purpose-mode)
-  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
-  (purpose-compile-user-configuration))
-
 (use-package ivy-purpose
   :ensure t
   :config
   (ivy-purpose-setup))
+
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'jabber-chat-mode-hook 'writegood-mode)
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+
+(diminish 'auto-fill-mode "")
+(diminish 'visual-line-mode "")
+(diminish 'flyspell-mode "")
+
+ (global-set-key
+  (kbd "<f5>")
+  (lambda (&optional force-reverting)
+    "Interactive call to revert-buffer. Ignoring the auto-save
+ file and not requesting for confirmation. When the current buffer
+ is modified, the command refuses to revert it, unless you specify
+ the optional argument: force-reverting to true."
+    (interactive "P")
+    ;;(message "force-reverting value is %s" force-reverting)
+    (if (or force-reverting (not (buffer-modified-p)))
+        (revert-buffer :ignore-auto :noconfirm)
+      (error "The buffer has been modified"))))
+
+(use-package elfeed
+  :ensure t)
+
+(bind-key "C-c ." 'imenu)
