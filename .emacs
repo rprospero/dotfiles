@@ -634,3 +634,5 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package elfeed
   :ensure t)
+
+(bind-key "C-c ." 'imenu)
