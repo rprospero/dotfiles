@@ -631,3 +631,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
     (if (or force-reverting (not (buffer-modified-p)))
         (revert-buffer :ignore-auto :noconfirm)
       (error "The buffer has been modified"))))
+
+(use-package elfeed
+  :ensure t)
