@@ -36,6 +36,9 @@
     (("agenda.org"
       (display-buffer-reuse-window display-buffer-use-some-window)
       (nil)))))
+ '(elfeed-feeds
+   (quote
+    ("http://www.xkcd.org/atom.xml" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/haskell.rss" "http://www.merriam-webster.com/wotd/feed/rss2" "https://wordsmith.org/awad/rss1.xml")))
  '(emojify-display-style (quote unicode))
  '(fci-rule-color "#383838")
  '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
