@@ -346,27 +346,8 @@
 (use-package rainbow-delimiters
              :ensure t
              :defer t
-             :init
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
              :config
-             (set-face-attribute 'rainbow-delimiters-depth-1-face nil
-                                 :foreground (face-attribute 'default :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-2-face nil
-                                 :foreground (face-attribute 'outline-1 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-3-face nil
-                                 :foreground (face-attribute 'outline-2 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-4-face nil
-                                 :foreground (face-attribute 'outline-3 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-5-face nil
-                                 :foreground (face-attribute 'outline-4 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-6-face nil
-                                 :foreground (face-attribute 'outline-5 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-7-face nil
-                                 :foreground (face-attribute 'outline-6 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-8-face nil
-                                 :foreground (face-attribute 'outline-7 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-9-face nil
-                                 :foreground (face-attribute 'outline-8 :foreground)))
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package company
   :ensure t
