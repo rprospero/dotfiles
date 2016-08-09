@@ -617,3 +617,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t)
 
 (bind-key "C-c ." 'imenu)
+(bind-key "C-x C-b" 'ibuffer)
+(bind-key "M-/" 'hippie-expand)
+(bind-key "M-l" 'ace-jump-mode)
