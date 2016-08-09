@@ -623,3 +623,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package sx
   :ensure t)
+
+(use-package pass
+  :ensure t)
