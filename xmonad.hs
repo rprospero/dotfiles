@@ -13,6 +13,7 @@ import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.Circle
+import           XMonad.Layout.Tabbed
 import qualified XMonad.StackSet              as W
 import           XMonad.Prompt
 import           XMonad.Prompt.RunOrRaise
@@ -28,7 +29,7 @@ myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
 myManageHook = composeAll . concat $
   [
-      [ className =? b --> viewShift "web" | b <- myClassWebShifts]
+      [ className =? b --> viewShift "web" >> doF W.focusDown | b <- myClassWebShifts]
     , [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts]
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
@@ -50,10 +51,9 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
-main = xmonad . ewmh . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
+main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook :: Choose (Choose Tall (Choose (Mirror Tall) Full)) Circle Window
-myLayoutHook = layoutHook def ||| Circle
+myLayoutHook = layoutHook def ||| Circle ||| simpleTabbed
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
@@ -78,6 +78,7 @@ myConfig = def {
                handleEventHook = handleEventHook def <+> fullscreenEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
+               logHook = logHook def <+> ewmhDesktopsLogHook,
                modMask = mod4Mask,
                workspaces = myWorkspaces,
                startupHook = setWMName "LG3D"
