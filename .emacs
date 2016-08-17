@@ -534,7 +534,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   (("M-z" . ace-window))
   :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
 
 (use-package ledger-mode
   :ensure t)
