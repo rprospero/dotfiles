@@ -1,15 +1,25 @@
-import           Control.Monad                (liftM2)
+import           Control.Monad                (liftM2, filterM)
+import           Data.List (isInfixOf, isPrefixOf)
 import           Graphics.X11.ExtraTypes.XF86
+import           System.Directory (getDirectoryContents, doesDirectoryExist)
+import           System.FilePath ((</>),splitFileName)
 import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Actions.DynamicWorkspaces
+import           XMonad.Actions.Search
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Circle
 import qualified XMonad.StackSet              as W
-import           XMonad.Prompt (defaultXPConfig)
+import           XMonad.Prompt
+import           XMonad.Prompt.RunOrRaise
+import           XMonad.Prompt.Shell
+import           XMonad.Prompt.Ssh
+import           XMonad.Prompt.Theme
+import           XMonad.Prompt.Window
+import           XMonad.Prompt.XMonad
 import           XMonad.Util.EZConfig         (additionalKeys)
 
 myWorkspaces :: [String]
@@ -63,8 +73,8 @@ myLayoutPrinter "Tall" = "<icon=/home/adam/dotfiles/layout_tall.xbm/>"
 myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xbm/>"
 myLayoutPrinter x = x
 
-myConfig = defaultConfig {
-               handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook,
+myConfig = def {
+               handleEventHook = handleEventHook def <+> fullscreenEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
                modMask = mod4Mask,
@@ -75,15 +85,39 @@ myConfig = defaultConfig {
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -l")
              , ((controlMask, xK_Print), spawn "shutter -e -a -n -o '/home/adam/Documents/screenshot-%F-%T.png'")
              , ((0, xK_Print), spawn "shutter -e -f -n -o '/home/adam/Documents/screenshot-%F-%T.png'")
-             , ((mod4Mask, xK_p), spawn "$(~/.cabal/bin/yeganesh -x -- -b -nb black)")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
              , ((mod4Mask, xK_t), spawn "thunar")
+             , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt)
              , ((mod4Mask .|. shiftMask, xK_Return), spawn "urxvt")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
-             , ((mod4Mask, xK_v), selectWorkspace defaultXPConfig)
-             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace defaultXPConfig (windows . W.shift))
-             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt defaultXPConfig)
+             , ((mod4Mask, xK_v), selectWorkspace def)
+             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace def (windows . W.shift))
+             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt def)
              , ((mod4Mask, xK_BackSpace), removeEmptyWorkspace)
+             , ((mod4Mask, xK_s), sshPrompt def)
+             , ((mod4Mask, xK_p), runOrRaisePrompt def)
+             , ((mod4Mask .|. shiftMask, xK_p), shellPrompt def)
+             , ((mod4Mask, xK_g), windowPromptGoto mySearchPrompt)
+             , ((mod4Mask .|. shiftMask, xK_g), windowPromptBring mySearchPrompt)
+             , ((mod4Mask, xK_x), xmonadPrompt def)
+             , ((mod4Mask, xK_i), promptSearch def (intelligent $ searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
              ]
+
+thunarPrompt = mkXPrompt Thunar def directoryComplete (spawn . ("thunar "++))
+
+directoryComplete :: String -> IO [String]
+directoryComplete x = do
+  let (dir, cur) = splitFileName x
+  dirs <- getDirectoryContents dir
+  realDirs <- filterM doesDirectoryExist $ map (dir </>) $ filter (cur `isPrefixOf`) dirs
+  return realDirs
+
+data Thunar = Thunar
+
+instance XPrompt Thunar where
+  showXPrompt Thunar = "Directory:  "
+
+mySearchPrompt :: XPConfig
+mySearchPrompt = def {searchPredicate = isInfixOf}
