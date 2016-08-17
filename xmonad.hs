@@ -54,7 +54,7 @@ main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = layoutHook def ||| Circle ||| simpleTabbed
+myLayoutHook = layoutHook def ||| Circle ||| tabbed shrinkText myTheme
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
@@ -127,9 +127,10 @@ instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
 mySearchPrompt :: XPConfig
-mySearchPrompt = defPrompt {searchPredicate = isInfixOf}
+mySearchPrompt = defPrompt {searchPredicate = isInfixOf,
+                            autoComplete = Just 1}
 
-defPrompt = colourTheme myTheme def
+defPrompt = promptTheme subTheme def --colourTheme myTheme def
 
 colourTheme :: Theme -> XPConfig -> XPConfig
 colourTheme t x = x {fgColor = inactiveTextColor t,
@@ -139,5 +140,103 @@ colourTheme t x = x {fgColor = inactiveTextColor t,
                      borderColor = activeBorderColor t,
                      font = fontName t}
 
+promptTheme :: PromptTheme -> XPConfig -> XPConfig
+promptTheme t x = x {fgColor = pFg t,
+                     bgColor = pBg t,
+                     fgHLight = pFgH t,
+                     bgHLight = pBgH t,
+                     borderColor = pBC t,
+                     font = pFont t}
+
+tabTheme :: PromptTheme -> Theme -> Theme
+tabTheme p x = x {inactiveTextColor = pFg p,
+                  inactiveColor = pBg p,
+                  inactiveBorderColor = pBgH p,
+                  activeTextColor = pFgH p,
+                  activeColor = pBgH p,
+                  activeBorderColor = pBgH p}
+
 myTheme :: Theme
-myTheme = theme kavonForestTheme
+myTheme = tabTheme subTheme $ theme kavonForestTheme
+
+subTheme = tronTheme
+
+data PromptTheme = PromptTheme {
+  pFg :: String,
+  pBg :: String,
+  pFgH :: String,
+  pBgH :: String,
+  pBC :: String,
+  pFont :: String}
+
+moeTheme = PromptTheme {
+  pFg = "#c6c6c6",
+  pBg = "#303030",
+  pFgH = "#4e4e4e",
+  pBgH = "#d7ff5f",
+  pBC = "#c6c6c6",
+  pFont = fontName def}
+
+grandShellTheme = PromptTheme {
+  pBg = "black",
+  pFg = "gray",
+  pFgH = "gray",
+  pBgH = "#34004A",
+  pBC = "gray",
+  pFont = fontName def}
+
+monokaiTheme = PromptTheme {
+  pFg = "#F8F8F2",
+  pBg = "#272822",
+  pFgH = "#F8F8F2",
+  pBgH = "#49483E",
+  pBC = "#F8F8F2",
+  pFont = fontName def}
+
+sanityBrightTheme = PromptTheme {
+  pFg = "#eaeaea",
+  pBg = "#000000",
+  pFgH = "#eaeaea",
+  pBgH = "#424242",
+  pBC = "#eaeaea",
+  pFont = fontName def}
+
+sanityEightiesTheme = PromptTheme {
+  pFg = "#cccccc",
+  pBg = "#2d2d2d",
+  pFgH = "#cccccc",
+  pBgH = "#515151",
+  pBC = "#cccccc",
+  pFont = fontName def}
+
+cyberPunkTheme = PromptTheme {
+  pFg = "#d3d3d3",
+  pBg = "#000000",
+  pFgH = "#d3d3d3",
+  pBgH = "#7F073F",
+  pBC = "#d3d3d3",
+  pFont = fontName def}
+
+darkToothTheme = PromptTheme {
+  pFg = "#FDF4C1",
+  pBg = "#282828",
+  pFgH = "#FDF4C1",
+  pBgH = "#30434C",
+  pBC = "#FDF4C1",
+  pFont = fontName def}
+
+materialTheme = PromptTheme {
+  pFg = "#ffffff",
+  pBg = "#263238",
+  pFgH = "white",
+  pBgH = "#555555",
+  pBC = "#ffffff",
+  pFont = fontName def}
+
+tronTheme = PromptTheme {
+  pFg = "#d3f9ee",
+  pBg = "#081724",
+  pFgH = "#d3f9ee",
+  pBgH = "#1d5483",
+  pBC = "#d3f9ee",
+  pFont = fontName def}
