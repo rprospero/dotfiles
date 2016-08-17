@@ -11,6 +11,7 @@ import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
+import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.Circle
 import qualified XMonad.StackSet              as W
 import           XMonad.Prompt
@@ -49,7 +50,7 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
-main = xmonad . ewmh . pagerHints $ myConfig
+main = xmonad . ewmh . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
 myLayoutHook :: Choose (Choose Tall (Choose (Mirror Tall) Full)) Circle Window
 myLayoutHook = layoutHook def ||| Circle
