@@ -2,12 +2,14 @@ import           Control.Monad                (liftM2)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
+import           XMonad.Actions.DynamicWorkspaces
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Circle
 import qualified XMonad.StackSet              as W
+import           XMonad.Prompt (defaultXPConfig)
 import           XMonad.Util.EZConfig         (additionalKeys)
 
 myWorkspaces :: [String]
@@ -80,4 +82,8 @@ myConfig = defaultConfig {
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
+             , ((mod4Mask, xK_v), selectWorkspace defaultXPConfig)
+             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace defaultXPConfig (windows . W.shift))
+             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt defaultXPConfig)
+             , ((mod4Mask, xK_BackSpace), removeEmptyWorkspace)
              ]
