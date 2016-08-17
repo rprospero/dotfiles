@@ -23,6 +23,7 @@ import           XMonad.Prompt.Theme
 import           XMonad.Prompt.Window
 import           XMonad.Prompt.XMonad
 import           XMonad.Util.EZConfig         (additionalKeys)
+import           XMonad.Util.Themes
 
 myWorkspaces :: [String]
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
@@ -89,25 +90,29 @@ myConfig = def {
              , ((0, xK_Print), spawn "shutter -e -f -n -o '/home/adam/Documents/screenshot-%F-%T.png'")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
              , ((mod4Mask, xK_t), spawn "thunar")
+             , ((mod4Mask .|. mod1Mask, xK_t), themePrompt mySearchPrompt)
              , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt)
              , ((mod4Mask .|. shiftMask, xK_Return), spawn "urxvt")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
-             , ((mod4Mask, xK_v), selectWorkspace def)
-             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace def (windows . W.shift))
-             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt def)
+             , ((mod4Mask, xK_v), selectWorkspace mySearchPrompt)
+             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace mySearchPrompt (windows . W.shift))
+             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt defPrompt)
              , ((mod4Mask, xK_BackSpace), removeEmptyWorkspace)
-             , ((mod4Mask, xK_s), sshPrompt def)
-             , ((mod4Mask, xK_p), runOrRaisePrompt def)
-             , ((mod4Mask .|. shiftMask, xK_p), shellPrompt def)
+             , ((mod4Mask, xK_s), sshPrompt mySearchPrompt)
+             , ((mod4Mask, xK_p), runOrRaisePrompt defPrompt)
+             , ((mod4Mask .|. shiftMask, xK_p), shellPrompt defPrompt)
              , ((mod4Mask, xK_g), windowPromptGoto mySearchPrompt)
              , ((mod4Mask .|. shiftMask, xK_g), windowPromptBring mySearchPrompt)
-             , ((mod4Mask, xK_x), xmonadPrompt def)
-             , ((mod4Mask, xK_i), promptSearch def (intelligent $ searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
+             , ((mod4Mask, xK_x), xmonadPrompt mySearchPrompt)
+             , ((mod4Mask, xK_i),
+                promptSearch defPrompt
+                (intelligent $
+                  searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
              ]
 
-thunarPrompt = mkXPrompt Thunar def directoryComplete (spawn . ("thunar "++))
+thunarPrompt = mkXPrompt Thunar defPrompt directoryComplete (spawn . ("thunar "++))
 
 directoryComplete :: String -> IO [String]
 directoryComplete x = do
@@ -122,4 +127,17 @@ instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
 mySearchPrompt :: XPConfig
-mySearchPrompt = def {searchPredicate = isInfixOf}
+mySearchPrompt = defPrompt {searchPredicate = isInfixOf}
+
+defPrompt = colourTheme myTheme def
+
+colourTheme :: Theme -> XPConfig -> XPConfig
+colourTheme t x = x {fgColor = inactiveTextColor t,
+                     bgColor = "black",
+                     fgHLight = activeTextColor t,
+                     bgHLight = "black",
+                     borderColor = activeBorderColor t,
+                     font = fontName t}
+
+myTheme :: Theme
+myTheme = theme kavonForestTheme
