@@ -71,8 +71,8 @@ myConfig = defaultConfig {
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -l")
-             , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
-             , ((0, xK_Print), spawn "scrot")
+             , ((controlMask, xK_Print), spawn "shutter -e -a -n -o '/home/adam/Documents/screenshot-%F-%T.png'")
+             , ((0, xK_Print), spawn "shutter -e -f -n -o '/home/adam/Documents/screenshot-%F-%T.png'")
              , ((mod4Mask, xK_p), spawn "$(~/.cabal/bin/yeganesh -x -- -b -nb black)")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
              , ((mod4Mask, xK_t), spawn "thunar")
