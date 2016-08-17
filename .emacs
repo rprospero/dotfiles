@@ -274,11 +274,11 @@
   (add-to-list 'exec-path "~/.cabal/bin")
   (customize-set-variable 'haskell-tags-on-save t)
 
-  (autoload 'ghc-init "ghc" nil t)
-  (autoload 'ghc-debug "ghc" nil t)
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  ;; (autoload 'ghc-init "ghc" nil t)
+  ;; (autoload 'ghc-debug "ghc" nil t)
+  ;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook
    'haskell-mode-hook
    (lambda ()
@@ -302,6 +302,10 @@
      (push '("<+>" . ?⊕) prettify-symbols-alist)
      (push '("::" . ?⁝) prettify-symbols-alist))))
 
+(use-package intero
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 ;; Custom hot-keys
 
