@@ -77,7 +77,7 @@ myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xb
 myLayoutPrinter x = x
 
 myConfig = def {
-               handleEventHook = handleEventHook def <+> fullscreenEventHook,
+               handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
                logHook = logHook def <+> ewmhDesktopsLogHook,
