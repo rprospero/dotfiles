@@ -2,12 +2,6 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  ;; :config
-  ;; (color-theme-sanityinc-tomorrow-bright)
-  )
-
 (setq custom-file "~/dotfiles/.emacs-custom.el")
 (load custom-file)
 
