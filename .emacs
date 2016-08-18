@@ -2,12 +2,6 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  ;; :config
-  ;; (color-theme-sanityinc-tomorrow-bright)
-  )
-
 (setq custom-file "~/dotfiles/.emacs-custom.el")
 (load custom-file)
 
@@ -544,8 +538,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t)
 
 ;;nnreddit stuff.  Should eventually be turned into a package
-(add-to-list 'load-path "~/Code/nnreddit")
-(require 'nnreddit)
+;; (add-to-list 'load-path "~/Code/nnreddit")
+;; (require 'nnreddit)
 ;; (add-to-list 'gnus-secondary-select-methods
 ;;              '(nnreddit ""))
 
