@@ -30,7 +30,8 @@ myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
 
 myManageHook = composeAll . concat $
   [
-      [ className =? b --> viewShift "web" >> doF W.focusDown | b <- myClassWebShifts]
+      [ className =? b --> viewShift "web" | b <- myClassWebShifts]
+    , [ className =? b --> doF W.focusDown | b <- myClassWebShifts]
     , [ className =? b --> viewShift "emacs" | b <- myClassEmacsShifts]
     , [ className =? b --> viewShift "chat" | b <- myClassChatShifts]
     , [ className =? b --> viewShift "documents" | b <- myClassDocumentsShifts]
