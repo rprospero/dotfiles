@@ -274,11 +274,11 @@
   (add-to-list 'exec-path "~/.cabal/bin")
   (customize-set-variable 'haskell-tags-on-save t)
 
-  (autoload 'ghc-init "ghc" nil t)
-  (autoload 'ghc-debug "ghc" nil t)
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  ;; (autoload 'ghc-init "ghc" nil t)
+  ;; (autoload 'ghc-debug "ghc" nil t)
+  ;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook
    'haskell-mode-hook
    (lambda ()
@@ -302,6 +302,10 @@
      (push '("<+>" . ?⊕) prettify-symbols-alist)
      (push '("::" . ?⁝) prettify-symbols-alist))))
 
+(use-package intero
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 ;; Custom hot-keys
 
@@ -313,6 +317,7 @@
 
 ;; Helm bindings
 (use-package helm
+  :diminish helm-mode
   :bind (("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
          ("C-c h" . helm-command-prefix)
@@ -345,27 +350,8 @@
 (use-package rainbow-delimiters
              :ensure t
              :defer t
-             :init
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
              :config
-             (set-face-attribute 'rainbow-delimiters-depth-1-face nil
-                                 :foreground (face-attribute 'default :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-2-face nil
-                                 :foreground (face-attribute 'outline-1 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-3-face nil
-                                 :foreground (face-attribute 'outline-2 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-4-face nil
-                                 :foreground (face-attribute 'outline-3 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-5-face nil
-                                 :foreground (face-attribute 'outline-4 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-6-face nil
-                                 :foreground (face-attribute 'outline-5 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-7-face nil
-                                 :foreground (face-attribute 'outline-6 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-8-face nil
-                                 :foreground (face-attribute 'outline-7 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-9-face nil
-                                 :foreground (face-attribute 'outline-8 :foreground)))
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package company
   :ensure t
@@ -536,6 +522,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (zone-select-add-program 'zone-pgm-sl))
 
 (use-package flycheck
+  :diminish flycheck-mode
   :config
   (flycheck-define-checker
    proselint
@@ -551,14 +538,14 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   (("M-z" . ace-window))
   :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
 
 (use-package ledger-mode
   :ensure t)
 
 ;;nnreddit stuff.  Should eventually be turned into a package
-; (add-to-list 'load-path "~/Code/nnreddit")
-; (require 'nnreddit)
+;; (add-to-list 'load-path "~/Code/nnreddit")
+;; (require 'nnreddit)
 ;; (add-to-list 'gnus-secondary-select-methods
 ;;              '(nnreddit ""))
 
@@ -570,8 +557,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
   (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
   (purpose-compile-user-configuration))
 
 (use-package counsel
@@ -607,3 +596,49 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package paradox
   :ensure t)
+
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'jabber-chat-mode-hook 'writegood-mode)
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+
+(diminish 'auto-fill-mode "")
+(diminish 'visual-line-mode "")
+(diminish 'flyspell-mode "")
+
+ (global-set-key
+  (kbd "<f5>")
+  (lambda (&optional force-reverting)
+    "Interactive call to revert-buffer. Ignoring the auto-save
+ file and not requesting for confirmation. When the current buffer
+ is modified, the command refuses to revert it, unless you specify
+ the optional argument: force-reverting to true."
+    (interactive "P")
+    ;;(message "force-reverting value is %s" force-reverting)
+    (if (or force-reverting (not (buffer-modified-p)))
+        (revert-buffer :ignore-auto :noconfirm)
+      (error "The buffer has been modified"))))
+
+(use-package elfeed
+  :ensure t)
+
+(bind-key "C-c ." 'imenu)
+(bind-key "C-x C-b" 'ibuffer)
+(bind-key "M-/" 'hippie-expand)
+(bind-key "M-l" 'ace-jump-mode)
+
+(use-package sx
+  :ensure t)
+
+(use-package pass
+  :ensure t)
+
+(use-package link-hint
+  :ensure t
+  :bind
+  ("C-c o" . link-hint-open-link)
+  ("C-c c" . link-hint-copy-link))
