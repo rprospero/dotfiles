@@ -110,9 +110,19 @@ myConfig = def {
              , ((mod4Mask, xK_x), xmonadPrompt mySearchPrompt)
              , ((mod4Mask, xK_i),
                 promptSearch defPrompt
-                (intelligent $
+                (moreIntelligent $
                   searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
              ]
+
+moreIntelligent :: SearchEngine -> SearchEngine
+moreIntelligent (SearchEngine name site) = searchEngineF name f
+  where
+    f s = if or ["http://" `isPrefixOf` s,
+                 "https://" `isPrefixOf` s,
+                 "ftp://" `isPrefixOf` s,
+                 and ['.' `elem` s, not $ ' '`elem` s ]]
+          then s
+          else site s
 
 thunarPrompt = mkXPrompt Thunar defPrompt directoryComplete (spawn . ("thunar "++))
 
