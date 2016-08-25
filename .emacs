@@ -2,7 +2,13 @@
 (eval-when-compile
   (require 'use-package))
 
-(setq custom-file "~/dotfiles/.emacs-custom.el")
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  ;; :config
+  ;; (color-theme-sanityinc-tomorrow-bright)
+  )
+
+(setq custom-file "./.emacs-custom.el")
 (load custom-file)
 
 (setq w32-apps-modifier 'super)
@@ -588,6 +594,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
 
+(use-package monokai-theme
+  :ensure t)
+
+(use-package paradox
+  :ensure t)
+
 (use-package writegood-mode
   :diminish writegood-mode
   :ensure t
@@ -633,4 +645,3 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
-
