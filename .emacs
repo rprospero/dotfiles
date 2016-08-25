@@ -33,19 +33,22 @@
         (:password . ,passwd)
         (:network-server . "talk.google.com")
         (:connection-type . ssl)))))
-   (defun send-message-xmobar (msg)
-          (if t
-              (call-process-shell-command
-               (format "echo \"%s\" > /tmp/jabber_notify" msg))))
-   (defun jabber-notify-xmobar ()
-          (if (equal "0" jabber-activity-count-string)
-            (send-message-xmobar "")
-            (send-message-xmobar (format "<fc=red,black><icon=/home/adam/dotfiles/pacman.xbm/>%s</fc>" jabber-activity-count-string))))
+   (defun x-urgency-hint (frame arg &optional source)
+     (let* ((wm-hints (append (x-window-property 
+                               "WM_HINTS" frame "WM_HINTS" source nil t) nil))
+            (flags (car wm-hints)))
+       (setcar wm-hints
+               (if arg
+                   (logior flags #x100)
+                 (logand flags (lognot #x100))))
+       (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
    (defun jabber-notify-taffy ()
      (if (equal "0" jabber-activity-count-string) t
-       (notifications-notify
-        :title "Jabber"
-        :body jabber-activity-count-string)))
+       (progn
+         ;; (notifications-notify
+         ;;  :title jabber-activity-make-string
+         ;;  :body jabber-activity-count-string)
+         (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
