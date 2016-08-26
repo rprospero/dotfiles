@@ -112,6 +112,7 @@ myConfig = def {
                 promptSearch defPrompt
                 (moreIntelligent $
                   searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
+             , ((mod4Mask .|. shiftMask , xK_n), withFocused $ windows . W.sink)
              ]
 
 moreIntelligent :: SearchEngine -> SearchEngine
