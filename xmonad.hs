@@ -55,7 +55,7 @@ main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = layoutHook def ||| Circle ||| tabbed shrinkText myTheme
+myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Circle
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
