@@ -8,7 +8,11 @@
   ;; (color-theme-sanityinc-tomorrow-bright)
   )
 
-(setq custom-file "~/Code/dotfiles/.emacs-custom.el")
+(setq custom-file
+      (cond
+       ((eq system-type 'darwin) "~/Code/dotfiles/.emacs-custom.el")
+       ((eq system-type 'gnu/linux) "~/dotfiles/.emacs-custom.el")
+       ((eq system-type 'windows-nt) "~/../../Documents/Code/dotfiles/.emacs-custom.el")))
 (load custom-file)
 
 (setq w32-apps-modifier 'super)
