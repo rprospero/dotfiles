@@ -131,7 +131,7 @@
      'org-agenda-day-face-function
      (function
       jd:org-agenda-day-face-holidays-function))
-    (require 'org-notify)
+
     (setq org-agenda-custom-commands
           '(("c" . "My Custom Agendas")
             ("cu" "Unscheduled TODO"
