@@ -1,6 +1,3 @@
-(setq custom-file "~/Code/dotfiles/.emacs-custom.el")
-(load custom-file)
-
 (package-initialize)
 (eval-when-compile
   (require 'use-package))
@@ -10,6 +7,9 @@
   ;; :config
   ;; (color-theme-sanityinc-tomorrow-bright)
   )
+
+(setq custom-file "~/Code/dotfiles/.emacs-custom.el")
+(load custom-file)
 
 (setq w32-apps-modifier 'super)
 
@@ -39,19 +39,22 @@
         (:password . ,passwd)
         (:network-server . "talk.google.com")
         (:connection-type . ssl)))))
-   (defun send-message-xmobar (msg)
-          (if t
-              (call-process-shell-command
-               (format "echo \"%s\" > /tmp/jabber_notify" msg))))
-   (defun jabber-notify-xmobar ()
-          (if (equal "0" jabber-activity-count-string)
-            (send-message-xmobar "")
-            (send-message-xmobar (format "<fc=red,black><icon=/home/adam/dotfiles/pacman.xbm/>%s</fc>" jabber-activity-count-string))))
+   (defun x-urgency-hint (frame arg &optional source)
+     (let* ((wm-hints (append (x-window-property 
+                               "WM_HINTS" frame "WM_HINTS" source nil t) nil))
+            (flags (car wm-hints)))
+       (setcar wm-hints
+               (if arg
+                   (logior flags #x100)
+                 (logand flags (lognot #x100))))
+       (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
    (defun jabber-notify-taffy ()
      (if (equal "0" jabber-activity-count-string) t
-       (notifications-notify
-        :title "Jabber"
-        :body jabber-activity-count-string)))
+       (progn
+         ;; (notifications-notify
+         ;;  :title jabber-activity-make-string
+         ;;  :body jabber-activity-count-string)
+         (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
@@ -257,11 +260,11 @@
   (add-to-list 'exec-path "~/.cabal/bin")
   (customize-set-variable 'haskell-tags-on-save t)
 
-  (autoload 'ghc-init "ghc" nil t)
-  (autoload 'ghc-debug "ghc" nil t)
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  ;; (autoload 'ghc-init "ghc" nil t)
+  ;; (autoload 'ghc-debug "ghc" nil t)
+  ;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook
    'haskell-mode-hook
    (lambda ()
@@ -285,6 +288,10 @@
      (push '("<+>" . ?⊕) prettify-symbols-alist)
      (push '("::" . ?⁝) prettify-symbols-alist))))
 
+(use-package intero
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 ;; Custom hot-keys
 
@@ -330,27 +337,8 @@
 (use-package rainbow-delimiters
              :ensure t
              :defer t
-             :init
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
              :config
-             (set-face-attribute 'rainbow-delimiters-depth-1-face nil
-                                 :foreground (face-attribute 'default :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-2-face nil
-                                 :foreground (face-attribute 'outline-1 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-3-face nil
-                                 :foreground (face-attribute 'outline-2 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-4-face nil
-                                 :foreground (face-attribute 'outline-3 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-5-face nil
-                                 :foreground (face-attribute 'outline-4 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-6-face nil
-                                 :foreground (face-attribute 'outline-5 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-7-face nil
-                                 :foreground (face-attribute 'outline-6 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-8-face nil
-                                 :foreground (face-attribute 'outline-7 :foreground))
-             (set-face-attribute 'rainbow-delimiters-depth-9-face nil
-                                 :foreground (face-attribute 'outline-8 :foreground)))
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package company
   :ensure t
@@ -541,7 +529,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   (("M-z" . ace-window))
   :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
 
 (use-package ledger-mode
   :ensure t)
@@ -594,6 +582,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
 
+(use-package monokai-theme
+  :ensure t)
+
+(use-package paradox
+  :ensure t)
+
 (use-package writegood-mode
   :diminish writegood-mode
   :ensure t
@@ -624,3 +618,18 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t)
 
 (bind-key "C-c ." 'imenu)
+(bind-key "C-x C-b" 'ibuffer)
+(bind-key "M-/" 'hippie-expand)
+(bind-key "M-l" 'ace-jump-mode)
+
+(use-package sx
+  :ensure t)
+
+(use-package pass
+  :ensure t)
+
+(use-package link-hint
+  :ensure t
+  :bind
+  ("C-c o" . link-hint-open-link)
+  ("C-c c" . link-hint-copy-link))
