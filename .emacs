@@ -318,31 +318,11 @@
 
 (winner-mode)
 
-;; Helm bindings
-(use-package helm
-  :diminish helm-mode
-  :bind (("M-y" . helm-show-kill-ring)
-         ("M-x" . helm-M-x)
-         ("C-c h" . helm-command-prefix)
-         ("C-x b" . helm-mini)
-         ("C-x C-f" . helm-find-files)
-         ("M-s SPC" . helm-swoop)
-         ("C-x 8 RET" . helm-unicode)
-         ("M-$" . helm-flyspell-correct))
-  :config
-  (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-z" 'helm-select-action helm-map))
-
-
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 12 :name "DejaVu Sans"))
 
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 20 :name "DejaVu Sans"))
-
-(customize-set-variable 'helm-split-window-in-side-p t)
-(helm-mode 1)
 
 ;; Twitter Stuff
 (use-package twittering-mode
@@ -572,11 +552,13 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f6>" . ivy-resume)
            ("C-x b" . ivy-switch-buffer)
            ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
            ("C-x C-f" . counsel-find-file)
            ("<f1> f" . counsel-describe-function)
            ("<f1> v" . counsel-describe-variable)
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
+           ("C-x 8 RET" . counsel-unicode-char)
            ("<f2> u" . counsel-unicode-char))
   :diminish counsel-mode
   :ensure t
