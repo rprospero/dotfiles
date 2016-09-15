@@ -19,7 +19,7 @@ import Graphics.UI.Gtk.Display.Image (Image, imageNewFromFile)
 import Graphics.UI.Gtk.Abstract.Widget (Widget, toWidget)
 import Graphics.UI.Gtk
 
-
+import Data.IORef
 import System.Process ( readProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
@@ -42,13 +42,16 @@ cpuCallback = do
   (userLoad, systemLoad, totalLoad) <- cpuLoad
   return totalLoad
 
-netCallback :: IO Double
-netCallback = do
+netCallback :: IORef ([Integer]) -> Int -> IO Double
+netCallback ref idx = do
+  old <- readIORef ref
   minfo <- getNetInfo "eno1"
-  return $ case minfo of
-             Nothing -> 0
-             Just [] -> 0
-             Just xs -> 0 -- (fromIntegral $ head xs) / 1000000000
+  case minfo of
+    Nothing -> return 0
+    Just [] -> return 0
+    Just xs -> do
+      writeIORef ref xs
+      return $ (fromIntegral (xs !! idx - old !! idx)) / 30000000
 
 barColour x
   | x < 1.0/3.0 = (0,3.0*x,0)
@@ -64,6 +67,7 @@ icon f = do
   return $ toWidget box
 
 main = do
+  netref <- newIORef [0, 0]
   let memCfg = defaultBarConfig barColour
       cpuCfg = defaultBarConfig barColour
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
@@ -72,7 +76,8 @@ main = do
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = pollingBarNew memCfg 5 memCallback
       cpu = pollingBarNew cpuCfg 5 cpuCallback
-      net = pollingBarNew cpuCfg 1 netCallback
+      net = pollingBarNew cpuCfg 1 $ netCallback netref 0
+      netup = pollingBarNew cpuCfg 1 $ netCallback netref 1
       tray = systrayNew
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
                                         , barHeight = 20
@@ -81,7 +86,7 @@ main = do
                                                          clock, icon"calendar.xbm",
                                                          mem, icon "mem.xbm",
                                                          cpu, icon "cpu.xbm",
-                                                         net, icon "net_wired.xbm",
+                                                         netup, net, icon "net_wired.xbm",
                                                          myFSMonitor "/",
                                                          myFSMonitor "/data",
                                                          myFSMonitor "/home",
