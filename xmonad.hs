@@ -140,8 +140,12 @@ instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
 mySearchPrompt :: XPConfig
-mySearchPrompt = defPrompt {searchPredicate = isInfixOf,
+mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
                             autoComplete = Just 1}
+
+
+mySearchPredicate :: String -> String -> Bool
+mySearchPredicate query item = and . map (`isInfixOf` item) . words $ query
 
 defPrompt = promptTheme subTheme def --colourTheme myTheme def
 
