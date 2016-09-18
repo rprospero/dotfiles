@@ -2,7 +2,13 @@
 (eval-when-compile
   (require 'use-package))
 
-(setq custom-file "~/dotfiles/.emacs-custom.el")
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  ;; :config
+  ;; (color-theme-sanityinc-tomorrow-bright)
+  )
+
+(setq custom-file "./.emacs-custom.el")
 (load custom-file)
 
 (setq w32-apps-modifier 'super)
@@ -33,19 +39,22 @@
         (:password . ,passwd)
         (:network-server . "talk.google.com")
         (:connection-type . ssl)))))
-   (defun send-message-xmobar (msg)
-          (if t
-              (call-process-shell-command
-               (format "echo \"%s\" > /tmp/jabber_notify" msg))))
-   (defun jabber-notify-xmobar ()
-          (if (equal "0" jabber-activity-count-string)
-            (send-message-xmobar "")
-            (send-message-xmobar (format "<fc=red,black><icon=/home/adam/dotfiles/pacman.xbm/>%s</fc>" jabber-activity-count-string))))
+   (defun x-urgency-hint (frame arg &optional source)
+     (let* ((wm-hints (append (x-window-property 
+                               "WM_HINTS" frame "WM_HINTS" source nil t) nil))
+            (flags (car wm-hints)))
+       (setcar wm-hints
+               (if arg
+                   (logior flags #x100)
+                 (logand flags (lognot #x100))))
+       (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
    (defun jabber-notify-taffy ()
      (if (equal "0" jabber-activity-count-string) t
-       (notifications-notify
-        :title "Jabber"
-        :body jabber-activity-count-string)))
+       (progn
+         ;; (notifications-notify
+         ;;  :title jabber-activity-make-string
+         ;;  :body jabber-activity-count-string)
+         (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
@@ -309,31 +318,11 @@
 
 (winner-mode)
 
-;; Helm bindings
-(use-package helm
-  :diminish helm-mode
-  :bind (("M-y" . helm-show-kill-ring)
-         ("M-x" . helm-M-x)
-         ("C-c h" . helm-command-prefix)
-         ("C-x b" . helm-mini)
-         ("C-x C-f" . helm-find-files)
-         ("M-s SPC" . helm-swoop)
-         ("C-x 8 RET" . helm-unicode)
-         ("M-$" . helm-flyspell-correct))
-  :config
-  (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-z" 'helm-select-action helm-map))
-
-
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 12 :name "DejaVu Sans"))
 
 (set-fontset-font "fontset-default" nil 
                   (font-spec :size 20 :name "DejaVu Sans"))
-
-(customize-set-variable 'helm-split-window-in-side-p t)
-(helm-mode 1)
 
 ;; Twitter Stuff
 (use-package twittering-mode
@@ -563,11 +552,13 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
            ("<f6>" . ivy-resume)
            ("C-x b" . ivy-switch-buffer)
            ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
            ("C-x C-f" . counsel-find-file)
            ("<f1> f" . counsel-describe-function)
            ("<f1> v" . counsel-describe-variable)
            ("<f1> l" . counsel-load-library)
            ("<f2> i" . counsel-info-lookup-symbol)
+           ("C-x 8 RET" . counsel-unicode-char)
            ("<f2> u" . counsel-unicode-char))
   :diminish counsel-mode
   :ensure t
@@ -584,6 +575,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+
+(use-package monokai-theme
+  :ensure t)
+
+(use-package paradox
+  :ensure t)
 
 (use-package writegood-mode
   :diminish writegood-mode
@@ -630,4 +627,3 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
-

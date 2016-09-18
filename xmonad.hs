@@ -55,7 +55,7 @@ main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = layoutHook def ||| Circle ||| tabbed shrinkText myTheme
+myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Circle
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
@@ -110,9 +110,20 @@ myConfig = def {
              , ((mod4Mask, xK_x), xmonadPrompt mySearchPrompt)
              , ((mod4Mask, xK_i),
                 promptSearch defPrompt
-                (intelligent $
+                (moreIntelligent $
                   searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
+             , ((mod4Mask .|. shiftMask , xK_n), withFocused $ windows . W.sink)
              ]
+
+moreIntelligent :: SearchEngine -> SearchEngine
+moreIntelligent (SearchEngine name site) = searchEngineF name f
+  where
+    f s = if or ["http://" `isPrefixOf` s,
+                 "https://" `isPrefixOf` s,
+                 "ftp://" `isPrefixOf` s,
+                 and ['.' `elem` s, not $ ' '`elem` s ]]
+          then s
+          else site s
 
 thunarPrompt = mkXPrompt Thunar defPrompt directoryComplete (spawn . ("thunar "++))
 
@@ -129,8 +140,12 @@ instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
 mySearchPrompt :: XPConfig
-mySearchPrompt = defPrompt {searchPredicate = isInfixOf,
+mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
                             autoComplete = Just 1}
+
+
+mySearchPredicate :: String -> String -> Bool
+mySearchPredicate query item = and . map (`isInfixOf` item) . words $ query
 
 defPrompt = promptTheme subTheme def --colourTheme myTheme def
 
