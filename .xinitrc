@@ -9,7 +9,7 @@ xscreensaver &
 
 xset -b
 
-xrdb ~/.Xresources
+xrdb -cpp cpp ~/.Xresources
 
 xsetroot -cursor_name left_ptr -solid black
 
