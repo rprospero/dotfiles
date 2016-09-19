@@ -332,7 +332,6 @@
 
 (use-package rainbow-delimiters
              :ensure t
-             :defer t
              :config
              (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
