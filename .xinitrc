@@ -21,4 +21,4 @@ xsetroot -cursor_name left_ptr -solid black
 #export SSH_AUTH_SOCK
 ###
 stack exec taffybar &!
-~/.xmonad/xmonad
+~/.xmonad/xmonad-x86_64-linux
