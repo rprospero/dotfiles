@@ -10,7 +10,6 @@ import           XMonad.Actions.Search
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
-import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.Circle
 import           XMonad.Layout.Tabbed
@@ -82,8 +81,7 @@ myConfig = def {
                layoutHook = avoidStruts myLayoutHook,
                logHook = logHook def <+> ewmhDesktopsLogHook,
                modMask = mod4Mask,
-               workspaces = myWorkspaces,
-               startupHook = setWMName "LG3D"
+               workspaces = myWorkspaces
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -l")
