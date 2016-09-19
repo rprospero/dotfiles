@@ -95,7 +95,7 @@ main = do
 myFSList :: IO [IO Widget]
 myFSList = do
   host <- getHostName
-  if (".sheffield.ac.uk" `isSuffixOf` host)
+  if (".shef.ac.uk" `isSuffixOf` host)
     then return [myFSMonitor "/",
                  myFSMonitor "/data",
                  myFSMonitor "/home",
