@@ -1,9 +1,19 @@
+#ifndef FIXED_FONT
+        #ifdef SRVR_dyn006107_shef_ac_uk
+                #define FIXED_FONT xft:DejaVu Sans Mono:size=9
+                #define EMACS_FIXED_FONT DejaVu Sans Mono-9
+        #else
+                #define FIXED_FONT xft:DejaVu Sans Mono:size=16
+                #define EMACS_FIXED_FONT DejaVu Sans Mono-16
+        #endif
+#endif
+
 XTerm*foreground: rgb:b2/b2/b2
 XTerm*background: rgb:08/08/08
 
 URxvt*skipScroll: true
 URxvt*foreground: rgb:b2/b2/b2
 URxvt*background: rgb:08/08/08
-URxvt.font: xft:DejaVu Sans Mono:size=18
+URxvt.font: FIXED_FONT
 
-Emacs.font: DejaVu Sans Mono-16
+Emacs.font: EMACS_FIXED_FONT
