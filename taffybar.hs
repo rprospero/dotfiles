@@ -1,3 +1,6 @@
+import Data.List (isSuffixOf)
+import Network.HostName
+
 import System.Taffybar
 
 import System.Taffybar.FSMonitor
@@ -79,17 +82,23 @@ main = do
       net = pollingBarNew cpuCfg 1 $ netCallback netref 0
       netup = pollingBarNew cpuCfg 1 $ netCallback netref 1
       tray = systrayNew
-  defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
+  fsList <- myFSList
+  defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
                                                          clock, icon"calendar.xbm",
                                                          mem, icon "mem.xbm",
                                                          cpu, icon "cpu.xbm",
-                                                         netup, net, icon "net_wired.xbm",
-                                                         myFSMonitor "/",
-                                                         myFSMonitor "/data",
-                                                         myFSMonitor "/home",
-                                                         icon "diskette.xbm",
-                                                         notifyAreaNew defaultNotificationConfig{notificationMaxTimeout=36000}]
+                                                         netup, net, icon "net_wired.xbm"] ++ fsList ++ [note]
                                         }
+myFSList :: IO [IO Widget]
+myFSList = do
+  host <- getHostName
+  if (".sheffield.ac.uk" `isSuffixOf` host)
+    then return [myFSMonitor "/",
+                 myFSMonitor "/data",
+                 myFSMonitor "/home",
+                 icon "diskette.xbm"]
+    else return [myFSMonitor "/",
+                 icon "diskette.xbm"]

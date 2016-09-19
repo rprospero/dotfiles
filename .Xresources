@@ -4,5 +4,6 @@ XTerm*background: rgb:08/08/08
 URxvt*skipScroll: true
 URxvt*foreground: rgb:b2/b2/b2
 URxvt*background: rgb:08/08/08
+URxvt.font: xft:DejaVu Sans Mono:size=18
 
-Emacs.font: DejaVu Sans Mono-9
+Emacs.font: DejaVu Sans Mono-16
