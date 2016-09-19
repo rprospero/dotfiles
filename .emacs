@@ -8,7 +8,16 @@
   ;; (color-theme-sanityinc-tomorrow-bright)
   )
 
-(setq custom-file "./.emacs-custom.el")
+(use-package s
+  :ensure t)
+
+(setq
+ custom-file
+ (cond
+  ((s-ends-with? "shef.ac.uk" system-name)
+   "~/dotfiles/.emacs-custom.el")
+  (t "~/.emacs-custom.el")))
+ 
 (load custom-file)
 
 (setq w32-apps-modifier 'super)
