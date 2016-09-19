@@ -3,6 +3,7 @@ import           Data.List (isInfixOf, isPrefixOf)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
+import           System.Posix.Env (putEnv)
 import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Actions.DynamicWorkspaces
@@ -52,7 +53,9 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
-main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
+main = do
+  putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
+  xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
 myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Circle
 
