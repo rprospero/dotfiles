@@ -16,7 +16,7 @@
  (cond
   ((s-ends-with? "shef.ac.uk" system-name)
    "~/dotfiles/.emacs-custom.el")
-  ((s-equals? "nadia" system-name)
+  ((s-prefix? "nadia" system-name)
    "/home/adam/dotfiles/.emacs-custom.el")
   (t "~/.emacs-custom.el")))
  
