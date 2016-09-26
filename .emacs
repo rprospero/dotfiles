@@ -635,3 +635,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
+
+(use-package color-theme-modern
+  :ensure t)
+
+(load-theme 'midnight)
