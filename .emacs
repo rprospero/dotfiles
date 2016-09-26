@@ -637,6 +637,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   ("C-c c" . link-hint-copy-link))
 
 (use-package color-theme-modern
+  :config
+  (load-theme 'midnight))
   :ensure t)
 
-(load-theme 'midnight)
