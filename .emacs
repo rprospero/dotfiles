@@ -399,15 +399,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
 
-(use-package guide-key
-  :ensure t
-  :diminish guide-key-mode
-  :config
-  (customize-set-variable 'guide-key/recursive-key-sequence-flag t)
-  (setq guide-key/guide-key-sequence '("C-x 4" "C-x r" "C-x a" "C-x RET" "C-x ." "C-x @" "C-x v" "M-g" "C-c" "M-s"))
-  (setq guide-key-tip/enabled))
-(guide-key-mode 1)  ; Enable guide-key-mode
-
 (which-function-mode 't)
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 
@@ -637,3 +628,17 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
+
+(use-package color-theme-modern
+  :ensure t
+  :config
+  (load-theme 'midnight))
+
+(use-package projectile
+  :ensure t)
+
+(use-package counsel-projectile
+  :ensure t)
+
+(use-package which-key
+  :ensure t)
