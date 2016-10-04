@@ -55,6 +55,7 @@ main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
+  putEnv "SAL_USE_VCLPLUGIN=gen"
   xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
 myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Circle
