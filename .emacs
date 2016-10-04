@@ -578,8 +578,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package monokai-theme
   :ensure t)
 
-(use-package paradox
-  :ensure t)
+;; (use-package paradox
+;;   :ensure t)
 
 (use-package writegood-mode
   :diminish writegood-mode
