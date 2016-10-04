@@ -2,11 +2,11 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  ;; :config
-  ;; (color-theme-sanityinc-tomorrow-bright)
-  )
+;; (use-package color-theme-sanityinc-tomorrow
+;;   :ensure t
+;;   ;; :config
+;;   ;; (color-theme-sanityinc-tomorrow-bright)
+;;   )
 
 (use-package s
   :ensure t)
@@ -16,6 +16,8 @@
  (cond
   ((s-ends-with? "shef.ac.uk" system-name)
    "~/dotfiles/.emacs-custom.el")
+  ((s-prefix? "nadia" system-name)
+   "/home/adam/dotfiles/.emacs-custom.el")
   (t "~/.emacs-custom.el")))
  
 (load custom-file)
@@ -136,7 +138,7 @@
      'org-agenda-day-face-function
      (function
       jd:org-agenda-day-face-holidays-function))
-    (require 'org-notify)
+    ; (require 'org-notify)
     (setq org-agenda-custom-commands
           '(("c" . "My Custom Agendas")
             ("cu" "Unscheduled TODO"
@@ -642,3 +644,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package which-key
   :ensure t)
+(if (s-prefix? "nadia" system-name)
+    (progn
+        (add-to-list 'load-path "~/Code/systemct-el/")
+        (require 'systemct))
+  nil)
