@@ -633,7 +633,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (load-theme 'midnight))
 
 (use-package projectile
-  :ensure t)
+  :ensure t
+  :config
+  (projectile-global-mode))
 
 (use-package counsel-projectile
   :ensure t)
