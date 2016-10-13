@@ -649,3 +649,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
         (add-to-list 'load-path "~/Code/systemct-el/")
         (require 'systemct))
   nil)
+
+(use-package flymake-jshint
+  :ensure t
+  :config
+  (flymake-jshint-load))
