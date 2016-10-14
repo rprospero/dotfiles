@@ -1,5 +1,5 @@
 import           Control.Monad                (liftM2, filterM)
-import           Data.List (isInfixOf, isPrefixOf)
+import           Data.List (isInfixOf, isPrefixOf,nub)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -149,7 +149,7 @@ mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
 mySearchPredicate :: String -> String -> Bool
 mySearchPredicate query item = and . map (`isInfixOf` item) . words $ query
 
-defPrompt = promptTheme subTheme def --colourTheme myTheme def
+defPrompt = promptTheme subTheme def {historyFilter = nub}
 
 colourTheme :: Theme -> XPConfig -> XPConfig
 colourTheme t x = x {fgColor = inactiveTextColor t,
