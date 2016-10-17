@@ -318,8 +318,9 @@
 
 (use-package intero
   :ensure t
-  :config
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  ;:config
+  ;(add-hook 'haskell-mode-hook 'intero-mode))
+  )
 
 ;; Custom hot-keys
 
