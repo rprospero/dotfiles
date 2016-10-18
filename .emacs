@@ -655,3 +655,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (flymake-jshint-load))
+
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode))
