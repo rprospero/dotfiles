@@ -217,7 +217,6 @@
   (local-set-key [(meta up)] 'flymake-goto-prev-error))
 
 ;;Python checking stuff
-(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 (add-hook 'python-mode-hook 'flymake-keys)
 
 ;;Usenet stuff
