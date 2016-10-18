@@ -317,8 +317,9 @@
 
 (use-package intero
   :ensure t
-  :config
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  ;:config
+  ;(add-hook 'haskell-mode-hook 'intero-mode))
+  )
 
 ;; Custom hot-keys
 
@@ -544,6 +545,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
   (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
   (purpose-compile-user-configuration))
 
 (use-package counsel
@@ -648,3 +650,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
         (add-to-list 'load-path "~/Code/systemct-el/")
         (require 'systemct))
   nil)
+
+(use-package flymake-jshint
+  :ensure t
+  :config
+  (flymake-jshint-load))
