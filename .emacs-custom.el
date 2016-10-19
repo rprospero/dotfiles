@@ -85,6 +85,7 @@
  '(message-sendmail-extra-arguments (quote ("--read-envelope-from")))
  '(message-sendmail-f-is-evil t)
  '(org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function) t)
+ '(notmuch-archive-tags (quote ("-inbox" "-unread")))
  '(org-agenda-files
    (quote
     ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))
