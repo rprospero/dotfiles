@@ -664,6 +664,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (require 'recentf)
 (recentf-mode)
 
+(use-package evil-god-state
+  :ensure t
+  :diminish
+  :config
+  (evil-define-key 'normal global-map "," 'evil-execute-in-god-state))
+
 (use-package evil-escape
   :ensure t
   :config
