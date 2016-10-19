@@ -659,7 +659,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package evil
   :ensure t
   :config
-  (evil-mode))
+  (evil-mode)
+  (add-hook 'git-commit-mode-hook #'evil-insert-state))
 
 (require 'recentf)
 (recentf-mode)
