@@ -86,6 +86,15 @@
  '(message-sendmail-f-is-evil t)
  '(org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function) t)
  '(notmuch-archive-tags (quote ("-inbox" "-unread")))
+ '(notmuch-saved-searches
+   (quote
+    ((:name "inbox" :query "tag:inbox" :key "i")
+     (:name "unread" :query "tag:unread" :key "u")
+     (:name "flagged" :query "tag:flagged" :key "f")
+     (:name "sent" :query "tag:sent" :key "t")
+     (:name "drafts" :query "tag:draft" :key "d")
+     (:name "all mail" :query "*" :key "a")
+     (:name "Today's mail" :query "date:0d.."))))
  '(org-agenda-files
    (quote
     ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))
