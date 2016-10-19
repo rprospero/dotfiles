@@ -663,3 +663,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (require 'recentf)
 (recentf-mode)
+
+(use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode)
+  (setq-default evil-escape-key-sequence "jk"))
