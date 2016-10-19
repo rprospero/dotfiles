@@ -675,3 +675,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk"))
+
+(use-package langtool
+  :ensure t
+  :config
+  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
