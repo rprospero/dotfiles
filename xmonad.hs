@@ -12,7 +12,7 @@ import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.UrgencyHook
-import           XMonad.Layout.Circle
+import           XMonad.Layout.HintedGrid
 import           XMonad.Layout.Tabbed
 import qualified XMonad.StackSet              as W
 import           XMonad.Prompt
@@ -58,7 +58,7 @@ main = do
   putEnv "SAL_USE_VCLPLUGIN=gen"
   xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Circle
+myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Grid False
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
