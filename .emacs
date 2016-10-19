@@ -677,6 +677,9 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk"))
 
+(use-package evil-magit
+  :ensure t)
+
 (use-package langtool
   :ensure t
   :config
