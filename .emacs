@@ -409,9 +409,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (sml/apply-theme 'respectful))
 
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-(diminish 'hs-minor-mode "")
-
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
 	    (push '("<=" . ?≤) prettify-symbols-alist)
@@ -644,6 +641,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t)
 
 (use-package which-key
+  :diminish which-key-mode
   :ensure t)
 (if (s-prefix? "nadia" system-name)
     (progn
@@ -667,12 +665,12 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 (use-package evil-god-state
   :ensure t
-  :diminish
   :config
   (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
 
 (use-package evil-escape
   :ensure t
+  :diminish evil-escape-mode
   :config
   (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk"))
