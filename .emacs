@@ -686,3 +686,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
+
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark))
