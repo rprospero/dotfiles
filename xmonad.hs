@@ -86,6 +86,7 @@ myConfig = def {
                layoutHook = avoidStruts myLayoutHook,
                logHook = logHook def <+> ewmhDesktopsLogHook,
                modMask = mod4Mask,
+               terminal = "urxvt",
                workspaces = myWorkspaces
              }
              `additionalKeys`
@@ -97,7 +98,6 @@ myConfig = def {
              , ((mod4Mask, xK_t), spawn "thunar")
              , ((mod4Mask .|. mod1Mask, xK_t), themePrompt mySearchPrompt)
              , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt)
-             , ((mod4Mask .|. shiftMask, xK_Return), spawn "urxvt")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
