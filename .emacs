@@ -658,6 +658,10 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :ensure t
   :config
   (evil-mode)
+  (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
+  (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
+  (evil-set-initial-state 'notmuch-search-mode 'emacs)
+  (evil-set-initial-state 'notmuch-show-mode 'emacs)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
 
 (require 'recentf)
