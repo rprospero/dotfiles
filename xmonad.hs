@@ -178,7 +178,7 @@ tabTheme p x = x {inactiveTextColor = pFg p,
 myTheme :: Theme
 myTheme = tabTheme subTheme $ theme kavonForestTheme
 
-subTheme = tronTheme
+subTheme = solarizedTheme
 
 data PromptTheme = PromptTheme {
   pFg :: String,
@@ -258,4 +258,12 @@ tronTheme = PromptTheme {
   pFgH = "#d3f9ee",
   pBgH = "#1d5483",
   pBC = "#d3f9ee",
+  pFont = fontName def}
+
+solarizedTheme = PromptTheme {
+  pFg = "#839496",
+  pBg = "#002b36",
+  pFgH = "#93a1a1",
+  pBgH = "073642",
+  pBC = "#859900",
   pFont = fontName def}
