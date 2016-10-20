@@ -26,6 +26,8 @@ import Data.IORef
 import System.Process ( readProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
+myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212)})
+
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
   fsOut <- readProcess "df" (["-kP", fs]) ""
@@ -33,7 +35,7 @@ myFSInfo fs = do
   return x
 
 myFSMonitor :: String -> IO Widget
-myFSMonitor fs = pollingBarNew (defaultBarConfig barColour) 600 $ myFSInfo fs
+myFSMonitor fs = myPollingBar 600 $ myFSInfo fs
 
 memCallback :: IO Double
 memCallback = do
@@ -71,16 +73,14 @@ icon f = do
 
 main = do
   netref <- newIORef [0, 0]
-  let memCfg = defaultBarConfig barColour
-      cpuCfg = defaultBarConfig barColour
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
-      mem = pollingBarNew memCfg 5 memCallback
-      cpu = pollingBarNew cpuCfg 5 cpuCallback
-      net = pollingBarNew cpuCfg 1 $ netCallback netref 0
-      netup = pollingBarNew cpuCfg 1 $ netCallback netref 1
+      mem = myPollingBar 5 memCallback
+      cpu = myPollingBar 5 cpuCallback
+      net = myPollingBar 1 $ netCallback netref 0
+      netup = myPollingBar 1 $ netCallback netref 1
       tray = systrayNew
   fsList <- myFSList
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
