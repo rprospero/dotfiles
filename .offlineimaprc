@@ -398,4 +398,4 @@ remoteuser = rprospero@gmail.com
 remotepasseval = passwords["Personal"]
 sslcacertfile = /etc/ssl/certs/ca-bundle.crt
 
-folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
+# folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
