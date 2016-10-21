@@ -3,6 +3,7 @@ import Network.HostName
 
 import System.Taffybar
 
+import System.Taffybar.CommandRunner
 import System.Taffybar.FSMonitor
 import System.Taffybar.Systray
 import System.Taffybar.TaffyPager
@@ -81,6 +82,7 @@ main = do
       cpu = myPollingBar 5 cpuCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
+      mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" "white"
       tray = systrayNew
   fsList <- myFSList
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
@@ -90,7 +92,7 @@ main = do
                                                          clock, icon"calendar.xbm",
                                                          mem, icon "mem.xbm",
                                                          cpu, icon "cpu.xbm",
-                                                         netup, net, icon "net_wired.xbm"] ++ fsList ++ [note]
+                                                         netup, net, icon "net_wired.xbm"] ++ fsList ++ [mail,icon "mail.xbm",note]
                                         }
 myFSList :: IO [IO Widget]
 myFSList = do
