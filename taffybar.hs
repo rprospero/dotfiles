@@ -92,7 +92,11 @@ main = do
                                                          clock, icon"calendar.xbm",
                                                          mem, icon "mem.xbm",
                                                          cpu, icon "cpu.xbm",
-                                                         netup, net, icon "net_wired.xbm"] ++ fsList ++ [mail,icon "mail.xbm",note]
+                                                         netup, net,
+                                                         icon "net_wired.xbm"] ++
+                                                       fsList ++
+                                                       [mail,icon "mail.xbm",
+                                                        note]
                                         }
 myFSList :: IO [IO Widget]
 myFSList = do
