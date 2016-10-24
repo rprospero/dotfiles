@@ -86,7 +86,7 @@ myConfig = def {
                layoutHook = avoidStruts myLayoutHook,
                logHook = logHook def <+> ewmhDesktopsLogHook,
                modMask = mod4Mask,
-               terminal = "urxvt",
+               terminal = "urxvt +sb",
                workspaces = myWorkspaces
              }
              `additionalKeys`
