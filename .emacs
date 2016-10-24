@@ -547,6 +547,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   (add-to-list 'purpose-user-mode-purposes '(notmuch-show-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
+  (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
   (purpose-compile-user-configuration))
 
 (use-package counsel
