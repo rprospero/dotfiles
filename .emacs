@@ -15,12 +15,37 @@
  custom-file
  (cond
   ((s-ends-with? "shef.ac.uk" system-name)
-   "~/dotfiles/.emacs-custom.el")
+   "/home/adam/dotfiles/.emacs-custom.el")
   ((s-prefix? "nadia" system-name)
    "/home/adam/dotfiles/.emacs-custom.el")
   (t "~/.emacs-custom.el")))
  
 (load custom-file)
+
+(let
+    ((mypaths
+      (cond
+       ((s-ends-with? "shef.ac.uk" system-name)
+        (list
+         "$NPM_PACKAGES/bin"
+         "/home/adam/.local/bin"
+         "/home/adam/bin"
+         "/usr/local/texlive/2015/bin/x86_64-linux"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64"
+         "/home/adam/.cabal/bin"
+         "/usr/local/bin"
+         "/home/adam/Science/LINUX64"
+         "/opt/maple18/bin"
+         "/usr/local/cuda-7.5/bin"
+         (getenv "PATH")))
+       ('t (list (getenv "PATH"))))))
+  (setenv "PATH" (mapconcat 'identity mypaths ";"))
+  (setq exec-path (append mypaths (list "." exec-directory))))
 
 (setq w32-apps-modifier 'super)
 
@@ -490,17 +515,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
-
-(use-package zone-select
-  :ensure t)
-
-(use-package zone-rainbow
-  :config
-  (zone-select-add-program 'zone-pgm-rainbow))
-
-(use-package zone-sl
-  :config
-  (zone-select-add-program 'zone-pgm-sl))
 
 (use-package flycheck
   :diminish flycheck-mode
