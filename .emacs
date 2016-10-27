@@ -604,7 +604,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :diminish writegood-mode
   :ensure t
   :config
-  (add-hook 'jabber-chat-mode-hook 'writegood-mode)
   (add-hook 'text-mode-hook 'writegood-mode)
   (add-hook 'latex-mode-hook 'writegood-mode)
   (add-hook 'org-mode-hook 'writegood-mode))
