@@ -58,7 +58,7 @@ main = do
   putEnv "SAL_USE_VCLPLUGIN=gen"
   xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = tabbed shrinkText myTheme ||| layoutHook def ||| Grid False
+myLayoutHook = tabbedBottom shrinkText myTheme ||| layoutHook def ||| Grid False
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
@@ -171,10 +171,10 @@ promptTheme t x = x {fgColor = pFg t,
 tabTheme :: PromptTheme -> Theme -> Theme
 tabTheme p x = x {inactiveTextColor = pFg p,
                   inactiveColor = pBg p,
-                  inactiveBorderColor = pBgH p,
+                  inactiveBorderColor = pBg p,
                   activeTextColor = pFgH p,
                   activeColor = pBgH p,
-                  activeBorderColor = pBgH p}
+                  activeBorderColor = pBg p}
 
 myTheme :: Theme
 myTheme = tabTheme subTheme $ theme kavonForestTheme
