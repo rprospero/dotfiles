@@ -42,6 +42,8 @@
          "/home/adam/Science/LINUX64"
          "/opt/maple18/bin"
          "/usr/local/cuda-7.5/bin"
+         "/usr/bin"
+         "/bin"
          (getenv "PATH")))
        ('t (list (getenv "PATH"))))))
   (setenv "PATH" (mapconcat 'identity mypaths ";"))
