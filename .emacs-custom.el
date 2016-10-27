@@ -65,7 +65,6 @@
      (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- '(ispell-dictionary nil t)
  '(jabber-chat-buffer-show-avatar nil)
  '(jabber-debug-keep-process-buffers t)
  '(jabber-debug-log-xml t)

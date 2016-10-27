@@ -220,8 +220,6 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-(customize-set-variable 'ispell-dictionary nil)
-
 (customize-set-variable
  'package-archives
  (quote
