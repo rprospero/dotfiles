@@ -56,25 +56,27 @@
 
 
 #+END_SRC
-* encourage-mode
 
-#+BEGIN_SRC elisp :tangle yes
+* Toys
+** encourage-mode
+
+ #+BEGIN_SRC elisp :tangle yes
 (use-package encourage-mode
   :diminish encourage-mode
   :ensure t
   :init (encourage-mode))
 
 
-#+END_SRC
+ #+END_SRC
 
-* selectric-mode
+** selectric-mode
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package selectric-mode
   :ensure t)
 
 
-#+END_SRC
+ #+END_SRC
 
 
 * Prose
