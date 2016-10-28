@@ -227,6 +227,14 @@
  #+END_SRC
 
 
+** elfeed
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package elfeed
+  :ensure t)
+ #+END_SRC
+
+
 * emojify
 
 #+BEGIN_SRC elisp :tangle yes
@@ -774,14 +782,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (ivy-purpose-setup))
  #+END_SRC
-
-
-* elfeed
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package elfeed
-  :ensure t)
-#+END_SRC
 
 
 * pass
