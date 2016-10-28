@@ -803,14 +803,25 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-* color-theme-modern
+* Themes
+** color-theme-modern
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package color-theme-modern
   :ensure t
   :config
   (load-theme 'midnight))
-#+END_SRC
+ #+END_SRC
+
+
+** solarized-theme
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark))
+ #+END_SRC
 
 
 * projectile
@@ -917,13 +928,3 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :diminish which-key-mode
   :ensure t)
  #+END_SRC
-
-
-* solarized-theme
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package solarized-theme
-  :ensure t
-  :config
-  (load-theme 'solarized-dark))
-#+END_SRC
