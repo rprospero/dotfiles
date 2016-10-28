@@ -671,6 +671,41 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
+** counsel
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package counsel
+  :bind   (("C-s" . swiper)
+           ("C-c C-r" . ivy-resume)
+           ("<f6>" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
+           ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
+           ("C-x C-f" . counsel-find-file)
+           ("<f1> f" . counsel-describe-function)
+           ("<f1> v" . counsel-describe-variable)
+           ("<f1> l" . counsel-load-library)
+           ("<f2> i" . counsel-info-lookup-symbol)
+           ("C-x 8 RET" . counsel-unicode-char)
+           ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t))
+ #+END_SRC
+
+
+** flyspell-correct-ivy
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+ #+END_SRC
+
+
 * window-purpose
 
 #+BEGIN_SRC elisp :tangle yes
@@ -692,49 +727,14 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-* counsel
+** ivy-purpose
 
-#+BEGIN_SRC elisp :tangle yes
-(use-package counsel
-  :bind   (("C-s" . swiper)
-           ("C-c C-r" . ivy-resume)
-           ("<f6>" . ivy-resume)
-           ("C-x b" . ivy-switch-buffer)
-           ("M-x" . counsel-M-x)
-           ("M-y" . counsel-yank-pop)
-           ("C-x C-f" . counsel-find-file)
-           ("<f1> f" . counsel-describe-function)
-           ("<f1> v" . counsel-describe-variable)
-           ("<f1> l" . counsel-load-library)
-           ("<f2> i" . counsel-info-lookup-symbol)
-           ("C-x 8 RET" . counsel-unicode-char)
-           ("<f2> u" . counsel-unicode-char))
-  :diminish counsel-mode
-  :ensure t
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t))
-#+END_SRC
-
-
-* ivy-purpose
-
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package ivy-purpose
   :ensure t
   :config
   (ivy-purpose-setup))
-#+END_SRC
-
-
-* flyspell-correct-ivy
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package flyspell-correct-ivy
-  :ensure t
-  :config
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
-#+END_SRC
+ #+END_SRC
 
 
 * writegood-mode
