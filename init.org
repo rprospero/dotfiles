@@ -57,86 +57,29 @@
 
 #+END_SRC
 
-* Toys
-** encourage-mode
+* Apps
+** magit
 
  #+BEGIN_SRC elisp :tangle yes
-(use-package encourage-mode
-  :diminish encourage-mode
+(use-package magit
   :ensure t
-  :init (encourage-mode))
-
-
+  :bind (("C-x g" . magit-status)))
  #+END_SRC
 
-** selectric-mode
+
+** ledger-mode
 
  #+BEGIN_SRC elisp :tangle yes
-(use-package selectric-mode
+(use-package ledger-mode
   :ensure t)
-
-
  #+END_SRC
 
 
-** emojify
+** pass
 
  #+BEGIN_SRC elisp :tangle yes
-(use-package emojify
-  :ensure t
-  :init
-  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
-  (add-hook 'after-init-hook #'global-emojify-mode))
-
-
- #+END_SRC
-
-
-* Prose
-
-
-** LaTeX
-
- #+BEGIN_SRC elisp :tangle yes
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(customize-set-variable 'TeX-PDF-mode t)
-
-
- #+END_SRC
-
-** Text Mode
-
- #+BEGIN_SRC elisp :tangle yes
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'text-mode-hook 'visual-line-mode)
-
-
- #+END_SRC
-
-
-** langtool
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package langtool
-  :ensure t
-  :config
-  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
- #+END_SRC
-
-
-** writegood-mode
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package writegood-mode
-  :diminish writegood-mode
-  :ensure t
-  :config
-  (add-hook 'text-mode-hook 'writegood-mode)
-  (add-hook 'latex-mode-hook 'writegood-mode)
-  (add-hook 'org-mode-hook 'writegood-mode))
+(use-package pass
+  :ensure t)
  #+END_SRC
 
 * Communication Tools
@@ -247,6 +190,109 @@
  #+BEGIN_SRC elisp :tangle yes
 (use-package elfeed
   :ensure t)
+ #+END_SRC
+
+
+* Prose
+
+
+** LaTeX
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(customize-set-variable 'TeX-PDF-mode t)
+
+
+ #+END_SRC
+
+** Text Mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook 'visual-line-mode)
+
+
+ #+END_SRC
+
+
+** langtool
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package langtool
+  :ensure t
+  :config
+  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
+ #+END_SRC
+
+
+** writegood-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+ #+END_SRC
+
+
+* Themes
+** color-theme-modern
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package color-theme-modern
+  :ensure t
+  :config
+  (load-theme 'midnight))
+ #+END_SRC
+
+
+** solarized-theme
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark))
+ #+END_SRC
+
+* Toys
+** encourage-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package encourage-mode
+  :diminish encourage-mode
+  :ensure t
+  :init (encourage-mode))
+
+
+ #+END_SRC
+
+** selectric-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package selectric-mode
+  :ensure t)
+
+
+ #+END_SRC
+
+
+** emojify
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package emojify
+  :ensure t
+  :init
+  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
+
  #+END_SRC
 
 
@@ -601,31 +647,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   )
  #+END_SRC
 
-* Apps
-** magit
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)))
- #+END_SRC
-
-
-** ledger-mode
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package ledger-mode
-  :ensure t)
- #+END_SRC
-
-
-** pass
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package pass
-  :ensure t)
- #+END_SRC
-
 
 * rainbow-delimiters
 
@@ -803,27 +824,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
 #+END_SRC
-
-
-* Themes
-** color-theme-modern
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package color-theme-modern
-  :ensure t
-  :config
-  (load-theme 'midnight))
- #+END_SRC
-
-
-** solarized-theme
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package solarized-theme
-  :ensure t
-  :config
-  (load-theme 'solarized-dark))
- #+END_SRC
 
 
 * projectile
