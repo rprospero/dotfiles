@@ -803,14 +803,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package counsel-projectile
   :ensure t)
 
-* which-key
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package which-key
-  :diminish which-key-mode
-  :ensure t)
-#+END_SRC
-
 
 * flymake-jshint
 
@@ -890,6 +882,14 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
       (god-local-mode-pause)))
 
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
+ #+END_SRC
+
+** which-key
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package which-key
+  :diminish which-key-mode
+  :ensure t)
  #+END_SRC
 
 
