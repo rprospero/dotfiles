@@ -57,6 +57,26 @@
 
 #+END_SRC
 
+Next, let's get rid of the window chrome.  It's just so ugly.
+
+#+BEGIN_SRC elisp :tangle yes
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+
+#+END_SRC
+
+Now, give the full list of package repositories.
+
+#+BEGIN_SRC elisp :tangle yes
+(customize-set-variable
+ 'package-archives
+ (quote
+  (("gnu" . "http://elpa.gnu.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")
+   ("melpa" . "http://melpa.milkbox.net/packages/"))))
+
+#+END_SRC
 * Apps
 ** magit
 
@@ -85,7 +105,18 @@
 
 * Code
 
+** elisp
 
+Let's try and make elisp symbols pretty!
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (push '("<=" . ?≤) prettify-symbols-alist)
+            (push '("**2" . ?²) prettify-symbols-alist)))
+
+
+#+END_SRC
 ** haskell-mode
 
  #+BEGIN_SRC elisp :tangle yes
@@ -126,6 +157,50 @@
  #+END_SRC
 
 
+ I've added command line completion for cabal and stack, since I'm too
+ lazy to type out my executable names on my own.
+
+#+BEGIN_SRC elisp :tangle yes
+(defconst pcmpl-cabal-commands
+  '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build"
+  "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen"
+  "haddock" "hscolour" "copy" "register" "sandbox" "exec" "repl"))
+
+(defun pcmpl-cabal-get-execs ()
+  (with-temp-buffer
+    (message "Loading")
+    (insert (shell-command-to-string "cat *.cabal"))
+    (goto-char (point-min))
+    (let ((ref-list))
+      (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
+        (message "Insert")
+        (add-to-list 'ref-list (match-string 1)))
+      ref-list)))
+
+(defun pcomplete/cabal ()
+  "Completion for `cabal'"
+  (pcomplete-here* pcmpl-cabal-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("run")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+(defconst pcmpl-stack-commands
+  '( "build" "install" "uninstall" "test" "bench" "haddock" "new" "templates" "init" "solver"
+  "setup" "path" "unpack" "update" "upgrade" "upload" "sdist" "dot" "exec" "ghc" "ghci"
+  "repl" "runghc" "runhaskell" "eval" "clean" "list" "query" "ide" "docker" "config" "image" "hpc")
+  "List of Stack Commands")
+
+(defun pcomplete/stack ()
+  "Completion for `stack'"
+  (pcomplete-here* pcmpl-stack-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("exec")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+
+#+END_SRC
 *** intero
 
   #+BEGIN_SRC elisp :tangle yes
@@ -146,6 +221,28 @@
  #+END_SRC
 
 
+
+** Python
+
+Let's make our python prettier, too!
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'python-mode-hook
+          (lambda ()
+            (push '("<=" . ?≤) prettify-symbols-alist)
+            (push '(">=" . ?≥) prettify-symbols-alist)
+            (push '("!=" . ?≠) prettify-symbols-alist)
+            (push '("np.pi" . ?π) prettify-symbols-alist)
+            (push '("np.sum" . ?Σ) prettify-symbols-alist)
+            (push '("np.sqrt" . ?√) prettify-symbols-alist)
+            (push '("sqrt" . ?√) prettify-symbols-alist)
+            (push '("sum" . ?Σ) prettify-symbols-alist)
+            (push '("alpha" . ?α) prettify-symbols-alist)
+            (push '("sigma" . ?σ) prettify-symbols-alist)
+            (push '("lambda" . ?λ) prettify-symbols-alist)
+            (push '("**2" . ?²) prettify-symbols-alist)))
+
+#+END_SRC
 ** rainbow-delimiters
 
  #+BEGIN_SRC elisp :tangle yes
@@ -368,6 +465,8 @@
 
 ** LaTeX
 
+Include useful mode hooks when moving into latex mode
+
  #+BEGIN_SRC elisp :tangle yes
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
@@ -378,6 +477,33 @@
 
  #+END_SRC
 
+ I like for each sentence in a LaTeX document to be its own line.
+ That way, when I'm editing, only the relevant sections get marked in
+ the version control, instead of the entire paragraph.  This code
+ tries to alleviate the problem.  I'm not sure how well it work.
+
+#+BEGIN_SRC elisp :tangle yes
+(defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
+  "Start each sentence on a new line."
+  (let ((from (ad-get-arg 0))
+        (to-marker (set-marker (make-marker) (ad-get-arg 1)))
+        tmp-end)
+    (while (< from (marker-position to-marker))
+      (forward-sentence)
+      ;; might have gone beyond to-marker --- use whichever is smaller:
+      (ad-set-arg 1 (setq tmp-end (min (point) (marker-position to-marker))))
+      ad-do-it
+      (ad-set-arg 0 (setq from (point)))
+      (unless (or
+               (bolp)
+               (looking-at "\\s *$"))
+        (LaTeX-newline)))
+    (set-marker to-marker nil)))
+
+(ad-activate 'LaTeX-fill-region-as-paragraph)
+
+
+#+END_SRC
 ** Text Mode
 
  #+BEGIN_SRC elisp :tangle yes
@@ -387,7 +513,20 @@
 
  #+END_SRC
 
+ There didn't used to be a built in word count function.  I believe
+ that there is now, so I may not need this any longer.
 
+#+BEGIN_SRC elisp :tangle yes
+(defun count-words (&optional begin end)
+  "count words between BEGIN and END (region); if no region defined, count words in buffer"
+  (interactive "r")
+  (let ((b (if mark-active begin (point-min)))
+      (e (if mark-active end (point-max))))
+    (message "Word count: %s" (how-many "\\w+" b e))))
+
+
+
+#+END_SRC
 ** langtool
 
  #+BEGIN_SRC elisp :tangle yes
@@ -586,7 +725,20 @@
    :modes (markdown-mode text-mode org-mode)))
  #+END_SRC
 
+** Key Bindings
 
+This is a place for my own personal key bindings.
+
+*** Kill this buffer
+
+I hate when emacs asks me which buffer to kill, because it's my
+current buffer 99% of the time.  Just change the key binding and be
+done with it.
+
+#+BEGIN_SRC elisp :tangle yes
+(bind-key "C-x k" 'kill-this-buffer)
+
+#+END_SRC
 ** keyfreq
 
  #+BEGIN_SRC elisp :tangle yes
@@ -736,47 +888,7 @@
 * Random Shit
 
 #+BEGIN_SRC elisp :tangle yes
-(bind-key "C-x k" 'kill-this-buffer)
-
 (customize-set-variable 'tab-always-indent 'complete)
-
-(defun count-words (&optional begin end)
-  "count words between BEGIN and END (region); if no region defined, count words in buffer"
-  (interactive "r")
-  (let ((b (if mark-active begin (point-min)))
-      (e (if mark-active end (point-max))))
-    (message "Word count: %s" (how-many "\\w+" b e))))
-
-(defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
-  "Start each sentence on a new line."
-  (let ((from (ad-get-arg 0))
-        (to-marker (set-marker (make-marker) (ad-get-arg 1)))
-        tmp-end)
-    (while (< from (marker-position to-marker))
-      (forward-sentence)
-      ;; might have gone beyond to-marker --- use whichever is smaller:
-      (ad-set-arg 1 (setq tmp-end (min (point) (marker-position to-marker))))
-      ad-do-it
-      (ad-set-arg 0 (setq from (point)))
-      (unless (or
-               (bolp)
-               (looking-at "\\s *$"))
-        (LaTeX-newline)))
-    (set-marker to-marker nil)))
-
-(ad-activate 'LaTeX-fill-region-as-paragraph)
-
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
-
-(customize-set-variable
- 'package-archives
- (quote
-  (("gnu" . "http://elpa.gnu.org/packages/")
-   ("marmalade" . "http://marmalade-repo.org/packages/")
-   ("melpa" . "http://melpa.milkbox.net/packages/"))))
-(customize-set-variable 'TeX-PDF-mode t)
 
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'flyspell-mode)
@@ -833,26 +945,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (push '("<=" . ?≤) prettify-symbols-alist)
-            (push '("**2" . ?²) prettify-symbols-alist)))
-
-(add-hook 'python-mode-hook
-          (lambda ()
-            (push '("<=" . ?≤) prettify-symbols-alist)
-            (push '(">=" . ?≥) prettify-symbols-alist)
-            (push '("!=" . ?≠) prettify-symbols-alist)
-            (push '("np.pi" . ?π) prettify-symbols-alist)
-            (push '("np.sum" . ?Σ) prettify-symbols-alist)
-            (push '("np.sqrt" . ?√) prettify-symbols-alist)
-            (push '("sqrt" . ?√) prettify-symbols-alist)
-            (push '("sum" . ?Σ) prettify-symbols-alist)
-            (push '("alpha" . ?α) prettify-symbols-alist)
-            (push '("sigma" . ?σ) prettify-symbols-alist)
-            (push '("lambda" . ?λ) prettify-symbols-alist)
-            (push '("**2" . ?²) prettify-symbols-alist)))
-
 (customize-save-variable
  'indent-tabs-mode
  nil)
@@ -863,42 +955,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (global-prettify-symbols-mode t)
 
 ;;;;Shell Stuff
-(bind-key "C-z" 'eshell)
-
-(defconst pcmpl-cabal-commands
-  '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build" "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen" "haddock" "hscolour" "copy" "register" "sandbox" "exec" "repl"))
-
-(defun pcmpl-cabal-get-execs ()
-  (with-temp-buffer
-    (message "Loading")
-    (insert (shell-command-to-string "cat *.cabal"))
-    (goto-char (point-min))
-    (let ((ref-list))
-      (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
-        (message "Insert")
-        (add-to-list 'ref-list (match-string 1)))
-      ref-list)))
-
-(defun pcomplete/cabal ()
-  "Completion for `cabal'"
-  (pcomplete-here* pcmpl-cabal-commands)
-
-  (cond
-   ((pcomplete-match (regexp-opt '("run")) 1)
-    (pcomplete-here* (pcmpl-cabal-get-execs)))))
-
-(defconst pcmpl-stack-commands
-  '( "build" "install" "uninstall" "test" "bench" "haddock" "new" "templates" "init" "solver" "setup" "path" "unpack" "update" "upgrade" "upload" "sdist" "dot" "exec" "ghc" "ghci" "repl" "runghc" "runhaskell" "eval" "clean" "list" "query" "ide" "docker" "config" "image" "hpc")
-  "List of Stack Commands")
-
-(defun pcomplete/stack ()
-  "Completion for `stack'"
-  (pcomplete-here* pcmpl-stack-commands)
-
-  (cond
-   ((pcomplete-match (regexp-opt '("exec")) 1)
-    (pcomplete-here* (pcmpl-cabal-get-execs)))))
-
 
 (setq inhibit-startup-screen t)
 
