@@ -266,6 +266,103 @@
  #+END_SRC
 
 
+* org
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
+  :config
+  (progn
+    (setq calendar-latitude 53.3836)
+    (setq calendar-longitude 1.4669)
+
+    (customize-set-variable 'org-agenda-include-diary nil)
+    (customize-set-variable 'org-agenda-start-on-weekday nil)
+    (customize-set-variable 'org-return-follows-link t)
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (variable-pitch-mode t)
+                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
+
+    (defun adam-org-sunrise ()
+      (concat
+       (nth 1 (split-string (diary-sunrise-sunset)))
+       " Sunrise"))
+    (defun adam-org-sunset ()
+      (concat
+       (nth 4 (split-string (diary-sunrise-sunset)))
+       " Sunset"))
+
+    (customize-set-variable 'org-agenda-start-on-weekday nil)
+    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (customize-set-variable 'org-confirm-babel-evaluate nil)
+    (customize-set-variable 'org-src-fontify-natively t)
+    (customize-set-variable 'org-agenda-include-diary nil)
+
+    (customize-set-variable
+     'holiday-other-holidays
+     (quote
+      (
+       (holiday-float 5 1 -1 "Spring Bank Holiday")
+       (holiday-float 5 1 1 "May Day Brank Holiday")
+       (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+       )))
+
+    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
+    (defun my-org-agenda-day-face-holidays-function (date)
+      "Compute DATE face for holidays."
+      (unless (org-agenda-todayp date)
+        (dolist (file (org-agenda-files nil 'ifmode))
+          (let ((face
+                 (dolist (entry (org-agenda-get-day-entries file date))
+                   (let ((category (with-temp-buffer
+                                     (insert entry)
+                                     (org-get-category (point-min)))))
+                     (when (or (string= "Holidays" category)
+                               (string= "Vacation" category))
+                       (return 'org-agenda-date-weekend))))))
+            (when face (return face))))))
+
+    (customize-set-variable
+     'org-agenda-day-face-function
+     (function
+      jd:org-agenda-day-face-holidays-function))
+    ; (require 'org-notify)
+    (setq org-agenda-custom-commands
+          '(("c" . "My Custom Agendas")
+            ("cu" "Unscheduled TODO"
+             ((todo ""
+                    ((org-agenda-overriding-header "\nUnscheduled TODO")
+                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
+             nil
+             nil)))
+
+    (add-hook 'org-mode-hook 'auto-fill-mode)
+    (add-hook 'org-mode-hook 'flyspell-mode)))
+
+
+
+#+END_SRC
+
+
+** htmlize
+
+ Org-mode uses the htmlize library to highlight the code in the
+ exported documentation.  As long as I've installed the library, I
+ should never need to think about it again.
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package htmlize
+  :ensure t)
+
+ #+END_SRC
+
+
 * Prose
 
 
@@ -368,102 +465,273 @@
 
  #+END_SRC
 
-
-* org
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package org
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
-  :config
-  (progn
-    (setq calendar-latitude 53.3836)
-    (setq calendar-longitude 1.4669)
-
-    (customize-set-variable 'org-agenda-include-diary nil)
-    (customize-set-variable 'org-agenda-start-on-weekday nil)
-    (customize-set-variable 'org-return-follows-link t)
-    (add-hook 'org-mode-hook
-              (lambda ()
-                (variable-pitch-mode t)
-                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
-
-    (defun adam-org-sunrise ()
-      (concat
-       (nth 1 (split-string (diary-sunrise-sunset)))
-       " Sunrise"))
-    (defun adam-org-sunset ()
-      (concat
-       (nth 4 (split-string (diary-sunrise-sunset)))
-       " Sunset"))
-
-    (customize-set-variable 'org-agenda-start-on-weekday nil)
-    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-    (customize-set-variable 'org-confirm-babel-evaluate nil)
-    (customize-set-variable 'org-src-fontify-natively t)
-    (customize-set-variable 'org-agenda-include-diary nil)
-
-    (customize-set-variable
-     'holiday-other-holidays
-     (quote
-      (
-       (holiday-float 5 1 -1 "Spring Bank Holiday")
-       (holiday-float 5 1 1 "May Day Brank Holiday")
-       (holiday-float 8 1 -1 "Late Summer Bank Holidays")
-       )))
-
-    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
-    (defun my-org-agenda-day-face-holidays-function (date)
-      "Compute DATE face for holidays."
-      (unless (org-agenda-todayp date)
-        (dolist (file (org-agenda-files nil 'ifmode))
-          (let ((face
-                 (dolist (entry (org-agenda-get-day-entries file date))
-                   (let ((category (with-temp-buffer
-                                     (insert entry)
-                                     (org-get-category (point-min)))))
-                     (when (or (string= "Holidays" category)
-                               (string= "Vacation" category))
-                       (return 'org-agenda-date-weekend))))))
-            (when face (return face))))))
-
-    (customize-set-variable
-     'org-agenda-day-face-function
-     (function
-      jd:org-agenda-day-face-holidays-function))
-    ; (require 'org-notify)
-    (setq org-agenda-custom-commands
-          '(("c" . "My Custom Agendas")
-            ("cu" "Unscheduled TODO"
-             ((todo ""
-                    ((org-agenda-overriding-header "\nUnscheduled TODO")
-                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
-             nil
-             nil)))
-
-    (add-hook 'org-mode-hook 'auto-fill-mode)
-    (add-hook 'org-mode-hook 'flyspell-mode)))
+* Utilities
 
 
-
-#+END_SRC
-
-
-** htmlize
-
- Org-mode uses the htmlize library to highlight the code in the
- exported documentation.  As long as I've installed the library, I
- should never need to think about it again.
+** ace-window
 
  #+BEGIN_SRC elisp :tangle yes
-(use-package htmlize
-  :ensure t)
-
+(use-package ace-window
+  :ensure t
+  :bind
+  (("M-z" . ace-window))
+  :config
+  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
  #+END_SRC
+
+
+** company
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  :diminish company-mode)
+ #+END_SRC
+
+
+** evil
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode)
+  (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
+  (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
+  (evil-set-initial-state 'notmuch-search-mode 'emacs)
+  (evil-set-initial-state 'notmuch-show-mode 'emacs)
+  (add-hook 'git-commit-mode-hook #'evil-insert-state))
+ #+END_SRC
+
+
+*** evil-god-state
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-god-state
+  :ensure t
+  :config
+  (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
+  #+END_SRC
+
+
+*** evil-escape
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-escape
+  :ensure t
+  :diminish evil-escape-mode
+  :config
+  (evil-escape-mode)
+  (setq-default evil-escape-key-sequence "jk"))
+  #+END_SRC
+
+
+*** evil-magit
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-magit
+  :ensure t)
+  #+END_SRC
+
+
+*** god-mode
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package god-mode
+  :bind (("<Scroll_Lock>" . god-mode-all))
+  :config
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+  (add-to-list 'god-exempt-major-modes 'magit-mode)
+  (add-to-list 'god-exempt-major-modes 'Group)
+  (add-to-list 'god-exempt-major-modes 'Messages)
+  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
+  (define-minor-mode mortal-mode
+    "Allow temporary departures from god-mode."
+    :lighter " mortal"
+    :keymap '(([return] . (lambda ()
+                            "Exit mortal-mode and resume god mode." (interactive)
+                            (god-local-mode-resume)
+                            (mortal-mode 0))))
+    (when mortal-mode
+      (god-local-mode-pause)))
+
+  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
+  #+END_SRC
+
+*** which-key
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package which-key
+  :diminish which-key-mode
+  :ensure t)
+  #+END_SRC
+
+
+** flycheck
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package flycheck
+  :diminish flycheck-mode
+  :config
+  (flycheck-define-checker
+   proselint
+   "A linter for plain prose"
+   :command ("proselint" source)
+   :standard-input f
+   :error-patterns
+   ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
+   :modes (markdown-mode text-mode org-mode)))
+ #+END_SRC
+
+
+** keyfreq
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package keyfreq
+  :ensure t
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+ #+END_SRC
+
+
+** ivy
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode)
+ #+END_SRC
+
+
+*** counsel
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package counsel
+  :bind   (("C-s" . swiper)
+           ("C-c C-r" . ivy-resume)
+           ("<f6>" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
+           ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
+           ("C-x C-f" . counsel-find-file)
+           ("<f1> f" . counsel-describe-function)
+           ("<f1> v" . counsel-describe-variable)
+           ("<f1> l" . counsel-load-library)
+           ("<f2> i" . counsel-info-lookup-symbol)
+           ("C-x 8 RET" . counsel-unicode-char)
+           ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t))
+  #+END_SRC
+
+
+*** flyspell-correct-ivy
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+  #+END_SRC
+
+
+** link-hint
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package link-hint
+  :ensure t
+  :bind
+  ("C-c o" . link-hint-open-link)
+  ("C-c c" . link-hint-copy-link))
+ #+END_SRC
+
+
+** projectile
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode))
+ #+END_SRC
+
+
+*** counsel-projectile
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package counsel-projectile
+  :ensure t)
+ #+END_SRC
+
+
+** smart-mode-line
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (smart-mode-line-enable)
+  :config
+  (sml/apply-theme 'respectful))
+ #+END_SRC
+
+
+** unbound
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package unbound
+  :ensure t)
+ #+END_SRC
+
+
+** whitespace-cleanup-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :diminish whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode))
+ #+END_SRC
+
+
+** window-purpose
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
+  (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-hello-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-message-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-search-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-show-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
+  (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
+  (purpose-compile-user-configuration))
+ #+END_SRC
+
+
+*** ivy-purpose
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package ivy-purpose
+  :ensure t
+  :config
+  (ivy-purpose-setup))
+  #+END_SRC
+
 
 * Random Shit
 
@@ -668,268 +936,3 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 
 #+END_SRC
-
-
-* company
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package company
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'company-mode)
-  :diminish company-mode)
-#+END_SRC
-
-
-* smart-mode-line
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package smart-mode-line
-  :ensure t
-  :init
-  (smart-mode-line-enable)
-  :config
-  (sml/apply-theme 'respectful))
-#+END_SRC
-
-
-* unbound
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package unbound
-  :ensure t)
-#+END_SRC
-
-
-* whitespace-cleanup-mode
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package whitespace-cleanup-mode
-  :ensure t
-  :diminish whitespace-cleanup-mode
-  :init
-  (global-whitespace-cleanup-mode))
-#+END_SRC
-
-
-* keyfreq
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package keyfreq
-  :ensure t
-  :config
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
-#+END_SRC
-
-
-* flycheck
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package flycheck
-  :diminish flycheck-mode
-  :config
-  (flycheck-define-checker
-   proselint
-   "A linter for plain prose"
-   :command ("proselint" source)
-   :standard-input f
-   :error-patterns
-   ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
-   :modes (markdown-mode text-mode org-mode)))
-#+END_SRC
-
-
-* ace-window
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package ace-window
-  :ensure t
-  :bind
-  (("M-z" . ace-window))
-  :config
-  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
-#+END_SRC
-
-
-* ivy
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package ivy
-  :ensure t
-  :diminish ivy-mode)
-#+END_SRC
-
-
-** counsel
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package counsel
-  :bind   (("C-s" . swiper)
-           ("C-c C-r" . ivy-resume)
-           ("<f6>" . ivy-resume)
-           ("C-x b" . ivy-switch-buffer)
-           ("M-x" . counsel-M-x)
-           ("M-y" . counsel-yank-pop)
-           ("C-x C-f" . counsel-find-file)
-           ("<f1> f" . counsel-describe-function)
-           ("<f1> v" . counsel-describe-variable)
-           ("<f1> l" . counsel-load-library)
-           ("<f2> i" . counsel-info-lookup-symbol)
-           ("C-x 8 RET" . counsel-unicode-char)
-           ("<f2> u" . counsel-unicode-char))
-  :diminish counsel-mode
-  :ensure t
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t))
- #+END_SRC
-
-
-** flyspell-correct-ivy
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package flyspell-correct-ivy
-  :ensure t
-  :config
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
- #+END_SRC
-
-
-* window-purpose
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package window-purpose
-  :ensure t
-  :config
-  (purpose-mode)
-  (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
-  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
-  (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
-  (add-to-list 'purpose-user-mode-purposes '(notmuch-hello-mode . chat))
-  (add-to-list 'purpose-user-mode-purposes '(notmuch-message-mode . chat))
-  (add-to-list 'purpose-user-mode-purposes '(notmuch-search-mode . chat))
-  (add-to-list 'purpose-user-mode-purposes '(notmuch-show-mode . chat))
-  (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
-  (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
-  (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
-  (purpose-compile-user-configuration))
-#+END_SRC
-
-
-** ivy-purpose
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package ivy-purpose
-  :ensure t
-  :config
-  (ivy-purpose-setup))
- #+END_SRC
-
-
-* link-hint
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package link-hint
-  :ensure t
-  :bind
-  ("C-c o" . link-hint-open-link)
-  ("C-c c" . link-hint-copy-link))
-#+END_SRC
-
-
-* projectile
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-global-mode))
-#+END_SRC
-
-
-** counsel-projectile
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package counsel-projectile
-  :ensure t)
-#+END_SRC
-
-
-* evil
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode)
-  (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
-  (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
-  (evil-set-initial-state 'notmuch-search-mode 'emacs)
-  (evil-set-initial-state 'notmuch-show-mode 'emacs)
-  (add-hook 'git-commit-mode-hook #'evil-insert-state))
-#+END_SRC
-
-
-** evil-god-state
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package evil-god-state
-  :ensure t
-  :config
-  (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
- #+END_SRC
-
-
-** evil-escape
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package evil-escape
-  :ensure t
-  :diminish evil-escape-mode
-  :config
-  (evil-escape-mode)
-  (setq-default evil-escape-key-sequence "jk"))
- #+END_SRC
-
-
-** evil-magit
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package evil-magit
-  :ensure t)
- #+END_SRC
-
-
-** god-mode
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package god-mode
-  :bind (("<Scroll_Lock>" . god-mode-all))
-  :config
-  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
-  (add-to-list 'god-exempt-major-modes 'magit-mode)
-  (add-to-list 'god-exempt-major-modes 'Group)
-  (add-to-list 'god-exempt-major-modes 'Messages)
-  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
-  (define-minor-mode mortal-mode
-    "Allow temporary departures from god-mode."
-    :lighter " mortal"
-    :keymap '(([return] . (lambda ()
-                            "Exit mortal-mode and resume god mode." (interactive)
-                            (god-local-mode-resume)
-                            (mortal-mode 0))))
-    (when mortal-mode
-      (god-local-mode-pause)))
-
-  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
- #+END_SRC
-
-** which-key
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package which-key
-  :diminish which-key-mode
-  :ensure t)
- #+END_SRC
