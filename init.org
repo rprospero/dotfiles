@@ -601,14 +601,30 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   )
  #+END_SRC
 
+* Apps
+** magit
 
-* magit
-
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
-#+END_SRC
+ #+END_SRC
+
+
+** ledger-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package ledger-mode
+  :ensure t)
+ #+END_SRC
+
+
+** pass
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package pass
+  :ensure t)
+ #+END_SRC
 
 
 * rainbow-delimiters
@@ -703,14 +719,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-* ledger-mode
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package ledger-mode
-  :ensure t)
-#+END_SRC
-
-
 * ivy
 
 #+BEGIN_SRC elisp :tangle yes
@@ -784,14 +792,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :config
   (ivy-purpose-setup))
  #+END_SRC
-
-
-* pass
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package pass
-  :ensure t)
-#+END_SRC
 
 
 * link-hint
