@@ -66,6 +66,13 @@ Next, let's get rid of the window chrome.  It's just so ugly.
 
 #+END_SRC
 
+Similarly, get rid of the awful startup screen.
+
+#+BEGIN_SRC elisp :tangle yes
+(setq inhibit-startup-screen t)
+
+#+END_SRC
+
 Now, give the full list of package repositories.
 
 #+BEGIN_SRC elisp :tangle yes
@@ -75,6 +82,34 @@ Now, give the full list of package repositories.
   (("gnu" . "http://elpa.gnu.org/packages/")
    ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
+
+#+END_SRC
+
+Let's set the default font and size
+
+#+BEGIN_SRC elisp :tangle yes
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 12 :name "DejaVu Sans"))
+
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 20 :name "DejaVu Sans"))
+
+#+END_SRC
+
+Make everything pretty!
+
+#+BEGIN_SRC elisp :tangle yes
+(global-prettify-symbols-mode t)
+
+#+END_SRC
+
+Use diminish to stop minor modes from taking over the entire taskbar.
+
+#+BEGIN_SRC elisp :tangle yes
+(diminish 'auto-fill-mode "")
+(diminish 'visual-line-mode "")
+(diminish 'flyspell-mode "")
+
 
 #+END_SRC
 * Apps
@@ -102,9 +137,55 @@ Now, give the full list of package repositories.
   :ensure t)
  #+END_SRC
 
+** Systemctl
+
+   I'm working on an interface to systemd through emacs.  The bits of
+   it can go in here for now.
+
+#+BEGIN_SRC elisp :tangle yes
+(if (s-prefix? "nadia" system-name)
+    (progn
+        (add-to-list 'load-path "~/Code/systemct-el/")
+        (require 'systemct))
+  nil)
+#+END_SRC
 
 * Code
 
+
+** Universal
+
+Bind the keys for finding the flymake errors, because I can never
+remember the default bindings.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun flymake-keys ()
+  (local-set-key [(meta down)] 'flymake-goto-next-error)
+  (local-set-key [(meta up)] 'flymake-goto-prev-error))
+
+#+END_SRC
+
+Which-function mode helps me when I'm stuck in some giant routine and
+lose track of where I am in the program.  There's the function, right
+there on the modeline.
+
+#+BEGIN_SRC elisp :tangle yes
+(which-function-mode 't)
+(set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
+
+#+END_SRC
+** C♯
+
+Set the C♯ compiler for linux
+
+#+BEGIN_SRC elisp :tangle yes
+
+(customize-set-variable
+ 'csharp-make-tool
+ "mcs")
+
+#+END_SRC
 ** elisp
 
 Let's try and make elisp symbols pretty!
@@ -243,6 +324,12 @@ Let's make our python prettier, too!
             (push '("**2" . ?²) prettify-symbols-alist)))
 
 #+END_SRC
+
+Add support to python mode for finding errors
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'python-mode-hook 'flymake-keys)
+#+END_SRC
 ** rainbow-delimiters
 
  #+BEGIN_SRC elisp :tangle yes
@@ -253,6 +340,13 @@ Let's make our python prettier, too!
  #+END_SRC
 
 * Communication Tools
+
+  We need spell checking in generic Mail mode.
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'mail-mode-hook 'flyspell-mode)
+
+#+END_SRC
 ** jabber
 
  #+BEGIN_SRC elisp :tangle yes
@@ -299,7 +393,8 @@ Let's make our python prettier, too!
 (use-package twittering-mode
              :bind (("C-c t" . twit))
              :config
-             (setq twittering-use-master-password t))
+             (setq twittering-use-master-password t)
+             (setq twittering-timer-interval 30))
  #+END_SRC
 
 
@@ -375,9 +470,9 @@ Let's make our python prettier, too!
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
-    (customize-set-variable 'org-agenda-include-diary nil)
-    (customize-set-variable 'org-agenda-start-on-weekday nil)
-    (customize-set-variable 'org-return-follows-link t)
+    (setq org-agenda-include-diary nil)
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-return-follows-link t)
     (add-hook 'org-mode-hook
               (lambda ()
                 (variable-pitch-mode t)
@@ -395,14 +490,14 @@ Let's make our python prettier, too!
        (nth 4 (split-string (diary-sunrise-sunset)))
        " Sunset"))
 
-    (customize-set-variable 'org-agenda-start-on-weekday nil)
-    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-    (customize-set-variable 'org-confirm-babel-evaluate nil)
-    (customize-set-variable 'org-src-fontify-natively t)
-    (customize-set-variable 'org-agenda-include-diary nil)
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-src-fontify-natively t)
+    (setq org-agenda-include-diary nil)
 
-    (customize-set-variable
-     'holiday-other-holidays
+    (setq
+     holiday-other-holidays
      (quote
       (
        (holiday-float 5 1 -1 "Spring Bank Holiday")
@@ -425,8 +520,8 @@ Let's make our python prettier, too!
                        (return 'org-agenda-date-weekend))))))
             (when face (return face))))))
 
-    (customize-set-variable
-     'org-agenda-day-face-function
+    (setq
+     org-agenda-day-face-function
      (function
       jd:org-agenda-day-face-holidays-function))
     ; (require 'org-notify)
@@ -446,6 +541,32 @@ Let's make our python prettier, too!
 
 #+END_SRC
 
+Display appointment reminders in X when available.  I stole this code
+from somewhere and should give proper credit.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun kdialog-popup (title msg)
+  "Show a popup if we're on X, or echo it otherwise; TITLE is the title
+of the message, MSG is the context.
+
+Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
+"
+
+  (interactive)
+  (if
+      (eq window-system 'x)
+      (shell-command
+       (concat "kdialog --title \"" title
+               "\" --passivepopup \""  msg
+               "\""))
+    (message (concat title ": " msg))))
+
+(defun kdialog-appt-display (min-to-appt new-time msg)
+  (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
+(setq appt-disp-window-function (function kdialog-appt-display))
+
+#+END_SRC
 
 ** htmlize
 
@@ -677,6 +798,22 @@ Include useful mode hooks when moving into latex mode
 
 *** god-mode
 
+  I have a little utility function to change the cursor type depending
+  on whether we are in god mode.  Now that I have evil-god mode, this
+  may no longer be necessary.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun my-update-cursor ()
+  (setq cursor-type (if (or god-local-mode buffer-read-only)
+                        'box
+                      'bar)))
+(setq cursor-type 'bar)
+
+#+END_SRC
+
+
+
   #+BEGIN_SRC elisp :tangle yes
 (use-package god-mode
   :bind (("<Scroll_Lock>" . god-mode-all))
@@ -729,6 +866,14 @@ Include useful mode hooks when moving into latex mode
 
 This is a place for my own personal key bindings.
 
+#+BEGIN_SRC elisp :tangle yes
+
+(bind-key "C-c ." 'imenu)
+(bind-key "C-x C-b" 'ibuffer)
+(bind-key "M-/" 'hippie-expand)
+(bind-key "M-l" 'ace-jump-mode)
+
+#+END_SRC
 *** Kill this buffer
 
 I hate when emacs asks me which buffer to kill, because it's my
@@ -737,6 +882,28 @@ done with it.
 
 #+BEGIN_SRC elisp :tangle yes
 (bind-key "C-x k" 'kill-this-buffer)
+
+#+END_SRC
+
+*** Refresh Key
+
+Refreshing buffers is a constant chore that really should have it's
+own hotkey.  Why not steal F5 from the browser?
+
+#+BEGIN_SRC elisp :tangle yes
+
+ (global-set-key
+  (kbd "<f5>")
+  (lambda (&optional force-reverting)
+    "Interactive call to revert-buffer. Ignoring the auto-save
+ file and not requesting for confirmation. When the current buffer
+ is modified, the command refuses to revert it, unless you specify
+ the optional argument: force-reverting to true."
+    (interactive "P")
+    ;;(message "force-reverting value is %s" force-reverting)
+    (if (or force-reverting (not (buffer-modified-p)))
+        (revert-buffer :ignore-auto :noconfirm)
+      (error "The buffer has been modified"))))
 
 #+END_SRC
 ** keyfreq
@@ -823,6 +990,16 @@ done with it.
  #+END_SRC
 
 
+
+** recentf
+
+   Recentf keeps track of recently edited files.
+
+#+BEGIN_SRC elisp :tangle yes
+(require 'recentf)
+(recentf-mode)
+
+#+END_SRC
 ** smart-mode-line
 
  #+BEGIN_SRC elisp :tangle yes
@@ -884,111 +1061,30 @@ done with it.
   (ivy-purpose-setup))
   #+END_SRC
 
+** Winner
 
-* Random Shit
+   Winner mode allows me to undo and redo changes to the window layout
+   within emacs.  Very useful when I make a mistake.  It's also handy
+   for focusing on a single window, then returning to my previous,
+   more complex layout with a single C-c ←
 
 #+BEGIN_SRC elisp :tangle yes
+(winner-mode)
+#+END_SRC
+* Disabled
+
+  Here are some old commands where I really don't remember what they
+  do.  I'm going to disable them for now and, if the world doesn't
+  explode, I'll probably just delete them.
+#+BEGIN_SRC elisp :tangle no
 (customize-set-variable 'tab-always-indent 'complete)
 
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-(add-hook 'mail-mode-hook 'flyspell-mode)
-
-(defun flymake-keys ()
-  (local-set-key [(meta down)] 'flymake-goto-next-error)
-  (local-set-key [(meta up)] 'flymake-goto-prev-error))
-
-;;Python checking stuff
-(add-hook 'python-mode-hook 'flymake-keys)
-
-(customize-set-variable
- 'csharp-make-tool
- "mcs")
-
-
-
-(winner-mode)
-
-(set-fontset-font "fontset-default" nil
-                  (font-spec :size 12 :name "DejaVu Sans"))
-
-(set-fontset-font "fontset-default" nil
-                  (font-spec :size 20 :name "DejaVu Sans"))
-
-(defun my-update-cursor ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'box
-                      'bar)))
-(setq cursor-type 'bar)
-
-(defun kdialog-popup (title msg)
-  "Show a popup if we're on X, or echo it otherwise; TITLE is the title
-of the message, MSG is the context.
-
-Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
-"
-
-  (interactive)
-  (if
-      (eq window-system 'x)
-      (shell-command
-       (concat "kdialog --title \"" title
-               "\" --passivepopup \""  msg
-               "\""))
-    (message (concat title ": " msg))))
-
-(defun kdialog-appt-display (min-to-appt new-time msg)
-  (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
-(setq appt-disp-window-function (function kdialog-appt-display))
-
-(which-function-mode 't)
-(set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
-
-
 
 (customize-save-variable
  'indent-tabs-mode
  nil)
 
-
-
-
-(global-prettify-symbols-mode t)
-
-;;;;Shell Stuff
-
-(setq inhibit-startup-screen t)
-
-(diminish 'auto-fill-mode "")
-(diminish 'visual-line-mode "")
-(diminish 'flyspell-mode "")
-
- (global-set-key
-  (kbd "<f5>")
-  (lambda (&optional force-reverting)
-    "Interactive call to revert-buffer. Ignoring the auto-save
- file and not requesting for confirmation. When the current buffer
- is modified, the command refuses to revert it, unless you specify
- the optional argument: force-reverting to true."
-    (interactive "P")
-    ;;(message "force-reverting value is %s" force-reverting)
-    (if (or force-reverting (not (buffer-modified-p)))
-        (revert-buffer :ignore-auto :noconfirm)
-      (error "The buffer has been modified"))))
-
-
-(bind-key "C-c ." 'imenu)
-(bind-key "C-x C-b" 'ibuffer)
-(bind-key "M-/" 'hippie-expand)
-(bind-key "M-l" 'ace-jump-mode)
-
-(if (s-prefix? "nadia" system-name)
-    (progn
-        (add-to-list 'load-path "~/Code/systemct-el/")
-        (require 'systemct))
-  nil)
-
-(require 'recentf)
-(recentf-mode)
 
 
 #+END_SRC
