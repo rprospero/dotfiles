@@ -76,9 +76,10 @@
 
 #+END_SRC
 
-* jabber
+* Communication Tools
+** jabber
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package jabber
   :ensure t
   :defer t
@@ -113,7 +114,69 @@
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
 
-#+END_SRC
+ #+END_SRC
+
+
+** twittering-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package twittering-mode
+             :bind (("C-c t" . twit))
+             :config
+             (setq twittering-use-master-password t))
+ #+END_SRC
+
+
+** sx
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package sx
+  :ensure t)
+ #+END_SRC
+
+
+
+** gnus
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package gnus
+  :config
+  (progn
+    (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
+    (customize-set-variable
+     'gnus-secondary-select-methods
+     (quote
+      ((nnmaildir "Professional"
+                  (directory "~/Maildir/Professional"))
+       (nnmaildir "Work"
+                  (directory "~/Maildir/Work"))
+       (nnmaildir "Personal"
+                  (directory "~/Maildir/Personal")))))
+
+    (customize-set-variable
+     'send-mail-function
+     (quote smtpmail-send-it))
+    (customize-set-variable
+     'sendmail-program
+     "msmtp")
+    (customize-set-variable
+     'message-send-mail-function
+     (quote message-send-mail-with-sendmail))
+    (customize-set-variable
+     'message-sendmail-envelope-from
+     (quote header))
+    (customize-set-variable
+     'message-sendmail-extra-arguments
+     (quote ("--read-envelope-from")))
+    (customize-set-variable
+     'message-sendmail-f-is-evil
+     t)
+
+    (defun gnus-keys ()
+      (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+
+    (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
+ #+END_SRC
 
 
 * emojify
@@ -439,50 +502,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-
-* gnus
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package gnus
-  :config
-  (progn
-    (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
-    (customize-set-variable
-     'gnus-secondary-select-methods
-     (quote
-      ((nnmaildir "Professional"
-                  (directory "~/Maildir/Professional"))
-       (nnmaildir "Work"
-                  (directory "~/Maildir/Work"))
-       (nnmaildir "Personal"
-                  (directory "~/Maildir/Personal")))))
-
-    (customize-set-variable
-     'send-mail-function
-     (quote smtpmail-send-it))
-    (customize-set-variable
-     'sendmail-program
-     "msmtp")
-    (customize-set-variable
-     'message-send-mail-function
-     (quote message-send-mail-with-sendmail))
-    (customize-set-variable
-     'message-sendmail-envelope-from
-     (quote header))
-    (customize-set-variable
-     'message-sendmail-extra-arguments
-     (quote ("--read-envelope-from")))
-    (customize-set-variable
-     'message-sendmail-f-is-evil
-     t)
-
-    (defun gnus-keys ()
-      (local-set-key ["S-delete"] 'gnus-summary-delete-article))
-
-    (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
-#+END_SRC
-
-
 * haskell-mode
 
 #+BEGIN_SRC elisp :tangle yes
@@ -540,16 +559,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
-#+END_SRC
-
-
-* twittering-mode
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package twittering-mode
-             :bind (("C-c t" . twit))
-             :config
-             (setq twittering-use-master-password t))
 #+END_SRC
 
 
@@ -745,14 +754,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 #+BEGIN_SRC elisp :tangle yes
 (use-package elfeed
-  :ensure t)
-#+END_SRC
-
-
-* sx
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package sx
   :ensure t)
 #+END_SRC
 
