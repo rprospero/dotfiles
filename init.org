@@ -56,18 +56,6 @@
 
 
 #+END_SRC
-* Multi-Line
-
-I don't remember what this package does :-P
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package multi-line
-  :ensure t
-  :bind (("C-c d" . multi-line)))
-
-
-#+END_SRC
-
 * encourage-mode
 
 #+BEGIN_SRC elisp :tangle yes
