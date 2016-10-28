@@ -586,32 +586,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-* god-mode
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package god-mode
-  :bind (("<Scroll_Lock>" . god-mode-all))
-  :config
-  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
-  (add-to-list 'god-exempt-major-modes 'magit-mode)
-  (add-to-list 'god-exempt-major-modes 'Group)
-  (add-to-list 'god-exempt-major-modes 'Messages)
-  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
-  (define-minor-mode mortal-mode
-    "Allow temporary departures from god-mode."
-    :lighter " mortal"
-    :keymap '(([return] . (lambda ()
-                            "Exit mortal-mode and resume god mode." (interactive)
-                            (god-local-mode-resume)
-                            (mortal-mode 0))))
-    (when mortal-mode
-      (god-local-mode-pause)))
-
-  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
-#+END_SRC
-
-
 * smart-mode-line
 
 #+BEGIN_SRC elisp :tangle yes
@@ -876,34 +850,60 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 #+END_SRC
 
 
-* evil-god-state
+** evil-god-state
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package evil-god-state
   :ensure t
   :config
   (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
-#+END_SRC
+ #+END_SRC
 
 
-* evil-escape
+** evil-escape
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package evil-escape
   :ensure t
   :diminish evil-escape-mode
   :config
   (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk"))
-#+END_SRC
+ #+END_SRC
 
 
-* evil-magit
+** evil-magit
 
-#+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle yes
 (use-package evil-magit
   :ensure t)
-#+END_SRC
+ #+END_SRC
+
+
+** god-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package god-mode
+  :bind (("<Scroll_Lock>" . god-mode-all))
+  :config
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+  (add-to-list 'god-exempt-major-modes 'magit-mode)
+  (add-to-list 'god-exempt-major-modes 'Group)
+  (add-to-list 'god-exempt-major-modes 'Messages)
+  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
+  (define-minor-mode mortal-mode
+    "Allow temporary departures from god-mode."
+    :lighter " mortal"
+    :keymap '(([return] . (lambda ()
+                            "Exit mortal-mode and resume god mode." (interactive)
+                            (god-local-mode-resume)
+                            (mortal-mode 0))))
+    (when mortal-mode
+      (god-local-mode-pause)))
+
+  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
+ #+END_SRC
 
 
 * langtool
