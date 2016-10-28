@@ -76,6 +76,54 @@
 
 #+END_SRC
 
+
+* Prose
+
+
+** LaTeX
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(customize-set-variable 'TeX-PDF-mode t)
+
+
+ #+END_SRC
+
+** Text Mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook 'visual-line-mode)
+
+
+ #+END_SRC
+
+
+** langtool
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package langtool
+  :ensure t
+  :config
+  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
+ #+END_SRC
+
+
+** writegood-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+ #+END_SRC
+
 * Communication Tools
 ** jabber
 
@@ -287,28 +335,6 @@
   :ensure t)
 
  #+END_SRC
-
-
-* LaTeX
-
-#+BEGIN_SRC elisp :tangle yes
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(customize-set-variable 'TeX-PDF-mode t)
-
-
-#+END_SRC
-
-* Text Mode
-
-#+BEGIN_SRC elisp :tangle yes
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'text-mode-hook 'visual-line-mode)
-
-
-#+END_SRC
 
 * Random Shit
 
@@ -750,19 +776,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
  #+END_SRC
 
 
-* writegood-mode
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package writegood-mode
-  :diminish writegood-mode
-  :ensure t
-  :config
-  (add-hook 'text-mode-hook 'writegood-mode)
-  (add-hook 'latex-mode-hook 'writegood-mode)
-  (add-hook 'org-mode-hook 'writegood-mode))
-#+END_SRC
-
-
 * elfeed
 
 #+BEGIN_SRC elisp :tangle yes
@@ -904,16 +917,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
   :diminish which-key-mode
   :ensure t)
  #+END_SRC
-
-
-* langtool
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package langtool
-  :ensure t
-  :config
-  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
-#+END_SRC
 
 
 * solarized-theme
