@@ -1,5 +1,5 @@
-import           Control.Monad                (liftM2, filterM)
-import           Data.List (isInfixOf, isPrefixOf,nub)
+import           Control.Monad                (liftM2, filterM,msum)
+import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -58,7 +58,50 @@ main = do
   putEnv "SAL_USE_VCLPLUGIN=gen"
   xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = tabbedBottom shrinkText myTheme ||| layoutHook def ||| Grid False
+data NameSegment = Prefix String | Suffix String | Subst String String
+
+
+replace :: String -> String -> String -> String
+replace "" _ _ = ""
+replace s old new =
+  if old `isPrefixOf` s
+  then new ++ replace (drop (length old) s) old new
+  else head s:replace (tail s) old new
+
+shrinkSegment :: String -> NameSegment -> Maybe String
+shrinkSegment s (Prefix prefix) = stripPrefix prefix s
+shrinkSegment s (Suffix suffix)
+  | isSuffixOf suffix s = Just $ reverse $ drop (length suffix) $ reverse s
+  | otherwise = Nothing
+shrinkSegment s (Subst before after)
+  | isInfixOf before s = Just $ replace s before after
+  | otherwise = Nothing
+
+mySegments :: [NameSegment]
+mySegments = [
+  -- Subst "=>" "⇒",
+  Suffix " - Mozilla Firefox",
+  Suffix " - GIMP",
+  Prefix "adam@dyn006107",
+  Suffix " - Google Search",
+  Suffix " - Hoogle"]
+
+dropSegment :: String -> String
+dropSegment s =
+  case msum $ map (shrinkSegment s) mySegments of
+    Just x -> x
+    Nothing -> init s
+myShrinkText :: s -> String -> [String]
+myShrinkText _ "" = [""]
+myShrinkText s cs = cs:myShrinkText s (dropSegment cs)
+
+data MyShrinker = MyShrinker
+instance Show MyShrinker where show _ = ""
+instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
+instance Shrinker MyShrinker where
+  shrinkIt = myShrinkText
+
+myLayoutHook = tabbedBottom MyShrinker myTheme ||| layoutHook def ||| Grid False
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
