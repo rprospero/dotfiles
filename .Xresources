@@ -1,10 +1,10 @@
 #ifndef FIXED_FONT
         #ifdef SRVR_dyn006107_shef_ac_uk
-                #define FIXED_FONT xft:DejaVu Sans Mono:size=9
-                #define EMACS_FIXED_FONT DejaVu Sans Mono-9
+                #define FIXED_FONT xft:inconsolata:pixelsize=9:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=9:antialias=true,hinting=true
+                #define EMACS_FIXED_FONT Inconsolata-9
         #else
-                #define FIXED_FONT xft:DejaVu Sans Mono:size=16
-                #define EMACS_FIXED_FONT DejaVu Sans Mono-16
+                #define FIXED_FONT xft:inconsolata:pixelsize=16:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=16:antialies=true:hinting=true
+                #define EMACS_FIXED_FONT Inconsolata-16
         #endif
 #endif
 
