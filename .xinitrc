@@ -1,19 +1,15 @@
 #!/bin/bash
 
 export PATH=/home/adam/bin:/usr/local/texlive/2015/bin/x86_64-linux:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server:/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64:$HOME/.cabal/bin:/usr/local/bin:/home/adam/Science/LINUX64:/opt/maple18/bin:$PATH:/usr/local/cuda-7.0/bin
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-
-emacs --daemon
 
 numlockx &
 xscreensaver &
 
 xset -b
 
-xrdb ~/.Xresources
+xrdb -cpp cpp ~/.Xresources
 
-xsetroot -cursor_name left_ptr -solid black
+xsetroot -cursor_name left_ptr -solid '#002B36'
 
 #start the keyring daemon
 #eval $(gnome-keyring-daemon -s)
@@ -21,4 +17,4 @@ xsetroot -cursor_name left_ptr -solid black
 #export SSH_AUTH_SOCK
 ###
 stack exec taffybar &!
-~/.xmonad/xmonad
+~/.xmonad/xmonad-x86_64-linux

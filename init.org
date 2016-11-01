@@ -1,0 +1,1091 @@
+* Header bits
+
+#+BEGIN_SRC elisp :tangle yes
+(package-initialize)
+(eval-when-compile
+  (require 'use-package))
+
+;; (use-package color-theme-sanityinc-tomorrow
+;;   :ensure t
+;;   ;; :config
+;;   ;; (color-theme-sanityinc-tomorrow-bright)
+;;   )
+
+(use-package s
+  :ensure t)
+
+(setq
+ custom-file
+ (cond
+  ((s-ends-with? "shef.ac.uk" system-name)
+   "/home/adam/dotfiles/.emacs-custom.el")
+  ((s-prefix? "nadia" system-name)
+   "/home/adam/dotfiles/.emacs-custom.el")
+  (t "~/.emacs-custom.el")))
+
+(load custom-file)
+
+(let
+    ((mypaths
+      (cond
+       ((s-ends-with? "shef.ac.uk" system-name)
+        (list
+         "$NPM_PACKAGES/bin"
+         "/home/adam/.local/bin"
+         "/home/adam/bin"
+         "/usr/local/texlive/2015/bin/x86_64-linux"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server"
+         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64"
+         "/home/adam/.cabal/bin"
+         "/usr/local/bin"
+         "/home/adam/Science/LINUX64"
+         "/opt/maple18/bin"
+         "/usr/local/cuda-7.5/bin"
+         "/usr/bin"
+         "/bin"
+         (getenv "PATH")))
+       ('t (list (getenv "PATH"))))))
+  (setenv "PATH" (mapconcat 'identity mypaths ";"))
+  (setq exec-path (append mypaths (list "." exec-directory))))
+
+(setq w32-apps-modifier 'super)
+
+
+#+END_SRC
+
+Next, let's get rid of the window chrome.  It's just so ugly.
+
+#+BEGIN_SRC elisp :tangle yes
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+
+#+END_SRC
+
+Similarly, get rid of the awful startup screen.
+
+#+BEGIN_SRC elisp :tangle yes
+(setq inhibit-startup-screen t)
+
+#+END_SRC
+
+Now, give the full list of package repositories.
+
+#+BEGIN_SRC elisp :tangle yes
+(customize-set-variable
+ 'package-archives
+ (quote
+  (("gnu" . "http://elpa.gnu.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")
+   ("melpa" . "http://melpa.milkbox.net/packages/"))))
+
+#+END_SRC
+
+Let's set the default font and size
+
+#+BEGIN_SRC elisp :tangle yes
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 12 :name "DejaVu Sans"))
+
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 20 :name "DejaVu Sans"))
+
+#+END_SRC
+
+Make everything pretty!
+
+#+BEGIN_SRC elisp :tangle yes
+(global-prettify-symbols-mode t)
+
+#+END_SRC
+
+Use diminish to stop minor modes from taking over the entire taskbar.
+
+#+BEGIN_SRC elisp :tangle yes
+(diminish 'auto-fill-mode "")
+(diminish 'visual-line-mode "")
+(diminish 'flyspell-mode "")
+
+
+#+END_SRC
+* Apps
+** magit
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
+ #+END_SRC
+
+
+** ledger-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package ledger-mode
+  :ensure t)
+ #+END_SRC
+
+
+** pass
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package pass
+  :ensure t)
+ #+END_SRC
+
+** Systemctl
+
+   I'm working on an interface to systemd through emacs.  The bits of
+   it can go in here for now.
+
+#+BEGIN_SRC elisp :tangle yes
+(if (s-prefix? "nadia" system-name)
+    (progn
+        (add-to-list 'load-path "~/Code/systemct-el/")
+        (require 'systemct))
+  nil)
+#+END_SRC
+
+* Code
+
+
+** Universal
+
+Bind the keys for finding the flymake errors, because I can never
+remember the default bindings.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun flymake-keys ()
+  (local-set-key [(meta down)] 'flymake-goto-next-error)
+  (local-set-key [(meta up)] 'flymake-goto-prev-error))
+
+#+END_SRC
+
+Which-function mode helps me when I'm stuck in some giant routine and
+lose track of where I am in the program.  There's the function, right
+there on the modeline.
+
+#+BEGIN_SRC elisp :tangle yes
+(which-function-mode 't)
+(set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
+
+#+END_SRC
+** C♯
+
+Set the C♯ compiler for linux
+
+#+BEGIN_SRC elisp :tangle yes
+
+(customize-set-variable
+ 'csharp-make-tool
+ "mcs")
+
+#+END_SRC
+** elisp
+
+Let's try and make elisp symbols pretty!
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (push '("<=" . ?≤) prettify-symbols-alist)
+            (push '("**2" . ?²) prettify-symbols-alist)))
+
+
+#+END_SRC
+** haskell-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package haskell-mode
+  :ensure t
+  :config
+  (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
+  (add-to-list 'exec-path "~/.cabal/bin")
+  (customize-set-variable 'haskell-tags-on-save t)
+
+  ;; (autoload 'ghc-init "ghc" nil t)
+  ;; (autoload 'ghc-debug "ghc" nil t)
+  ;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook
+   'haskell-mode-hook
+   (lambda ()
+     (push '("\\" . ?λ) prettify-symbols-alist)
+     (push '("->" . ?→) prettify-symbols-alist)
+     (push '("<-" . ?←) prettify-symbols-alist)
+     (push '("=>" . ?⇒) prettify-symbols-alist)
+     (push '("not" . ?¬) prettify-symbols-alist)
+     (push '("==" . ?≟) prettify-symbols-alist)
+     (push '("/=" . ?≠) prettify-symbols-alist)
+     (push '("<=" . ?≤) prettify-symbols-alist)
+     (push '(">=" . ?≥) prettify-symbols-alist)
+     (push '("=" . ?≡) prettify-symbols-alist)
+     (push '("pi" . ?π) prettify-symbols-alist)
+     (push '(">>" . ?≫) prettify-symbols-alist)
+     (push '("<<" . ?≪) prettify-symbols-alist)
+     (push '("++" . ?⧺) prettify-symbols-alist)
+     (push '("*" . ?⋅) prettify-symbols-alist)
+     (push '(" . " . ?∘) prettify-symbols-alist)
+     (push '("<*>" . ?⊛) prettify-symbols-alist)
+     (push '("<+>" . ?⊕) prettify-symbols-alist)
+     (push '("::" . ?⁝) prettify-symbols-alist))))
+ #+END_SRC
+
+
+ I've added command line completion for cabal and stack, since I'm too
+ lazy to type out my executable names on my own.
+
+#+BEGIN_SRC elisp :tangle yes
+(defconst pcmpl-cabal-commands
+  '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build"
+  "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen"
+  "haddock" "hscolour" "copy" "register" "sandbox" "exec" "repl"))
+
+(defun pcmpl-cabal-get-execs ()
+  (with-temp-buffer
+    (message "Loading")
+    (insert (shell-command-to-string "cat *.cabal"))
+    (goto-char (point-min))
+    (let ((ref-list))
+      (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
+        (message "Insert")
+        (add-to-list 'ref-list (match-string 1)))
+      ref-list)))
+
+(defun pcomplete/cabal ()
+  "Completion for `cabal'"
+  (pcomplete-here* pcmpl-cabal-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("run")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+(defconst pcmpl-stack-commands
+  '( "build" "install" "uninstall" "test" "bench" "haddock" "new" "templates" "init" "solver"
+  "setup" "path" "unpack" "update" "upgrade" "upload" "sdist" "dot" "exec" "ghc" "ghci"
+  "repl" "runghc" "runhaskell" "eval" "clean" "list" "query" "ide" "docker" "config" "image" "hpc")
+  "List of Stack Commands")
+
+(defun pcomplete/stack ()
+  "Completion for `stack'"
+  (pcomplete-here* pcmpl-stack-commands)
+
+  (cond
+   ((pcomplete-match (regexp-opt '("exec")) 1)
+    (pcomplete-here* (pcmpl-cabal-get-execs)))))
+
+
+#+END_SRC
+*** intero
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package intero
+  :ensure t
+  ;:config
+  ;(add-hook 'haskell-mode-hook 'intero-mode))
+  )
+  #+END_SRC
+
+** flymake-jshint
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package flymake-jshint
+  :ensure t
+  :config
+  (flymake-jshint-load))
+ #+END_SRC
+
+
+
+** Python
+
+Let's make our python prettier, too!
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'python-mode-hook
+          (lambda ()
+            (push '("<=" . ?≤) prettify-symbols-alist)
+            (push '(">=" . ?≥) prettify-symbols-alist)
+            (push '("!=" . ?≠) prettify-symbols-alist)
+            (push '("np.pi" . ?π) prettify-symbols-alist)
+            (push '("np.sum" . ?Σ) prettify-symbols-alist)
+            (push '("np.sqrt" . ?√) prettify-symbols-alist)
+            (push '("sqrt" . ?√) prettify-symbols-alist)
+            (push '("sum" . ?Σ) prettify-symbols-alist)
+            (push '("alpha" . ?α) prettify-symbols-alist)
+            (push '("sigma" . ?σ) prettify-symbols-alist)
+            (push '("lambda" . ?λ) prettify-symbols-alist)
+            (push '("**2" . ?²) prettify-symbols-alist)))
+
+#+END_SRC
+
+Add support to python mode for finding errors
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'python-mode-hook 'flymake-keys)
+#+END_SRC
+** rainbow-delimiters
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package rainbow-delimiters
+             :ensure t
+             :config
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+ #+END_SRC
+
+* Communication Tools
+
+  We need spell checking in generic Mail mode.
+
+#+BEGIN_SRC elisp :tangle yes
+(add-hook 'mail-mode-hook 'flyspell-mode)
+
+#+END_SRC
+** jabber
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package jabber
+  :ensure t
+  :defer t
+  :config
+  (progn
+   (let
+    ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
+    (setq
+     jabber-account-list
+     `(("rprospero@gmail.com"
+        (:port . 5223)
+        (:password . ,passwd)
+        (:network-server . "talk.google.com")
+        (:connection-type . ssl)))))
+   (defun x-urgency-hint (frame arg &optional source)
+     (let* ((wm-hints (append (x-window-property
+                               "WM_HINTS" frame "WM_HINTS" source nil t) nil))
+            (flags (car wm-hints)))
+       (setcar wm-hints
+               (if arg
+                   (logior flags #x100)
+                 (logand flags (lognot #x100))))
+       (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
+   (defun jabber-notify-taffy ()
+     (if (equal "0" jabber-activity-count-string) t
+       (progn
+         ;; (notifications-notify
+         ;;  :title jabber-activity-make-string
+         ;;  :body jabber-activity-count-string)
+         (x-urgency-hint (selected-frame) t))))
+   (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
+
+
+ #+END_SRC
+
+
+** twittering-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package twittering-mode
+             :bind (("C-c t" . twit))
+             :config
+             (setq twittering-use-master-password t)
+             (setq twittering-timer-interval 30))
+ #+END_SRC
+
+
+** sx
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package sx
+  :ensure t)
+ #+END_SRC
+
+
+
+** gnus
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package gnus
+  :config
+  (progn
+    (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
+    (customize-set-variable
+     'gnus-secondary-select-methods
+     (quote
+      ((nnmaildir "Professional"
+                  (directory "~/Maildir/Professional"))
+       (nnmaildir "Work"
+                  (directory "~/Maildir/Work"))
+       (nnmaildir "Personal"
+                  (directory "~/Maildir/Personal")))))
+
+    (customize-set-variable
+     'send-mail-function
+     (quote smtpmail-send-it))
+    (customize-set-variable
+     'sendmail-program
+     "msmtp")
+    (customize-set-variable
+     'message-send-mail-function
+     (quote message-send-mail-with-sendmail))
+    (customize-set-variable
+     'message-sendmail-envelope-from
+     (quote header))
+    (customize-set-variable
+     'message-sendmail-extra-arguments
+     (quote ("--read-envelope-from")))
+    (customize-set-variable
+     'message-sendmail-f-is-evil
+     t)
+
+    (defun gnus-keys ()
+      (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+
+    (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
+ #+END_SRC
+
+
+** elfeed
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package elfeed
+  :ensure t)
+ #+END_SRC
+
+
+* org
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
+  :config
+  (progn
+    (setq calendar-latitude 53.3836)
+    (setq calendar-longitude 1.4669)
+
+    (setq org-agenda-include-diary nil)
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-return-follows-link t)
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (variable-pitch-mode t)
+                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+                (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
+
+    (defun adam-org-sunrise ()
+      (concat
+       (nth 1 (split-string (diary-sunrise-sunset)))
+       " Sunrise"))
+    (defun adam-org-sunset ()
+      (concat
+       (nth 4 (split-string (diary-sunrise-sunset)))
+       " Sunset"))
+
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-src-fontify-natively t)
+    (setq org-agenda-include-diary nil)
+
+    (setq
+     holiday-other-holidays
+     (quote
+      (
+       (holiday-float 5 1 -1 "Spring Bank Holiday")
+       (holiday-float 5 1 1 "May Day Brank Holiday")
+       (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+       )))
+
+    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
+    (defun my-org-agenda-day-face-holidays-function (date)
+      "Compute DATE face for holidays."
+      (unless (org-agenda-todayp date)
+        (dolist (file (org-agenda-files nil 'ifmode))
+          (let ((face
+                 (dolist (entry (org-agenda-get-day-entries file date))
+                   (let ((category (with-temp-buffer
+                                     (insert entry)
+                                     (org-get-category (point-min)))))
+                     (when (or (string= "Holidays" category)
+                               (string= "Vacation" category))
+                       (return 'org-agenda-date-weekend))))))
+            (when face (return face))))))
+
+    (setq
+     org-agenda-day-face-function
+     (function
+      jd:org-agenda-day-face-holidays-function))
+    ; (require 'org-notify)
+    (setq org-agenda-custom-commands
+          '(("c" . "My Custom Agendas")
+            ("cu" "Unscheduled TODO"
+             ((todo ""
+                    ((org-agenda-overriding-header "\nUnscheduled TODO")
+                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
+             nil
+             nil)))
+
+    (add-hook 'org-mode-hook 'auto-fill-mode)
+    (add-hook 'org-mode-hook 'flyspell-mode)))
+
+
+
+#+END_SRC
+
+Display appointment reminders in X when available.  I stole this code
+from somewhere and should give proper credit.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun kdialog-popup (title msg)
+  "Show a popup if we're on X, or echo it otherwise; TITLE is the title
+of the message, MSG is the context.
+
+Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
+"
+
+  (interactive)
+  (if
+      (eq window-system 'x)
+      (shell-command
+       (concat "kdialog --title \"" title
+               "\" --passivepopup \""  msg
+               "\""))
+    (message (concat title ": " msg))))
+
+(defun kdialog-appt-display (min-to-appt new-time msg)
+  (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
+(setq appt-disp-window-function (function kdialog-appt-display))
+
+#+END_SRC
+
+** htmlize
+
+ Org-mode uses the htmlize library to highlight the code in the
+ exported documentation.  As long as I've installed the library, I
+ should never need to think about it again.
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package htmlize
+  :ensure t)
+
+ #+END_SRC
+
+
+* Prose
+
+
+** LaTeX
+
+Include useful mode hooks when moving into latex mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(customize-set-variable 'TeX-PDF-mode t)
+
+
+ #+END_SRC
+
+ I like for each sentence in a LaTeX document to be its own line.
+ That way, when I'm editing, only the relevant sections get marked in
+ the version control, instead of the entire paragraph.  This code
+ tries to alleviate the problem.  I'm not sure how well it work.
+
+#+BEGIN_SRC elisp :tangle yes
+(defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
+  "Start each sentence on a new line."
+  (let ((from (ad-get-arg 0))
+        (to-marker (set-marker (make-marker) (ad-get-arg 1)))
+        tmp-end)
+    (while (< from (marker-position to-marker))
+      (forward-sentence)
+      ;; might have gone beyond to-marker --- use whichever is smaller:
+      (ad-set-arg 1 (setq tmp-end (min (point) (marker-position to-marker))))
+      ad-do-it
+      (ad-set-arg 0 (setq from (point)))
+      (unless (or
+               (bolp)
+               (looking-at "\\s *$"))
+        (LaTeX-newline)))
+    (set-marker to-marker nil)))
+
+(ad-activate 'LaTeX-fill-region-as-paragraph)
+
+
+#+END_SRC
+** Text Mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook 'visual-line-mode)
+
+
+ #+END_SRC
+
+ There didn't used to be a built in word count function.  I believe
+ that there is now, so I may not need this any longer.
+
+#+BEGIN_SRC elisp :tangle yes
+(defun count-words (&optional begin end)
+  "count words between BEGIN and END (region); if no region defined, count words in buffer"
+  (interactive "r")
+  (let ((b (if mark-active begin (point-min)))
+      (e (if mark-active end (point-max))))
+    (message "Word count: %s" (how-many "\\w+" b e))))
+
+
+
+#+END_SRC
+** langtool
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package langtool
+  :ensure t
+  :config
+  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
+ #+END_SRC
+
+
+** writegood-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package writegood-mode
+  :diminish writegood-mode
+  :ensure t
+  :config
+  (add-hook 'text-mode-hook 'writegood-mode)
+  (add-hook 'latex-mode-hook 'writegood-mode)
+  (add-hook 'org-mode-hook 'writegood-mode))
+ #+END_SRC
+
+
+* Themes
+** color-theme-modern
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package color-theme-modern
+  :ensure t
+  :config
+  (load-theme 'midnight))
+ #+END_SRC
+
+
+** solarized-theme
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark))
+ #+END_SRC
+
+* Toys
+** encourage-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package encourage-mode
+  :diminish encourage-mode
+  :ensure t
+  :init (encourage-mode))
+
+
+ #+END_SRC
+
+** selectric-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package selectric-mode
+  :ensure t)
+
+
+ #+END_SRC
+
+
+** emojify
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package emojify
+  :ensure t
+  :init
+  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
+
+ #+END_SRC
+
+* Utilities
+
+
+** ace-window
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package ace-window
+  :ensure t
+  :bind
+  (("M-z" . ace-window))
+  :config
+  (setq aw-keys '(?k ?d ?j ?f ?s ?l ?a ?h ?g)))
+ #+END_SRC
+
+
+** company
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  :diminish company-mode)
+ #+END_SRC
+
+
+** evil
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode)
+  (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
+  (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
+  (evil-set-initial-state 'notmuch-search-mode 'emacs)
+  (evil-set-initial-state 'notmuch-show-mode 'emacs)
+  (add-hook 'git-commit-mode-hook #'evil-insert-state))
+ #+END_SRC
+
+
+*** evil-god-state
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-god-state
+  :ensure t
+  :config
+  (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
+  #+END_SRC
+
+
+*** evil-escape
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-escape
+  :ensure t
+  :diminish evil-escape-mode
+  :config
+  (evil-escape-mode)
+  (setq-default evil-escape-key-sequence "jk"))
+  #+END_SRC
+
+
+*** evil-magit
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package evil-magit
+  :ensure t)
+  #+END_SRC
+
+
+*** god-mode
+
+  I have a little utility function to change the cursor type depending
+  on whether we are in god mode.  Now that I have evil-god mode, this
+  may no longer be necessary.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(defun my-update-cursor ()
+  (setq cursor-type (if (or god-local-mode buffer-read-only)
+                        'box
+                      'bar)))
+(setq cursor-type 'bar)
+
+#+END_SRC
+
+
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package god-mode
+  :bind (("<Scroll_Lock>" . god-mode-all))
+  :config
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+  (add-to-list 'god-exempt-major-modes 'magit-mode)
+  (add-to-list 'god-exempt-major-modes 'Group)
+  (add-to-list 'god-exempt-major-modes 'Messages)
+  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
+  (define-minor-mode mortal-mode
+    "Allow temporary departures from god-mode."
+    :lighter " mortal"
+    :keymap '(([return] . (lambda ()
+                            "Exit mortal-mode and resume god mode." (interactive)
+                            (god-local-mode-resume)
+                            (mortal-mode 0))))
+    (when mortal-mode
+      (god-local-mode-pause)))
+
+  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
+  #+END_SRC
+
+*** which-key
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package which-key
+  :diminish which-key-mode
+  :ensure t)
+  #+END_SRC
+
+
+** flycheck
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package flycheck
+  :diminish flycheck-mode
+  :config
+  (flycheck-define-checker
+   proselint
+   "A linter for plain prose"
+   :command ("proselint" source)
+   :standard-input f
+   :error-patterns
+   ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
+   :modes (markdown-mode text-mode org-mode)))
+ #+END_SRC
+
+** Key Bindings
+
+This is a place for my own personal key bindings.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(bind-key "C-c ." 'imenu)
+(bind-key "C-x C-b" 'ibuffer)
+(bind-key "M-/" 'hippie-expand)
+(bind-key "M-l" 'ace-jump-mode)
+
+#+END_SRC
+*** Kill this buffer
+
+I hate when emacs asks me which buffer to kill, because it's my
+current buffer 99% of the time.  Just change the key binding and be
+done with it.
+
+#+BEGIN_SRC elisp :tangle yes
+(bind-key "C-x k" 'kill-this-buffer)
+
+#+END_SRC
+
+*** Refresh Key
+
+Refreshing buffers is a constant chore that really should have it's
+own hotkey.  Why not steal F5 from the browser?
+
+#+BEGIN_SRC elisp :tangle yes
+
+ (global-set-key
+  (kbd "<f5>")
+  (lambda (&optional force-reverting)
+    "Interactive call to revert-buffer. Ignoring the auto-save
+ file and not requesting for confirmation. When the current buffer
+ is modified, the command refuses to revert it, unless you specify
+ the optional argument: force-reverting to true."
+    (interactive "P")
+    ;;(message "force-reverting value is %s" force-reverting)
+    (if (or force-reverting (not (buffer-modified-p)))
+        (revert-buffer :ignore-auto :noconfirm)
+      (error "The buffer has been modified"))))
+
+#+END_SRC
+** keyfreq
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package keyfreq
+  :ensure t
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+ #+END_SRC
+
+
+** ivy
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode)
+ #+END_SRC
+
+
+*** counsel
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package counsel
+  :bind   (("C-s" . swiper)
+           ("C-c C-r" . ivy-resume)
+           ("<f6>" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
+           ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
+           ("C-x C-f" . counsel-find-file)
+           ("<f1> f" . counsel-describe-function)
+           ("<f1> v" . counsel-describe-variable)
+           ("<f1> l" . counsel-load-library)
+           ("<f2> i" . counsel-info-lookup-symbol)
+           ("C-x 8 RET" . counsel-unicode-char)
+           ("<f2> u" . counsel-unicode-char))
+  :diminish counsel-mode
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t))
+  #+END_SRC
+
+
+*** flyspell-correct-ivy
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package flyspell-correct-ivy
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+  #+END_SRC
+
+
+** link-hint
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package link-hint
+  :ensure t
+  :bind
+  ("C-c o" . link-hint-open-link)
+  ("C-c c" . link-hint-copy-link))
+ #+END_SRC
+
+
+** projectile
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode))
+ #+END_SRC
+
+
+*** counsel-projectile
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package counsel-projectile
+  :ensure t)
+ #+END_SRC
+
+
+
+** recentf
+
+   Recentf keeps track of recently edited files.
+
+#+BEGIN_SRC elisp :tangle yes
+(require 'recentf)
+(recentf-mode)
+
+#+END_SRC
+** smart-mode-line
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (smart-mode-line-enable)
+  :config
+  (sml/apply-theme 'respectful))
+ #+END_SRC
+
+
+** unbound
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package unbound
+  :ensure t)
+ #+END_SRC
+
+
+** whitespace-cleanup-mode
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :diminish whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode))
+ #+END_SRC
+
+
+** window-purpose
+
+ #+BEGIN_SRC elisp :tangle yes
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
+  (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-hello-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-message-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-search-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(notmuch-show-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
+  (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
+  (purpose-compile-user-configuration))
+ #+END_SRC
+
+
+*** ivy-purpose
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package ivy-purpose
+  :ensure t
+  :config
+  (ivy-purpose-setup))
+  #+END_SRC
+
+** Winner
+
+   Winner mode allows me to undo and redo changes to the window layout
+   within emacs.  Very useful when I make a mistake.  It's also handy
+   for focusing on a single window, then returning to my previous,
+   more complex layout with a single C-c ←
+
+#+BEGIN_SRC elisp :tangle yes
+(winner-mode)
+#+END_SRC
+* Disabled
+
+  Here are some old commands where I really don't remember what they
+  do.  I'm going to disable them for now and, if the world doesn't
+  explode, I'll probably just delete them.
+#+BEGIN_SRC elisp :tangle no
+(customize-set-variable 'tab-always-indent 'complete)
+
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+
+(customize-save-variable
+ 'indent-tabs-mode
+ nil)
+
+
+
+#+END_SRC
+>>>>>>> 94f77da1fbbdab8f82fc88f8bb5f590375845079:init.org

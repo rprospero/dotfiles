@@ -4,3 +4,5 @@
 *.hi
 /xmonad
 /xmonad.o
+/init.el
+/init.html

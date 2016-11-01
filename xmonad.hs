@@ -1,8 +1,9 @@
-import           Control.Monad                (liftM2, filterM)
-import           Data.List (isInfixOf, isPrefixOf)
+import           Control.Monad                (liftM2, filterM,msum)
+import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
+import           System.Posix.Env (putEnv)
 import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Actions.DynamicWorkspaces
@@ -10,9 +11,8 @@ import           XMonad.Actions.Search
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks
-import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
-import           XMonad.Layout.Circle
+import           XMonad.Layout.HintedGrid
 import           XMonad.Layout.Tabbed
 import qualified XMonad.StackSet              as W
 import           XMonad.Prompt
@@ -53,9 +53,55 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
 
 main :: IO ()
 -- main = xmonad . ewmh =<< statusBar "xmobar" myPP toggleStrutsKey myConfig
-main = xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
+main = do
+  putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
+  putEnv "SAL_USE_VCLPLUGIN=gen"
+  xmonad . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
-myLayoutHook = layoutHook def ||| Circle ||| tabbed shrinkText myTheme
+data NameSegment = Prefix String | Suffix String | Subst String String
+
+
+replace :: String -> String -> String -> String
+replace "" _ _ = ""
+replace s old new =
+  if old `isPrefixOf` s
+  then new ++ replace (drop (length old) s) old new
+  else head s:replace (tail s) old new
+
+shrinkSegment :: String -> NameSegment -> Maybe String
+shrinkSegment s (Prefix prefix) = stripPrefix prefix s
+shrinkSegment s (Suffix suffix)
+  | isSuffixOf suffix s = Just $ reverse $ drop (length suffix) $ reverse s
+  | otherwise = Nothing
+shrinkSegment s (Subst before after)
+  | isInfixOf before s = Just $ replace s before after
+  | otherwise = Nothing
+
+mySegments :: [NameSegment]
+mySegments = [
+  -- Subst "=>" "⇒",
+  Suffix " - Mozilla Firefox",
+  Suffix " - GIMP",
+  Prefix "adam@dyn006107",
+  Suffix " - Google Search",
+  Suffix " - Hoogle"]
+
+dropSegment :: String -> String
+dropSegment s =
+  case msum $ map (shrinkSegment s) mySegments of
+    Just x -> x
+    Nothing -> init s
+myShrinkText :: s -> String -> [String]
+myShrinkText _ "" = [""]
+myShrinkText s cs = cs:myShrinkText s (dropSegment cs)
+
+data MyShrinker = MyShrinker
+instance Show MyShrinker where show _ = ""
+instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
+instance Shrinker MyShrinker where
+  shrinkIt = myShrinkText
+
+myLayoutHook = tabbedBottom MyShrinker myTheme ||| layoutHook def ||| Grid False
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
@@ -77,13 +123,14 @@ myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xb
 myLayoutPrinter x = x
 
 myConfig = def {
+               focusedBorderColor = pBg subTheme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
                logHook = logHook def <+> ewmhDesktopsLogHook,
                modMask = mod4Mask,
-               workspaces = myWorkspaces,
-               startupHook = setWMName "LG3D"
+               terminal = "urxvt +sb",
+               workspaces = myWorkspaces
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -l")
@@ -94,7 +141,6 @@ myConfig = def {
              , ((mod4Mask, xK_t), spawn "thunar")
              , ((mod4Mask .|. mod1Mask, xK_t), themePrompt mySearchPrompt)
              , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt)
-             , ((mod4Mask .|. shiftMask, xK_Return), spawn "urxvt")
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
@@ -112,6 +158,7 @@ myConfig = def {
                 promptSearch defPrompt
                 (moreIntelligent $
                   searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
+             , ((mod4Mask .|. shiftMask , xK_n), withFocused $ windows . W.sink)
              ]
 
 moreIntelligent :: SearchEngine -> SearchEngine
@@ -139,10 +186,14 @@ instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
 mySearchPrompt :: XPConfig
-mySearchPrompt = defPrompt {searchPredicate = isInfixOf,
+mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
                             autoComplete = Just 1}
 
-defPrompt = promptTheme subTheme def --colourTheme myTheme def
+
+mySearchPredicate :: String -> String -> Bool
+mySearchPredicate query item = and . map (`isInfixOf` item) . words $ query
+
+defPrompt = promptTheme subTheme def {historyFilter = nub}
 
 colourTheme :: Theme -> XPConfig -> XPConfig
 colourTheme t x = x {fgColor = inactiveTextColor t,
@@ -163,15 +214,15 @@ promptTheme t x = x {fgColor = pFg t,
 tabTheme :: PromptTheme -> Theme -> Theme
 tabTheme p x = x {inactiveTextColor = pFg p,
                   inactiveColor = pBg p,
-                  inactiveBorderColor = pBgH p,
+                  inactiveBorderColor = pBg p,
                   activeTextColor = pFgH p,
                   activeColor = pBgH p,
-                  activeBorderColor = pBgH p}
+                  activeBorderColor = pBg p}
 
 myTheme :: Theme
 myTheme = tabTheme subTheme $ theme kavonForestTheme
 
-subTheme = tronTheme
+subTheme = solarizedTheme
 
 data PromptTheme = PromptTheme {
   pFg :: String,
@@ -251,4 +302,12 @@ tronTheme = PromptTheme {
   pFgH = "#d3f9ee",
   pBgH = "#1d5483",
   pBC = "#d3f9ee",
+  pFont = fontName def}
+
+solarizedTheme = PromptTheme {
+  pFg = "#839496",
+  pBg = "#002b36",
+  pFgH = "#93a1a1",
+  pBgH = "073642",
+  pBC = "#859900",
   pFont = fontName def}
