@@ -60,7 +60,9 @@
          ;;  :body jabber-activity-count-string)
          (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
-   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
+   (cond
+    ((eq system-type 'gnu/linux)
+     (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))))
 
 (use-package emojify
   :ensure t
