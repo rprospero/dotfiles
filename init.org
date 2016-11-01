@@ -48,6 +48,19 @@
          "/usr/bin"
          "/bin"
          (getenv "PATH")))
+         ((s-starts-with? "adams-mbp" system-name)
+          (list
+           "/Users/adam/Library/Python/2.7/bin/"
+           "/Users/adam/.local/bin/"
+           "/opt/local/bin"
+           "/opt/local/sbin"
+           "/usr/local/bin"
+           "/usr/bin"
+           "/bin"
+           "/usr/sbin"
+           "/sbin"
+           "/opt/X11/bin"
+           "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
        ('t (list (getenv "PATH"))))))
   (setenv "PATH" (mapconcat 'identity mypaths ";"))
   (setq exec-path (append mypaths (list "." exec-directory))))
