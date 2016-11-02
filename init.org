@@ -801,6 +801,9 @@ Include useful mode hooks when moving into latex mode
 (use-package evil
   :ensure t
   :config
+  (setq evil-escape-unordered-key-sequence t)
+  (setq evil-insert-state-modes
+    '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
   (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
   (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
