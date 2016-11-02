@@ -573,6 +573,8 @@ notmuch is a wonderful little utility for managing my mail
   :ensure t
   :config
   (setq notmuch-archive-tags (quote ("-inbox" "-unread")))
+  (set-face-attribute 'notmuch-search-unread-face nil
+	:foreground "#859900")
   (setq notmuch-saved-searches
         (quote
          ((:name "inbox" :query "tag:inbox" :key "i")
