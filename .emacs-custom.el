@@ -70,12 +70,8 @@
      (:name "all mail" :query "*" :key "a")
      (:name "Today's mail" :query "date:0d.."))))
  '(org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
- '(org-agenda-files
-   (quote
-    ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))
  '(org-agenda-include-diary nil)
  '(org-agenda-start-on-weekday nil)
- '(org-agenda-window-setup (quote current-window))
  '(org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
  '(org-confirm-babel-evaluate nil)
  '(org-file-apps

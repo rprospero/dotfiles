@@ -481,10 +481,14 @@ Add support to python mode for finding errors
          ("C-c b" . org-iswitchb))
   :config
   (progn
+    (setq org-agenda-files
+          (quote
+           ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
     (setq org-agenda-include-diary nil)
+    (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-start-on-weekday nil)
     (setq org-return-follows-link t)
     (add-hook 'org-mode-hook
