@@ -456,9 +456,9 @@ review again so that I can remember exactly how they work.  FIXME
 (use-package gnus
   :config
   (progn
-    (customize-set-variable 'gnus-select-method '(nntp "news.gwene.org"))
-    (customize-set-variable
-     'gnus-secondary-select-methods
+    (setq gnus-select-method '(nntp "news.gwene.org"))
+    (setq
+     gnus-secondary-select-methods
      (quote
       ((nnmaildir "Professional"
                   (directory "~/Maildir/Professional"))
@@ -467,23 +467,23 @@ review again so that I can remember exactly how they work.  FIXME
        (nnmaildir "Personal"
                   (directory "~/Maildir/Personal")))))
 
-    (customize-set-variable
-     'send-mail-function
+    (setq
+     send-mail-function
      (quote smtpmail-send-it))
-    (customize-set-variable
-     'sendmail-program
+    (setq
+     sendmail-program
      "msmtp")
-    (customize-set-variable
-     'message-send-mail-function
+    (setq
+     message-send-mail-function
      (quote message-send-mail-with-sendmail))
-    (customize-set-variable
-     'message-sendmail-envelope-from
+    (setq
+     message-sendmail-envelope-from
      (quote header))
-    (customize-set-variable
-     'message-sendmail-extra-arguments
+    (setq
+     message-sendmail-extra-arguments
      (quote ("--read-envelope-from")))
-    (customize-set-variable
-     'message-sendmail-f-is-evil
+    (setq
+     message-sendmail-f-is-evil
      t)
 
     (defun gnus-keys ()
