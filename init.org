@@ -158,9 +158,17 @@ security hole, but I only install themes from trusted sources and I'm
 not auditing them as it currently is.  Plus, this gets the terrible
 custom-safe-themes variable out of customize
 
-#+BEGIN_SRC elisp :tangle
+#+BEGIN_SRC elisp :tangle yes
 
 (setq custom-safe-themes t)
+
+#+END_SRC
+
+Give a default e-mail address.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq user-mail-address "a.washington@sheffield.ac.uk")
 
 #+END_SRC
 * Apps
@@ -582,6 +590,7 @@ notmuch is a wonderful little utility for managing my mail
  #+BEGIN_SRC elisp :tangle yes
 (use-package elfeed
   :ensure t
+  :config
   (setq
    elfeed-feeds
    '("http://www.xkcd.org/atom.xml"
