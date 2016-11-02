@@ -3,14 +3,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
- '(ansi-term-color-vector
-   [unspecified "#081724" "#ff694d" "#68f6cb" "#fffe4e" "#bad6e2" "#afc0fd" "#d2f1ff" "#d3f9ee"] t)
  '(auto-image-file-mode t)
  '(browse-url-browser-function (quote browse-url-firefox))
  '(column-number-mode t)
- '(csharp-make-tool "mcs" t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(custom-safe-themes
    (quote
@@ -26,17 +21,9 @@
  '(elfeed-feeds
    (quote
     ("http://www.xkcd.org/atom.xml" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/haskell.rss" "http://www.merriam-webster.com/wotd/feed/rss2" "https://wordsmith.org/awad/rss1.xml" "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
- '(emojify-display-style (quote unicode))
  '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
  '(flymake-python-pyflakes-executable "flake8")
  '(flymake-python-pyflakes-extra-arguments (quote (" --ignore=E302,E226")))
- '(gnus-secondary-select-methods
-   (quote
-    ("~/.cabal/bin" "/opt/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/Applications/MacPorts/Emacs.app/Contents/MacOS/libexec" "/Applications/MacPorts/Emacs.app/Contents/MacOS/bin" "/usr/local/bin/stack")))
- '(gnus-select-method (quote (nntp "news.gwene.org")))
- '(guide-key/recursive-key-sequence-flag t)
- '(haskell-tags-on-save t)
- '(helm-split-window-in-side-p t)
  '(hl-sexp-background-color "#1c1f26")
  '(holiday-other-holidays
    (quote
@@ -44,7 +31,6 @@
      (holiday-float 5 1 1 "May Day Brank Holiday")
      (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
  '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
  '(mouse-autoselect-window 0.5)
  '(org-mode-hook
    (quote
@@ -56,19 +42,14 @@
                          [org-add-hook change-major-mode-hook org-babel-show-result-all append local]
                          5]
                    org-babel-result-hide-spec org-babel-hide-all-hashes)))
- '(org-return-follows-link t)
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
     (evil-magit langtool smooth-scrolling evil-god-state evil-escape telepathy ten-hundred-mode evil-tutor flycheck-jshint flymake-jshint web-completion-data which-key counsel-projectile projectile color-theme-modern color-theme zone-sl zone-select zone-rainbow zone-nyan zone-matrix yasnippet yaml-mode writegood-mode wolfram-mode whitespace-cleanup-mode voca-builder use-package unicode-fonts undo-tree unbound twittering-mode tronesque-theme tron-theme tree-mode tle tabbar systemd sx switch-window suggest spray smart-mode-line shorten shm sexy-monochrome-theme selectric-mode rainbow-delimiters pylint purescript-mode pov-mode pcmpl-pip pcmpl-git pass ox-ioslide org-pandoc oauth2 nyan-mode notmuch multi-line monokai-theme moe-theme material-theme magit lush-theme lui link-hint ledger-mode lcs kv keyfreq jedi jabber ivy-purpose intero hi2 hackernews guide-key-tip grandshell-theme goto-chg god-mode gnuplot gitignore-mode git-timemachine flyspell-correct-ivy flymake-python-pyflakes flycheck-pyflakes flycheck-purescript flycheck-ledger flycheck-haskell fireplace esup esqlite encourage-mode emojify emoji-fontset elfeed-goodies ein-mumamo dracula-theme doom-themes docker darktooth-theme cyberpunk-theme cuda-mode counsel company-jedi company-ghc color-theme-sanityinc-tomorrow circe cherry-blossom-theme auctex android-mode ample-zen-theme ace-window ace-jump-buffer 2048-game)))
- '(paradox-automatically-star t)
- '(paradox-github-token t)
  '(revert-without-query (quote ("*.png")))
- '(scheme-program-name "meep")
  '(send-mail-function (quote smtpmail-send-it))
  '(sendmail-program "msmtp")
  '(tab-always-indent (quote complete))
- '(twittering-timer-interval 30)
  '(user-mail-address "a.washington@sheffield.ac.uk"))
 
 

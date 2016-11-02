@@ -193,9 +193,7 @@ Set the C♯ compiler for linux
 
 #+BEGIN_SRC elisp :tangle yes
 
-(customize-set-variable
- 'csharp-make-tool
- "mcs")
+(setq 'csharp-make-tool "mcs")
 
 #+END_SRC
 ** elisp
@@ -218,7 +216,7 @@ Let's try and make elisp symbols pretty!
   :config
   (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
   (add-to-list 'exec-path "~/.cabal/bin")
-  (customize-set-variable 'haskell-tags-on-save t)
+  (setq haskell-tags-on-save t)
 
   ;; (autoload 'ghc-init "ghc" nil t)
   ;; (autoload 'ghc-debug "ghc" nil t)
@@ -793,7 +791,7 @@ Include useful mode hooks when moving into latex mode
 (use-package emojify
   :ensure t
   :init
-  (customize-set-variable 'emojify-display-style 'unicode) ; :-)
+  (setq 'emojify-display-style 'unicode) ; :-)
   (add-hook 'after-init-hook #'global-emojify-mode))
 
 
