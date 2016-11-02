@@ -393,6 +393,8 @@ Add support to python mode for finding errors
          ;;  :title jabber-activity-make-string
          ;;  :body jabber-activity-count-string)
          (x-urgency-hint (selected-frame) t))))
+   (setq jabber-chat-buffer-show-avatar nil)
+   (setq jabber-vcard-avatars-retrieve nil)
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
 
