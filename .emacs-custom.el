@@ -7,7 +7,6 @@
  '(browse-url-browser-function (quote browse-url-firefox))
  '(column-number-mode t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
- '(default-input-method "TeX")
  '(diff-switches "-u")
  '(dired-dwim-target t)
  '(display-buffer-alist

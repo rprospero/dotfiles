@@ -133,6 +133,15 @@ people on the internet.
  '(indent-tabs-mode nil)
 
 #+END_SRC
+
+Use the TeX input method to get those glorious unicode characters.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq default-input-method "TeX")
+(toggle-input-method)
+
+#+END_SRC
 * Apps
 ** magit
 
