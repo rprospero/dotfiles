@@ -176,6 +176,23 @@ two directories far more reasonable.
 (setq dired-dwim-target t)
 
 #+END_SRC
+** Images
+
+Load images as images, instead of as bye arrays
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq auto-image-file-mode t)
+
+#+END_SRC
+
+Always revert images files without asking.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq revert-without-query '(".png"))
+
+#+END_SRC
 ** magit
 
  #+BEGIN_SRC elisp :tangle yes
