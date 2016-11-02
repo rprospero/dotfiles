@@ -522,7 +522,6 @@ notmuch is a wonderful little utility for managing my mail
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
-    (setq org-agenda-include-diary nil)
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-start-on-weekday nil)
     (setq org-return-follows-link t)
@@ -550,6 +549,7 @@ notmuch is a wonderful little utility for managing my mail
     (setq org-agenda-include-diary nil)
     (setq org-src-preserve-indentation t)
     (setq org-table-convert-region-max-lines 99999)
+    (setq org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
     (setq org-file-apps
     (quote
      ((auto-mode . emacs)

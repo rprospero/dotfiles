@@ -46,11 +46,6 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(mouse-autoselect-window 0.5)
- '(org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
- '(org-agenda-include-diary nil)
- '(org-agenda-start-on-weekday nil)
- '(org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
- '(org-confirm-babel-evaluate nil)
  '(org-mode-hook
    (quote
     (flyspell-mode auto-fill-mode
@@ -62,7 +57,6 @@
                          5]
                    org-babel-result-hide-spec org-babel-hide-all-hashes)))
  '(org-return-follows-link t)
- '(org-src-fontify-natively t)
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
