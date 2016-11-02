@@ -19,9 +19,6 @@
  '(auto-image-file-mode t)
  '(browse-url-browser-function (quote browse-url-firefox))
  '(column-number-mode t)
- '(company-dabbrev-code-modes
-   (quote
-    (prog-mode batch-file-mode csharp-mode css-mode erlang-mode haskell-mode jde-mode lua-mode python-mode purescript-mode)))
  '(csharp-make-tool "mcs" t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(custom-safe-themes

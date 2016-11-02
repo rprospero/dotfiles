@@ -761,8 +761,13 @@ Include useful mode hooks when moving into latex mode
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'company-mode)
+  (setq company-dabbrev-code-modes
+   (quote
+    (prog-mode batch-file-mode csharp-mode css-mode erlang-mode haskell-mode
+    jde-mode lua-mode python-mode purescript-mode)))
   :diminish company-mode)
- #+END_SRC
+#+END_SRC
+
 
 
 ** evil
