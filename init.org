@@ -862,7 +862,10 @@ Include useful mode hooks when moving into latex mode
   #+BEGIN_SRC elisp :tangle yes
 (use-package which-key
   :diminish which-key-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq which-key-mode t)
+  (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
 

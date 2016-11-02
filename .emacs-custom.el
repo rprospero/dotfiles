@@ -120,9 +120,7 @@
  '(sendmail-program "msmtp")
  '(tab-always-indent (quote complete))
  '(twittering-timer-interval 30)
- '(user-mail-address "a.washington@sheffield.ac.uk")
- '(which-key-mode t)
- '(which-key-show-operator-state-maps t))
+ '(user-mail-address "a.washington@sheffield.ac.uk"))
 
 
 
