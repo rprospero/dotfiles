@@ -1206,7 +1206,7 @@ own hotkey.  Why not steal F5 from the browser?
   do.  I'm going to disable them for now and, if the world doesn't
   explode, I'll probably just delete them.
 #+BEGIN_SRC elisp :tangle no
-(customize-set-variable 'tab-always-indent 'complete)
+(setq tab-always-indent 'complete)
 
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 
