@@ -30,7 +30,6 @@
     ((holiday-float 5 1 -1 "Spring Bank Holiday")
      (holiday-float 5 1 1 "May Day Brank Holiday")
      (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
- '(indent-tabs-mode nil)
  '(mouse-autoselect-window 0.5)
  '(org-mode-hook
    (quote

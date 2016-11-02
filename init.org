@@ -124,6 +124,15 @@ Use diminish to stop minor modes from taking over the entire taskbar.
 
 
 #+END_SRC
+
+Always use spaces instead of tabs to avoid complaints from bored
+people on the internet.
+
+#+BEGIN_SRC elisp :tangle yes
+
+ '(indent-tabs-mode nil)
+
+#+END_SRC
 * Apps
 ** magit
 
