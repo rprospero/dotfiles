@@ -1049,6 +1049,13 @@ own hotkey.  Why not steal F5 from the browser?
  #+BEGIN_SRC elisp :tangle yes
 (use-package window-purpose
   :ensure t
+  :bind
+  ("C-c C-, C-d" . purpose-toggle-window-purpose-dedicated)
+  ("C-c C-, C-D" . purpose-toggle-window-buffer-dedicated)
+  ("C-c C-, C-1" . purpose-delete-non-dedicated-windows)
+  ("C-c C-, C-b" . purpose-switch-buffer-with-purpose)
+  ("C-c C-, C-s" . purpose-save-window-layout)
+  ("C-c C-, C-l" . purpose-load-window-layout)
   :config
   (purpose-mode)
   (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
