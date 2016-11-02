@@ -833,15 +833,6 @@ Include useful mode hooks when moving into latex mode
 
 * Themes
 
-** color-theme-modern
-
- #+BEGIN_SRC elisp :tangle yes
-(use-package color-theme-modern
-  :ensure t
-  :config
-  (load-theme 'midnight))
- #+END_SRC
-
 
 ** solarized-theme
 
