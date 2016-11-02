@@ -554,6 +554,11 @@ notmuch is a wonderful little utility for managing my mail
          ("C-c b" . org-iswitchb))
   :config
   (progn
+    (setq holiday-other-holidays
+     (quote
+      ((holiday-float 5 1 -1 "Spring Bank Holiday")
+       (holiday-float 5 1 1 "May Day Brank Holiday")
+       (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
     (setq org-agenda-files
           (quote
            ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))

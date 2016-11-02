@@ -19,11 +19,6 @@
  '(flymake-python-pyflakes-executable "flake8")
  '(flymake-python-pyflakes-extra-arguments (quote (" --ignore=E302,E226")))
  '(hl-sexp-background-color "#1c1f26")
- '(holiday-other-holidays
-   (quote
-    ((holiday-float 5 1 -1 "Spring Bank Holiday")
-     (holiday-float 5 1 1 "May Day Brank Holiday")
-     (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
  '(mouse-autoselect-window 0.5)
  '(org-mode-hook
    (quote
