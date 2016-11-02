@@ -152,6 +152,17 @@ Either way, I disagree with it, so we'll put the column numbers in.
 (setq column-number-mode t)
 
 #+END_SRC
+
+Tell emacs to treat all themes as safe.  This is, honestly, a gapping
+security hole, but I only install themes from trusted sources and I'm
+not auditing them as it currently is.  Plus, this gets the terrible
+custom-safe-themes variable out of customize
+
+#+BEGIN_SRC elisp :tangle
+
+(setq custom-safe-themes t)
+
+#+END_SRC
 * Apps
 ** Dired
 
@@ -802,16 +813,6 @@ Include useful mode hooks when moving into latex mode
 
 * Themes
 
-Tell emacs to treat all themes as safe.  This is, honestly, a gapping
-security hole, but I only install themes from trusted sources and I'm
-not auditing them as it currently is.  Plus, this gets the terrible
-custom-safe-themes variable out of customize
-
-#+BEGIN_SRC elisp :tangle
-
-(setq custom-safe-themes t)
-
-#+END_SRC
 ** color-theme-modern
 
  #+BEGIN_SRC elisp :tangle yes
