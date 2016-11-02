@@ -6,7 +6,6 @@
  '(auto-image-file-mode t)
  '(column-number-mode t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
- '(diff-switches "-u")
  '(display-buffer-alist
    (quote
     (("agenda.org"
