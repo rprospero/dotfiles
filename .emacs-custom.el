@@ -9,9 +9,6 @@
     (("agenda.org"
       (display-buffer-reuse-window display-buffer-use-some-window)
       (nil)))))
- '(elfeed-feeds
-   (quote
-    ("http://www.xkcd.org/atom.xml" "https://www.reddit.com/r/emacs.rss" "https://www.reddit.com/r/haskell.rss" "http://www.merriam-webster.com/wotd/feed/rss2" "https://wordsmith.org/awad/rss1.xml" "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
  '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
  '(flymake-python-pyflakes-executable "flake8")
  '(flymake-python-pyflakes-extra-arguments (quote (" --ignore=E302,E226")))

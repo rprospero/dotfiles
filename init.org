@@ -581,7 +581,16 @@ notmuch is a wonderful little utility for managing my mail
 
  #+BEGIN_SRC elisp :tangle yes
 (use-package elfeed
-  :ensure t)
+  :ensure t
+  (setq
+   elfeed-feeds
+   '("http://www.xkcd.org/atom.xml"
+     "https://www.reddit.com/r/emacs.rss"
+     "https://www.reddit.com/r/haskell.rss"
+     "http://www.merriam-webster.com/wotd/feed/rss2"
+     "https://wordsmith.org/awad/rss1.xml"
+     "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
+
  #+END_SRC
 
 
