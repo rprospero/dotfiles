@@ -513,6 +513,21 @@ Add support to python mode for finding errors
     (setq org-confirm-babel-evaluate nil)
     (setq org-src-fontify-natively t)
     (setq org-agenda-include-diary nil)
+    (setq org-src-preserve-indentation t)
+    (setq org-table-convert-region-max-lines 99999)
+    (setq org-file-apps
+    (quote
+     ((auto-mode . emacs)
+      ("\\.mm\\'" . default)
+      ("\\.x?html?\\'" . default)
+      ("\\.pdf\\'" . system))))
+
+
+    (setq org-latex-listings (quote minted))
+    (setq org-latex-packages-alist (quote (("" "minted" nil))))
+    (setq org-latex-pdf-process
+          (quote
+           ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 
     (setq
      holiday-other-holidays

@@ -74,17 +74,6 @@
  '(org-agenda-start-on-weekday nil)
  '(org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
  '(org-confirm-babel-evaluate nil)
- '(org-file-apps
-   (quote
-    ((auto-mode . emacs)
-     ("\\.mm\\'" . default)
-     ("\\.x?html?\\'" . default)
-     ("\\.pdf\\'" . system))))
- '(org-latex-listings (quote minted))
- '(org-latex-packages-alist (quote (("" "minted" nil))))
- '(org-latex-pdf-process
-   (quote
-    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
  '(org-mode-hook
    (quote
     (flyspell-mode auto-fill-mode
@@ -97,8 +86,6 @@
                    org-babel-result-hide-spec org-babel-hide-all-hashes)))
  '(org-return-follows-link t)
  '(org-src-fontify-natively t)
- '(org-src-preserve-indentation t)
- '(org-table-convert-region-max-lines 99999)
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
