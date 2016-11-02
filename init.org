@@ -884,7 +884,7 @@ This is a place for my own personal key bindings.
 (bind-key "C-c ." 'imenu)
 (bind-key "C-x C-b" 'ibuffer)
 (bind-key "M-/" 'hippie-expand)
-(bind-key "M-l" 'ace-jump-mode)
+(bind-key "M-d" 'avy-goto-char-timer)
 
 #+END_SRC
 *** Kill this buffer
