@@ -808,7 +808,13 @@ Include useful mode hooks when moving into latex mode
   :ensure t)
   #+END_SRC
 
+*** evil org mode
 
+#+BEGIN_SRC elisp :tangle yes
+(use-package evil-org
+  :ensure t)
+
+#+END_SRC
 *** god-mode
 
   I have a little utility function to change the cursor type depending
