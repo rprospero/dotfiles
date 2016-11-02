@@ -1011,6 +1011,8 @@ own hotkey.  Why not steal F5 from the browser?
  #+BEGIN_SRC elisp :tangle yes
 (use-package projectile
   :ensure t
+  :init
+  (setq projectile-keymap-prefix (kbd "C-c C-p"))
   :config
   (projectile-global-mode))
  #+END_SRC
