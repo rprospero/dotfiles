@@ -142,6 +142,16 @@ Use the TeX input method to get those glorious unicode characters.
 (toggle-input-method)
 
 #+END_SRC
+
+Emacs gives us line numbers by default, but not column numbers.  I
+think that that's a legacy decision left over from the terminal days?
+Either way, I disagree with it, so we'll put the column numbers in.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq column-number-mode t)
+
+#+END_SRC
 * Apps
 ** Dired
 

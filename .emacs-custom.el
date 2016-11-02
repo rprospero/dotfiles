@@ -4,7 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-image-file-mode t)
- '(column-number-mode t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(display-buffer-alist
    (quote
@@ -17,7 +16,6 @@
  '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
  '(flymake-python-pyflakes-executable "flake8")
  '(flymake-python-pyflakes-extra-arguments (quote (" --ignore=E302,E226")))
- '(hl-sexp-background-color "#1c1f26")
  '(mouse-autoselect-window 0.5)
  '(org-mode-hook
    (quote
