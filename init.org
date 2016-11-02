@@ -5,12 +5,6 @@
 (eval-when-compile
   (require 'use-package))
 
-;; (use-package color-theme-sanityinc-tomorrow
-;;   :ensure t
-;;   ;; :config
-;;   ;; (color-theme-sanityinc-tomorrow-bright)
-;;   )
-
 (use-package s
   :ensure t)
 
@@ -1277,21 +1271,3 @@ own hotkey.  Why not steal F5 from the browser?
 #+BEGIN_SRC elisp :tangle yes
 (winner-mode)
 #+END_SRC
-* Disabled
-
-  Here are some old commands where I really don't remember what they
-  do.  I'm going to disable them for now and, if the world doesn't
-  explode, I'll probably just delete them.
-#+BEGIN_SRC elisp :tangle no
-(setq tab-always-indent 'complete)
-
-(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-
-(customize-save-variable
- 'indent-tabs-mode
- nil)
-
-
-
-#+END_SRC
->>>>>>> 94f77da1fbbdab8f82fc88f8bb5f590375845079:init.org
