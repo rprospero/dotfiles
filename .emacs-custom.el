@@ -4,7 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-image-file-mode t)
- '(browse-url-browser-function (quote browse-url-firefox))
  '(column-number-mode t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(diff-switches "-u")

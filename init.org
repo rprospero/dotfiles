@@ -400,6 +400,16 @@ review again so that I can remember exactly how they work.  FIXME
 (setq message-sendmail-f-is-evil t)
 
 #+END_SRC
+
+We'll set the default browser to firefox for now.  At some point, I
+want to make function that intelligently decides between firefox and
+eww.  FIXME
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq browse-url-browser-function 'browse-url-firefox)
+
+#+END_SRC
 ** jabber
 
  #+BEGIN_SRC elisp :tangle yes
