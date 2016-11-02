@@ -8,17 +8,6 @@
 (use-package s
   :ensure t)
 
-(setq
- custom-file
- (cond
-  ((s-ends-with? "shef.ac.uk" system-name)
-   "/home/adam/dotfiles/.emacs-custom.el")
-  ((s-prefix? "nadia" system-name)
-   "/home/adam/dotfiles/.emacs-custom.el")
-  (t "~/.emacs-custom.el")))
-
-(load custom-file)
-
 (let
     ((mypaths
       (cond
