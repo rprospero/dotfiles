@@ -22,8 +22,6 @@
  '(company-dabbrev-code-modes
    (quote
     (prog-mode batch-file-mode csharp-mode css-mode erlang-mode haskell-mode jde-mode lua-mode python-mode purescript-mode)))
- '(counsel-find-file-at-point t)
- '(counsel-mode t)
  '(csharp-make-tool "mcs" t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(custom-safe-themes

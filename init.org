@@ -970,7 +970,9 @@ own hotkey.  Why not steal F5 from the browser?
   :ensure t
   :config
   (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t))
+  (setq ivy-use-virtual-buffers t)
+  (setq counsel-find-file-at-point t)
+  (setq counsel-mode t))
   #+END_SRC
 
 
