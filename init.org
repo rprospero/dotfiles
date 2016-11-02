@@ -464,6 +464,28 @@ Add support to python mode for finding errors
  #+END_SRC
 
 
+** notmuch
+
+notmuch is a wonderful little utility for managing my mail
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package notmuch
+  :ensure t
+  :config
+  (setq notmuch-archive-tags (quote ("-inbox" "-unread")))
+  (setq notmuch-saved-searches
+        (quote
+         ((:name "inbox" :query "tag:inbox" :key "i")
+          (:name "unread" :query "tag:unread" :key "u")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "sent" :query "tag:sent" :key "t")
+          (:name "drafts" :query "tag:draft" :key "d")
+          (:name "all mail" :query "*" :key "a")
+          (:name "Today's mail" :query "date:0d..")
+          (:name "promotional" :query "to:promotional tag:inbox"))))
+
+#+END_SRC
 ** elfeed
 
  #+BEGIN_SRC elisp :tangle yes
