@@ -108,11 +108,6 @@
  '(org-src-fontify-natively t)
  '(org-src-preserve-indentation t)
  '(org-table-convert-region-max-lines 99999)
- '(package-archives
-   (quote
-    (("gnu" . "http://elpa.gnu.org/packages/")
-     ("marmalade" . "http://marmalade-repo.org/packages/")
-     ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote

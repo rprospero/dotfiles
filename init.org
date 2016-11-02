@@ -89,8 +89,7 @@ Similarly, get rid of the awful startup screen.
 Now, give the full list of package repositories.
 
 #+BEGIN_SRC elisp :tangle yes
-(customize-set-variable
- 'package-archives
+(setq package-archives
  (quote
   (("gnu" . "http://elpa.gnu.org/packages/")
    ("marmalade" . "http://marmalade-repo.org/packages/")
