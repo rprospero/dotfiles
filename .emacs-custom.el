@@ -8,7 +8,6 @@
  '(column-number-mode t)
  '(custom-enabled-themes (quote (smart-mode-line-respectful)))
  '(diff-switches "-u")
- '(dired-dwim-target t)
  '(display-buffer-alist
    (quote
     (("agenda.org"
