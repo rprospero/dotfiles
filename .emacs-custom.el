@@ -3,16 +3,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (smart-mode-line-respectful)))
- '(display-buffer-alist
-   (quote
-    (("agenda.org"
-      (display-buffer-reuse-window display-buffer-use-some-window)
-      (nil)))))
- '(flycheck-disabled-checkers (quote (haskell-stack-ghc)))
- '(flymake-python-pyflakes-executable "flake8")
- '(flymake-python-pyflakes-extra-arguments (quote (" --ignore=E302,E226")))
- '(mouse-autoselect-window 0.5)
  '(org-mode-hook
    (quote
     (flyspell-mode auto-fill-mode
