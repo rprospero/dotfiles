@@ -359,6 +359,19 @@ Add support to python mode for finding errors
 (add-hook 'mail-mode-hook 'flyspell-mode)
 
 #+END_SRC
+
+Also, there are some generic message mode settings that I need to
+review again so that I can remember exactly how they work.  FIXME
+
+#+BEGIN_SRC elisp :tangle yes
+
+
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+(setq message-sendmail-envelope-from 'header)
+(setq message-sendmail-extra-arguments '("--read-envelope-from"))
+(setq message-sendmail-f-is-evil t)
+
+#+END_SRC
 ** jabber
 
  #+BEGIN_SRC elisp :tangle yes
