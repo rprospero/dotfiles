@@ -211,7 +211,7 @@ Set the C♯ compiler for linux
 
 #+BEGIN_SRC elisp :tangle yes
 
-(setq 'csharp-make-tool "mcs")
+(setq csharp-make-tool "mcs")
 
 #+END_SRC
 ** elisp
@@ -820,7 +820,7 @@ custom-safe-themes variable out of customize
 (use-package emojify
   :ensure t
   :init
-  (setq 'emojify-display-style 'unicode) ; :-)
+  (setq emojify-display-style 'unicode) ; :-)
   (add-hook 'after-init-hook #'global-emojify-mode))
 
 
