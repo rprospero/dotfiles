@@ -626,9 +626,15 @@ Include useful mode hooks when moving into latex mode
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(customize-set-variable 'TeX-PDF-mode t)
-
-
+(setq TeX-PDF-mode t)
+(setq TeX-view-program-list (quote (("Okular" "okular --unique %o#src:%n%b"))))
+(setq TeX-view-program-selection
+   (quote
+    (((output-dvi style-pstricks)
+      "dvips and gv")
+     (output-dvi "Okular")
+     (output-pdf "Evince")
+     (output-html "xdg-open"))))
  #+END_SRC
 
  I like for each sentence in a LaTeX document to be its own line.
