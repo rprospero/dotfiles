@@ -18,7 +18,7 @@ import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
 
 import System.Information.Memory
-import System.Information.CPU
+import System.Information.CPU2
 import System.Information.Network
 
 import Graphics.UI.Gtk.Display.Image (Image, imageNewFromFile)
@@ -45,10 +45,20 @@ memCallback = do
   mi <- parseMeminfo
   return $ memoryUsedRatio mi
 
-cpuCallback :: IO Double
-cpuCallback = do
-  (userLoad, systemLoad, totalLoad) <- cpuLoad
-  return totalLoad
+-- CPU Charts
+
+cpuCharts :: Int -> [IO Widget]
+cpuCharts count = map makeCpuChart [0..count-1]
+
+makeCpuChart :: Int -> IO Widget
+makeCpuChart cpu = do
+  myPollingBar 5 $ getCPULoad ("cpu" ++ show cpu)  >>= return . sum
+
+cpuCount :: String -> Int
+cpuCount host
+  | ".shef.ac.uk" `isSuffixOf` host = 8
+  | otherwise = 1
+------------------------------
 
 netCallback :: IORef ([Integer]) -> Int -> IO Double
 netCallback ref idx = do
@@ -143,7 +153,6 @@ main = do
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
-      cpu = myPollingBar 5 cpuCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
       mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" "white"
@@ -155,8 +164,9 @@ main = do
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
                                                          clock, staticLabel calendarIcon,
-                                                         mem, staticLabel verilogIcon,
-                                                         cpu, staticLabel vhdlIcon,
+                                                         mem, staticLabel verilogIcon] ++
+                                                       cpuCharts (cpuCount host) ++
+                                                         [staticLabel vhdlIcon,
                                                          netup, net,
                                                          staticLabel globeIcon] ++
                                                        fsList ++
