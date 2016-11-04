@@ -103,7 +103,8 @@ main = do
       netup = myPollingBar 1 $ netCallback netref 1
       mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" "white"
       tray = systrayNew
-  fsList <- myFSList
+  host <- getHostName
+  let fsList = myFSList host
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
@@ -117,13 +118,11 @@ main = do
                                                        [mail,icon "mail.xbm",
                                                         note]
                                         }
-myFSList :: IO [IO Widget]
-myFSList = do
-  host <- getHostName
-  if (".shef.ac.uk" `isSuffixOf` host)
-    then return [myFSMonitor "/",
-                 myFSMonitor "/data",
-                 myFSMonitor "/home",
-                 icon "diskette.xbm"]
-    else return [myFSMonitor "/",
-                 icon "diskette.xbm"]
+myFSList :: String -> [IO Widget]
+myFSList host
+  | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
+                                       myFSMonitor "/data",
+                                       myFSMonitor "/home",
+                                       staticLabel hddIcon]
+  | otherwise = [myFSMonitor "/",
+                 staticLabel hddIcon]
