@@ -178,5 +178,6 @@ myFSList :: String -> [IO Widget]
 myFSList host
   | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
                                        myFSMonitor "/data",
-                                       myFSMonitor "/home"]
+                                       myFSMonitor "/home",
+                                       myFSMonitor "/mnt/NAS"]
   | otherwise = [myFSMonitor "/"]
