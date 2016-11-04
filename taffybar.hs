@@ -120,10 +120,10 @@ main = do
   netref <- newIORef [0, 0]
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
-        activeWorkspace = colorize "yellow" "" . workspaceMangler,
+        activeWorkspace = colorize "#b58900" "" . workspaceMangler,
         hiddenWorkspace = workspaceMangler,
-        urgentWorkspace = colorize "red" "yellow" . workspaceMangler,
-        visibleWorkspace = colorize "orange" "" . workspaceMangler }
+        urgentWorkspace = colorize "#002b36" "#839496" . workspaceMangler,
+        visibleWorkspace = colorize "#cb4b16" "" . workspaceMangler,
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
