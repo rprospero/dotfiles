@@ -155,7 +155,7 @@ main = do
       mem = myPollingBar 5 memCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
-      mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" "white"
+      mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" ""
       tray = systrayNew
   host <- getHostName
   let fsList = myFSList host
