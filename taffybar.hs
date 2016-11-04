@@ -85,16 +85,21 @@ wicon code = "<span font_family='Weather Icons'> &#x" <> code <> ";</span>"
 haskell = alltheicon "e921"
 hddIcon = faicon "f0a0"
 mailIcon = octicon "f03b"
+arrowsHIcon = faicon "f07e"
+arrowsVIcon = faicon "f07d"
 calendarIcon = octicon "f068"
 commentsIcon = faicon "f086"
 emacsIcon = fileicon "e926"
 firefoxIcon = faicon "f269"
 globeIcon = faicon "f0ac"
+listIcon = faicon "f03a"
 rssIcon = faicon "f09e"
 pictureIcon = faicon "f03e"
+squareIcon = faicon "f0c8"
 tableIcon = faicon "f0ce"
 terminalIcon = faicon "f120"
 textFileIcon = faicon "f15c"
+thIcon = faicon "f00a"
 verilogIcon = fileicon "e949"
 vhdlIcon = fileicon "e9aa"
 wifiIcon = faicon "f1eb"
@@ -116,14 +121,25 @@ workspaceMangler "chat" = commentsIcon
 workspaceMangler "media" = pictureIcon
 workspaceMangler x = escape x
 
+layoutMangler :: String -> String
+layoutMangler l
+  | "Tall" == l = arrowsVIcon
+  | "Mirror Tall" == l = arrowsHIcon
+  | "Full" == l = squareIcon
+  | "Grid False" == l = thIcon
+  | "Tabbed Bottom Simplest" == l = listIcon
+  | otherwise = l
+
 main = do
   netref <- newIORef [0, 0]
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
+        activeLayout = layoutMangler,
         activeWorkspace = colorize "#b58900" "" . workspaceMangler,
         hiddenWorkspace = workspaceMangler,
         urgentWorkspace = colorize "#002b36" "#839496" . workspaceMangler,
         visibleWorkspace = colorize "#cb4b16" "" . workspaceMangler,
+        widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
