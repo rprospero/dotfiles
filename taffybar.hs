@@ -122,6 +122,7 @@ main = do
       pager = taffyPagerNew defaultPagerConfig {
         activeWorkspace = colorize "yellow" "" . workspaceMangler,
         hiddenWorkspace = workspaceMangler,
+        urgentWorkspace = colorize "red" "yellow" . workspaceMangler,
         visibleWorkspace = colorize "orange" "" . workspaceMangler }
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
