@@ -6,6 +6,7 @@ import System.Taffybar
 
 import System.Taffybar.CommandRunner
 import System.Taffybar.FSMonitor
+import System.Taffybar.Pager (colorize, escape)
 import System.Taffybar.Systray
 import System.Taffybar.TaffyPager
 import System.Taffybar.SimpleClock
@@ -85,10 +86,15 @@ haskell = alltheicon "e921"
 hddIcon = faicon "f0a0"
 mailIcon = octicon "f03b"
 calendarIcon = octicon "f068"
+commentsIcon = faicon "f086"
 emacsIcon = fileicon "e926"
+firefoxIcon = faicon "f269"
 globeIcon = faicon "f0ac"
 rssIcon = faicon "f09e"
+pictureIcon = faicon "f03e"
 tableIcon = faicon "f0ce"
+terminalIcon = faicon "f120"
+textFileIcon = faicon "f15c"
 verilogIcon = fileicon "e949"
 vhdlIcon = fileicon "e9aa"
 wifiIcon = faicon "f1eb"
@@ -101,10 +107,22 @@ staticLabel label = do
   widgetShowAll w
   return w
 
+workspaceMangler :: String -> String
+workspaceMangler "main" = terminalIcon
+workspaceMangler "web" = firefoxIcon
+workspaceMangler "emacs" = emacsIcon
+workspaceMangler "documents" = textFileIcon
+workspaceMangler "chat" = commentsIcon
+workspaceMangler "media" = pictureIcon
+workspaceMangler x = escape x
+
 main = do
   netref <- newIORef [0, 0]
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
-      pager = taffyPagerNew defaultPagerConfig
+      pager = taffyPagerNew defaultPagerConfig {
+        activeWorkspace = colorize "yellow" "" . workspaceMangler,
+        hiddenWorkspace = workspaceMangler,
+        visibleWorkspace = colorize "orange" "" . workspaceMangler }
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
