@@ -1,4 +1,5 @@
 import Data.List (isSuffixOf)
+import Data.Monoid ((<>))
 import Network.HostName
 
 import System.Taffybar
@@ -71,6 +72,24 @@ icon f = do
   boxPackStart box img PackNatural 0
   widgetShowAll box
   return $ toWidget box
+
+-- Icon Font Handling
+alltheicon code = "<span font_family='all-the-icons'> &#x" <> code <> ";</span>"
+faicon code = "<span font_family='FontAwesome'> &#x" <> code <> ";</span>"
+fileicon code = "<span font_family='file-icons'> &#x" <> code <> ";</span>"
+octicon code = "<span font_family='github-octicons'> &#x" <> code <> ";</span>"
+wicon code = "<span font_family='Weather Icons'> &#x" <> code <> ";</span>"
+
+haskell = alltheicon "e921"
+hddIcon = faicon "f0a0"
+
+staticLabel :: String -> IO Widget
+staticLabel label = do
+  l <- labelNew $ Just label -- (Nothing :: Maybe String)
+  labelSetMarkup l label
+  let w = (toWidget l)
+  widgetShowAll w
+  return w
 
 main = do
   netref <- newIORef [0, 0]
