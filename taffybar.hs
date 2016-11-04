@@ -65,6 +65,7 @@ barColour x
   | x < 2.0/3.0 = (3*x-1,1,0)
   | otherwise = (1,abs (3-3*x),0)
 
+-- Insert image icons
 icon :: String -> IO Widget
 icon f = do
   box <- hBoxNew False 0
@@ -82,6 +83,15 @@ wicon code = "<span font_family='Weather Icons'> &#x" <> code <> ";</span>"
 
 haskell = alltheicon "e921"
 hddIcon = faicon "f0a0"
+mailIcon = octicon "f03b"
+calendarIcon = octicon "f068"
+emacsIcon = fileicon "e926"
+globeIcon = faicon "f0ac"
+rssIcon = faicon "f09e"
+tableIcon = faicon "f0ce"
+verilogIcon = fileicon "e949"
+vhdlIcon = fileicon "e9aa"
+wifiIcon = faicon "f1eb"
 
 staticLabel :: String -> IO Widget
 staticLabel label = do
@@ -109,20 +119,19 @@ main = do
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
-                                                         clock, icon"calendar.xbm",
-                                                         mem, icon "mem.xbm",
-                                                         cpu, icon "cpu.xbm",
+                                                         clock, staticLabel calendarIcon,
+                                                         mem, staticLabel verilogIcon,
+                                                         cpu, staticLabel vhdlIcon,
                                                          netup, net,
-                                                         icon "net_wired.xbm"] ++
+                                                         staticLabel globeIcon] ++
                                                        fsList ++
-                                                       [mail,icon "mail.xbm",
+                                                       [staticLabel hddIcon,
+                                                        mail, staticLabel mailIcon,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
 myFSList host
   | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
                                        myFSMonitor "/data",
-                                       myFSMonitor "/home",
-                                       staticLabel hddIcon]
-  | otherwise = [myFSMonitor "/",
-                 staticLabel hddIcon]
+                                       myFSMonitor "/home"]
+  | otherwise = [myFSMonitor "/"]
