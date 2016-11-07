@@ -35,12 +35,15 @@ showAndReturn l = do
   widgetShowAll l
   return $ toWidget l
 
-myMail :: IO String
-myMail = do
-  mail <- readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
-  if mail == "0\n"
+liveCount :: (Num a, Eq a) => (a -> String) -> IO a -> IO String
+liveCount action value = do
+  current <- value
+  if current == 0
     then return ""
-    else return $ mailIcon <> " " <> mail
+    else return $ action current
+
+myMail :: IO Int
+myMail = read <$> readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
@@ -180,7 +183,7 @@ main = do
                                                          staticLabel globeIcon] ++
                                                        fsList ++
                                                        [staticLabel hddIcon,
-                                                        pollingLabelNew "Bar" 10 myMail >>= showAndReturn,
+                                                        pollingLabelNew "" 10 (liveCount (\x -> mailIcon <> " " <> show x) myMail) >>= showAndReturn,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
