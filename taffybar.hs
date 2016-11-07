@@ -31,6 +31,17 @@ import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212)})
 
+showAndReturn l = do
+  widgetShowAll l
+  return $ toWidget l
+
+myMail :: IO String
+myMail = do
+  mail <- readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
+  if mail == "0\n"
+    then return ""
+    else return $ mailIcon <> " " <> mail
+
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
   fsOut <- readProcess "df" (["-kP", fs]) ""
@@ -82,8 +93,7 @@ icon f = do
   box <- hBoxNew False 0
   img <- imageNewFromFile $ "/home/adam/dotfiles/" ++ f
   boxPackStart box img PackNatural 0
-  widgetShowAll box
-  return $ toWidget box
+  showAndReturn box
 
 -- Icon Font Handling
 alltheicon code = "<span font_family='all-the-icons'> &#x" <> code <> ";</span>"
@@ -155,7 +165,6 @@ main = do
       mem = myPollingBar 5 memCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
-      mail = commandRunnerNew 10 "/usr/local/bin/notmuch" ["count","tag:unread"] "Unread Mail" ""
       tray = systrayNew
   host <- getHostName
   let fsList = myFSList host
@@ -171,7 +180,7 @@ main = do
                                                          staticLabel globeIcon] ++
                                                        fsList ++
                                                        [staticLabel hddIcon,
-                                                        mail, staticLabel mailIcon,
+                                                        pollingLabelNew "Bar" 10 myMail >>= showAndReturn,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
