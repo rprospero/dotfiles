@@ -29,7 +29,10 @@ import Data.IORef
 import System.Process ( readProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
-myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212)})
+myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
+                                                           barPadding = 0,
+                                                           barWidth = 9})
+
 
 showAndReturn l = do
   widgetShowAll l
