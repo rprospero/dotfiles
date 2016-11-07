@@ -52,7 +52,7 @@ myFSInfo fs = do
   return x
 
 myFSMonitor :: String -> IO Widget
-myFSMonitor fs = myPollingBar 600 $ myFSInfo fs
+myFSMonitor fs = myPollingBar 6 $ myFSInfo fs
 
 memCallback :: IO Double
 memCallback = do
