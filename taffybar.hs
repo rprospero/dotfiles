@@ -259,11 +259,11 @@ main = do
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
-        activeWindow = windowMangler . escape,
-        activeWorkspace = colorize "#b58900" "" . workspaceMangler,
-        hiddenWorkspace = workspaceMangler,
+        activeWindow = windowMangler . escape . take 40,
+        activeWorkspace = colorize "#859900" "" . workspaceMangler,
+        hiddenWorkspace = colorize "#268bd2" "" . workspaceMangler,
         urgentWorkspace = colorize "#002b36" "#839496" . workspaceMangler,
-        visibleWorkspace = colorize "#cb4b16" "" . workspaceMangler,
+        visibleWorkspace = colorize "#2aa198" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
       wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
