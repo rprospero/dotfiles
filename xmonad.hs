@@ -10,6 +10,7 @@ import           XMonad.Actions.DynamicWorkspaces
 import           XMonad.Actions.Search
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
+import           XMonad.Hooks.FadeInactive
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.HintedGrid
@@ -124,10 +125,11 @@ myLayoutPrinter x = x
 
 myConfig = def {
                focusedBorderColor = pBg subTheme,
+               normalBorderColor = pBg subTheme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts myLayoutHook,
-               logHook = logHook def <+> ewmhDesktopsLogHook,
+               logHook = logHook def <+> ewmhDesktopsLogHook <+> fadeInactiveLogHook 0.5
                modMask = mod4Mask,
                terminal = "urxvt +sb",
                workspaces = myWorkspaces
