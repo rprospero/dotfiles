@@ -285,7 +285,7 @@ main = do
                                                          staticLabel globeIcon] ++
                                                        fsList ++
                                                        [staticLabel hddIcon,
-                                                        pollingLabelNew "" 10 (liveCount (\x -> mailIcon <> " " <> show x) myMail) >>= showAndReturn,
+                                                        pollingLabelNew "" 10 (liveCount (\x -> colorize "#fdf6e3" "" mailIcon <> " " <> show x) myMail) >>= showAndReturn,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
