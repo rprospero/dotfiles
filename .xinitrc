@@ -9,7 +9,8 @@ xset -b
 
 xrdb -cpp cpp ~/.Xresources
 
-hsetroot -cursor_name left_ptr -solid '#002B36'
+compton &
+hsetroot -solid '#002B36'
 
 #start the keyring daemon
 #eval $(gnome-keyring-daemon -s)
