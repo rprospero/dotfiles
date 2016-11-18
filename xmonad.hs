@@ -217,6 +217,9 @@ tabTheme :: PromptTheme -> Theme -> Theme
 tabTheme p x = x {inactiveTextColor = pFg p,
                   inactiveColor = pBg p,
                   inactiveBorderColor = pBg p,
+                  urgentColor = pFg p,
+                  urgentTextColor = pBg p,
+                  urgentBorderColor = pBg p,
                   activeTextColor = pFgH p,
                   activeColor = pBgH p,
                   activeBorderColor = pBg p}
