@@ -196,6 +196,13 @@ Always revert images files without asking.
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status))
+  :init
+  (if
+      (or
+	 (s-starts-with-p "adams-mbp" system-name)
+	 (s-starts-with-p "Adams-MBP" system-name)
+  	 (s-starts-with-p "Adams-MacBook" system-name))
+      (setq magit-git-executable "/usr/bin/git"))
   :config
   (setq diff-switches "-u"))
  #+END_SRC
