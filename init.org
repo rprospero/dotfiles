@@ -34,6 +34,7 @@
          (getenv "PATH")))
          ((or
 	   (s-starts-with? "adams-mbp" system-name)
+	   (s-starts-with? "Adams-MBP" system-name)
 	   (s-starts-with? "Adams-MacBook" system-name))
           (list
            "/Users/adam/Library/Python/2.7/bin/"
