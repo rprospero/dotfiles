@@ -914,6 +914,12 @@ Include useful mode hooks when moving into latex mode
  #+END_SRC
 
 
+** Tidal 
+
+#+BEGIN_SRC elisp :tangle yes
+(add-to-list 'load-path "~/Code/tidal/" )
+(require 'tidal)
+#+END_SRC
 ** emojify
 
  #+BEGIN_SRC elisp :tangle yes
