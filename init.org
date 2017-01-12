@@ -379,7 +379,7 @@ Let's try and make elisp symbols pretty!
 
 ** flymake-jshint
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle no
 (use-package flymake-jshint
   :ensure t
   :config
