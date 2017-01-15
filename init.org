@@ -1,10 +1,25 @@
 * Header bits
 
+Before anything else, we need to bootstrap up a working implementation
+of use-package so that we can install all the other packages that we
+desire
+
 #+BEGIN_SRC elisp :tangle yes
+(setq package-archives
+ (quote
+  (("gnu" . "http://elpa.gnu.org/packages/")
+   ; ("marmalade" . "http://marmalade-repo.org/packages/")
+   ("melpa" . "http://melpa.milkbox.net/packages/"))))
 (package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
 
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle yes
 (use-package s
   :ensure t)
 
@@ -70,17 +85,6 @@ Similarly, get rid of the awful startup screen.
 
 #+BEGIN_SRC elisp :tangle yes
 (setq inhibit-startup-screen t)
-
-#+END_SRC
-
-Now, give the full list of package repositories.
-
-#+BEGIN_SRC elisp :tangle yes
-(setq package-archives
- (quote
-  (("gnu" . "http://elpa.gnu.org/packages/")
-   ; ("marmalade" . "http://marmalade-repo.org/packages/")
-   ("melpa" . "http://melpa.milkbox.net/packages/"))))
 
 #+END_SRC
 
