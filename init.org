@@ -921,8 +921,11 @@ Include useful mode hooks when moving into latex mode
 ** Tidal 
 
 #+BEGIN_SRC elisp :tangle yes
-(add-to-list 'load-path "~/Code/tidal/" )
-(require 'tidal)
+(if
+    (file-exists-p "~/Code/tidal")
+    (progn
+      (add-to-list 'load-path "~/Code/tidal/" )
+      (require 'tidal)))
 #+END_SRC
 ** emojify
 
