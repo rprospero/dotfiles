@@ -226,14 +226,9 @@ batteryTime = do
 
 batteryWidget :: Double -> IO Widget
 batteryWidget update = do
-  l <- pollingLabelNew "" update batteryIcon
-  ebox <- eventBoxNew
-  containerAdd ebox l
-  eventBoxSetVisibleWindow ebox False
-  cal <- makeWindow $ pollingLabelNew "" 5 batteryTime
-  _ <- on ebox buttonPressEvent $ onClick [SingleClick] (toggleChild "Calendar" l cal)
-  widgetShowAll ebox
-  return (toWidget ebox)
+  base <- pollingLabelNew "" update batteryIcon
+  child <- pollingLabelNew "" update batteryTime
+  clickWidget base child
 
 -- secondsToTime :: Int64 -> String
 secondsToTime x = show hours <> ":" <> show minutes
@@ -250,6 +245,16 @@ appropriateBattery x
   | otherwise = batteryFullIcon
 
 --  Widget Utilities
+
+clickWidget :: Widget -> Widget -> IO Widget
+clickWidget base child = do
+  ebox <- eventBoxNew
+  containerAdd ebox base
+  eventBoxSetVisibleWindow ebox False
+  window <- makeWindow $ return child
+  _ <- on ebox buttonPressEvent $ onClick [SingleClick] (toggleChild "" base window)
+  widgetShowAll ebox
+  return (toWidget ebox)
 
 makeWindow :: (WidgetClass w) => IO w -> IO Window
 makeWindow window = do
