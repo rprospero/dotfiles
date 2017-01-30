@@ -302,7 +302,7 @@ main = do
         visibleWorkspace = colorize "#2aa198" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
-      wea = weatherNew (defaultWeatherConfig "EGCN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
+      wea = weatherNew (defaultWeatherConfig "EGVN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
