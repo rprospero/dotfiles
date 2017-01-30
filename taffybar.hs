@@ -192,7 +192,7 @@ batteryFullIcon = faicon "F240"
 batteryHalfIcon = faicon "F242"
 batteryQuarterIcon = faicon "F243"
 batteryThreeQuarterIcon = faicon "F241"
-batteryEmptyIcon = colorize "#dc322f" "" $ faicon "F244"
+batteryEmptyIcon = faicon "F244"
 batteryChargingIcon = alltheicon "e939"
 
 myBatteryInfo :: IO (Maybe BatteryInfo)
@@ -238,9 +238,9 @@ secondsToTime x = show hours <> ":" <> show minutes
 
 appropriateBattery :: BatteryInfo -> String
 appropriateBattery x
-  | batteryPercentage x < 0.2 = batteryEmptyIcon
-  | batteryPercentage x < 0.4 = batteryQuarterIcon
-  | batteryPercentage x < 0.6 = batteryHalfIcon
+  | batteryPercentage x < 0.2 = colorize "#dc322f" "" $ batteryEmptyIcon
+  | batteryPercentage x < 0.4 = colorize "#cb4b16" "" $ batteryQuarterIcon
+  | batteryPercentage x < 0.6 = colorize "#b58900" "" $ batteryHalfIcon
   | batteryPercentage x < 0.8 = batteryThreeQuarterIcon
   | otherwise = batteryFullIcon
 
