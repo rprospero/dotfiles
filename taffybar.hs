@@ -4,6 +4,7 @@ import Data.Foldable (foldl')
 import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
 import Data.Monoid ((<>))
 import Network.HostName
+import System.Process
 import Text.Printf
 
 import System.Taffybar
@@ -82,6 +83,7 @@ cpuCount host
   | ".shef.ac.uk" `isSuffixOf` host = 8
   | "Walter" `isSuffixOf` host = 4
   | otherwise = 1
+
 ------------------------------
 
 netCallback :: IORef ([Integer]) -> Int -> IO Double
@@ -94,6 +96,17 @@ netCallback ref idx = do
     Just xs -> do
       writeIORef ref xs
       return $ (fromIntegral (xs !! idx - old !! idx)) / 30000000
+
+wifiConnected :: IO Bool
+wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
+
+wifiStatus :: IO String
+wifiStatus = do
+  state <- wifiConnected
+  let colour = if state
+        then ""
+        else "#dc322f"
+  return $ colorize colour "" wifiIcon
 
 barColour x
   | x < 1.0/3.0 = (0,3.0*x,0)
@@ -258,6 +271,15 @@ clickWidget base child = do
   widgetShowAll ebox
   return (toWidget ebox)
 
+clickCommand :: Widget -> IO () -> IO Widget
+clickCommand base command = do
+  ebox <- eventBoxNew
+  containerAdd ebox base
+  eventBoxSetVisibleWindow ebox False
+  _ <- on ebox buttonPressEvent $ onClick [SingleClick] command
+  widgetShowAll ebox
+  return (toWidget ebox)
+
 makeWindow :: (WidgetClass w) => IO w -> IO Window
 makeWindow window = do
   container <- windowNew
@@ -365,13 +387,15 @@ main = do
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
       tray = systrayNew
+  wifiWidget <- pollingLabelNew "" 5 wifiStatus >>= showAndReturn
+  let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
   host <- getHostName
   let fsList = myFSList host
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
-                                                         batteryWidget 5.0,
+                                                         batteryWidget 5.0, wifi,
                                                          clock, staticLabel calendarIcon,
                                                          mem, staticLabel verilogIcon] ++
                                                        cpuCharts (cpuCount host) ++
