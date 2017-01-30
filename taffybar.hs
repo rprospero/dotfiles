@@ -4,6 +4,7 @@ import Data.Foldable (foldl')
 import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
 import Data.Monoid ((<>))
 import Network.HostName
+import Text.Printf
 
 import System.Taffybar
 
@@ -231,7 +232,7 @@ batteryWidget update = do
   clickWidget base child
 
 -- secondsToTime :: Int64 -> String
-secondsToTime x = show hours <> ":" <> show minutes
+secondsToTime x = show hours <> ":" <> printf "%02d" minutes
   where
     hours = x `div` 3600
     minutes = (x `mod` 3600) `div` 60
