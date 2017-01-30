@@ -245,7 +245,7 @@ batteryWidget update = do
   child <- pollingLabelNew "" update batteryTime
   clickWidget base child
 
--- secondsToTime :: Int64 -> String
+secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
   where
     hours = x `div` 3600
