@@ -1,3 +1,4 @@
+import Control.Monad.Trans (liftIO)
 import Data.Char (toLower)
 import Data.Foldable (foldl')
 import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
@@ -18,6 +19,7 @@ import System.Taffybar.MPRIS
 
 import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
+import System.Taffybar.Widgets.Util
 
 import System.Information.Battery
 import System.Information.Memory
@@ -184,27 +186,54 @@ appleIcon = faicon "F179"
 androidIcon = faicon "F17B"
 amazonIcon = faicon "F270"
 
+---------------  Battery Icon Code
+
 batteryFullIcon = faicon "F240"
 batteryHalfIcon = faicon "F242"
 batteryQuarterIcon = faicon "F243"
 batteryThreeQuarterIcon = faicon "F241"
-batteryEmptyIcon = faicon "F244"
+batteryEmptyIcon = colorize "#dc322f" "" $ faicon "F244"
 batteryChargingIcon = alltheicon "e939"
 
-batteryWidget :: IO String
-batteryWidget = do
+myBatteryInfo :: IO (Maybe BatteryInfo)
+myBatteryInfo = do
   ctx <- batteryContextNew
   case ctx of
+    Nothing -> return Nothing
+    Just c -> getBatteryInfo c
+
+batteryIcon :: IO String
+batteryIcon = do
+  minfo <- myBatteryInfo
+  case minfo of
     Nothing -> return ""
-    Just c -> do
-      minfo <- getBatteryInfo c
-      case minfo of
-        Nothing -> return ""
-        Just info -> case batteryState info of
-          BatteryStateCharging -> return $ batteryChargingIcon <> " " <> secondsToTime (batteryTimeToFull info)
-          BatteryStateFullyCharged -> return batteryChargingIcon
-          BatteryStateDischarging -> return $ appropriateBattery info <> " " <> secondsToTime (batteryTimeToEmpty info)
-          _ -> return batteryEmptyIcon
+    Just info -> case batteryState info of
+      BatteryStateCharging -> return $ batteryChargingIcon
+      BatteryStateFullyCharged -> return batteryChargingIcon
+      BatteryStateDischarging -> return $ appropriateBattery info
+      _ -> return batteryEmptyIcon
+
+batteryTime :: IO String
+batteryTime = do
+  minfo <- myBatteryInfo
+  case minfo of
+    Nothing -> return "Charged"
+    Just info -> case batteryState info of
+      BatteryStateCharging -> return $ secondsToTime (batteryTimeToFull info) <> " Till Full"
+      BatteryStateDischarging -> return $ secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
+      BatteryStateFullyCharged -> return "Charged"
+      x -> return $ show x
+
+batteryWidget :: Double -> IO Widget
+batteryWidget update = do
+  l <- pollingLabelNew "" update batteryIcon
+  ebox <- eventBoxNew
+  containerAdd ebox l
+  eventBoxSetVisibleWindow ebox False
+  cal <- makeWindow $ pollingLabelNew "" 5 batteryTime
+  _ <- on ebox buttonPressEvent $ onClick [SingleClick] (toggleChild "Calendar" l cal)
+  widgetShowAll ebox
+  return (toWidget ebox)
 
 -- secondsToTime :: Int64 -> String
 secondsToTime x = show hours <> ":" <> show minutes
@@ -220,6 +249,28 @@ appropriateBattery x
   | batteryPercentage x < 0.8 = batteryThreeQuarterIcon
   | otherwise = batteryFullIcon
 
+--  Widget Utilities
+
+makeWindow :: (WidgetClass w) => IO w -> IO Window
+makeWindow window = do
+  container <- windowNew
+  win <- window
+  containerAdd container win
+  -- _ <- onShow container $ liftIO $ resetCalendarDate cal
+  _ <- on container deleteEvent $ do
+    liftIO (widgetHideAll container)
+    return True
+  return container
+
+toggleChild :: WidgetClass w => String -> w -> Window -> IO Bool
+toggleChild title widget child = do
+  isVis <- get child widgetVisible
+  if isVis
+    then widgetHideAll child
+    else do
+      attachPopup widget title child
+      displayPopup widget child
+  return True
 
 staticLabel :: String -> IO Widget
 staticLabel label = do
@@ -313,7 +364,7 @@ main = do
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
-                                                         pollingLabelNew "" 5 batteryWidget >>= showAndReturn,
+                                                         batteryWidget 5.0,
                                                          clock, staticLabel calendarIcon,
                                                          mem, staticLabel verilogIcon] ++
                                                        cpuCharts (cpuCount host) ++
