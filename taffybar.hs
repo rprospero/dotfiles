@@ -19,6 +19,7 @@ import System.Taffybar.MPRIS
 import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
 
+import System.Information.Battery
 import System.Information.Memory
 import System.Information.CPU2
 import System.Information.Network
@@ -183,6 +184,41 @@ appleIcon = faicon "F179"
 androidIcon = faicon "F17B"
 amazonIcon = faicon "F270"
 
+batteryFullIcon = faicon "F240"
+batteryHalfIcon = faicon "F242"
+batteryQuarterIcon = faicon "F243"
+batteryThreeQuarterIcon = faicon "F241"
+batteryEmptyIcon = faicon "F244"
+batteryChargingIcon = alltheicon "e939"
+
+batteryWidget :: IO String
+batteryWidget = do
+  ctx <- batteryContextNew
+  case ctx of
+    Nothing -> return ""
+    Just c -> do
+      minfo <- getBatteryInfo c
+      case minfo of
+        Nothing -> return ""
+        Just info -> case batteryState info of
+          BatteryStateCharging -> return $ batteryChargingIcon <> " " <> secondsToTime (batteryTimeToFull info)
+          BatteryStateFullyCharged -> return batteryChargingIcon
+          BatteryStateDischarging -> return $ appropriateBattery info <> " " <> secondsToTime (batteryTimeToEmpty info)
+          _ -> return batteryEmptyIcon
+
+-- secondsToTime :: Int64 -> String
+secondsToTime x = show hours <> ":" <> show minutes
+  where
+    hours = x `div` 3600
+    minutes = (x `mod` 3600) `div` 60
+
+appropriateBattery :: BatteryInfo -> String
+appropriateBattery x
+  | batteryPercentage x < 0.2 = batteryEmptyIcon
+  | batteryPercentage x < 0.4 = batteryQuarterIcon
+  | batteryPercentage x < 0.6 = batteryHalfIcon
+  | batteryPercentage x < 0.8 = batteryThreeQuarterIcon
+  | otherwise = batteryFullIcon
 
 
 staticLabel :: String -> IO Widget
@@ -277,6 +313,7 @@ main = do
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wea,
+                                                         pollingLabelNew "" 5 batteryWidget >>= showAndReturn,
                                                          clock, staticLabel calendarIcon,
                                                          mem, staticLabel verilogIcon] ++
                                                        cpuCharts (cpuCount host) ++
