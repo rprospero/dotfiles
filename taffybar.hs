@@ -80,6 +80,7 @@ makeCpuChart cpu = do
 cpuCount :: String -> Int
 cpuCount host
   | ".shef.ac.uk" `isSuffixOf` host = 8
+  | "Walter" `isSuffixOf` host = 4
   | otherwise = 1
 ------------------------------
 
