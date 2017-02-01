@@ -253,10 +253,10 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
 
 appropriateBattery :: BatteryInfo -> String
 appropriateBattery x
-  | batteryPercentage x < 0.2 = colorize "#dc322f" "" $ batteryEmptyIcon
-  | batteryPercentage x < 0.4 = colorize "#cb4b16" "" $ batteryQuarterIcon
-  | batteryPercentage x < 0.6 = colorize "#b58900" "" $ batteryHalfIcon
-  | batteryPercentage x < 0.8 = batteryThreeQuarterIcon
+  | batteryPercentage x < 20.0 = colorize "#dc322f" "" $ batteryEmptyIcon
+  | batteryPercentage x < 40.0 = colorize "#cb4b16" "" $ batteryQuarterIcon
+  | batteryPercentage x < 60.0 = colorize "#b58900" "" $ batteryHalfIcon
+  | batteryPercentage x < 80.0 = batteryThreeQuarterIcon
   | otherwise = batteryFullIcon
 
 --  Widget Utilities
