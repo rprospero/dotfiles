@@ -382,20 +382,20 @@ main = do
         visibleWorkspace = colorize "#2aa198" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
-      wea = weatherNew (defaultWeatherConfig "EGVN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
+      -- wea = weatherNew (defaultWeatherConfig "EGVN"){ weatherTemplate = "$tempC$ C @ $humidity$" } 10
       mem = myPollingBar 5 memCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
       tray = systrayNew
-  wifiWidget <- pollingLabelNew "" 5 wifiStatus >>= showAndReturn
-  let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
+  -- wifiWidget <- pollingLabelNew "" 5 wifiStatus >>= showAndReturn
+  -- let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
   host <- getHostName
   let fsList = myFSList host
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
-                                        , endWidgets = [ tray, wea,
-                                                         batteryWidget 5.0, wifi,
+                                        , endWidgets = [ tray,
+                                                         batteryWidget 5.0, -- wifi,
                                                          clock, staticLabel calendarIcon,
                                                          mem, staticLabel verilogIcon] ++
                                                        cpuCharts (cpuCount host) ++
