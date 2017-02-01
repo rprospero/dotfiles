@@ -17,5 +17,5 @@ hsetroot -solid '#002B36'
 #export GNOME_KEYRING_CONTROL
 #export SSH_AUTH_SOCK
 ###
-stack exec taffybar &!
-~/.xmonad/xmonad-x86_64-linux
+# taffybar &!
+# ~/.xmonad/xmonad-x86_64-linux
