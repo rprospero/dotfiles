@@ -427,6 +427,15 @@ Add support to python mode for finding errors
              :config
              (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
  #+END_SRC
+** Systemd
+
+I need to be able to edit systemd service files.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package systemd
+  :ensure t)
+
+#+END_SRC
 
 * Communication Tools
 
