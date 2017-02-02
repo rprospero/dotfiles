@@ -15,6 +15,7 @@ import Graphics.Icons.FileIcon hiding (appleCode)
 import Graphics.Icons.FontAwesome hiding (terminalCode)
 import Graphics.Icons.Octicon hiding (terminalCode, calendarCode, globeCode, fileTextCode)
 import Graphics.Icons.Types
+import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
 import System.Process
@@ -134,9 +135,6 @@ icon f = do
   boxPackStart box img PackNatural 0
   showAndReturn box
 
--- Icon Font Handling
-wicon code = "<span font_family='Weather Icons'> &#x" <> code <> ";</span>"
-
 rawWeatherIcon :: Int -> Bool -> String
 rawWeatherIcon 200 = thunderstormIcon
 rawWeatherIcon 201 = thunderstormIcon
@@ -213,24 +211,24 @@ rawWeatherIcon 961 =  const "?"
 rawWeatherIcon 962 =  const "?"
 rawWeatherIcon _ = const "?"
 
-clearIcon True = wicon "F00D"
-clearIcon False = wicon "F02E"
-cloudyIcon True = wicon "f002"
-cloudyIcon False = wicon "f031"
-overcastIcon _ = wicon "f013"
-thunderstormIcon True = wicon "f010"
-thunderstormIcon False = wicon "f03b"
-drizzleIcon True = wicon "f00b"
-drizzleIcon False = wicon "f039"
-rainIcon True = wicon "f008"
-rainIcon False = wicon "f036"
-showerIcon True = wicon "f009"
-showerIcon False = wicon "f037"
-snowIcon True = wicon "f00a"
-snowIcon False = wicon "f038"
-sleetIcon True = wicon "f0b2"
-sleetIcon False = wicon "f0b4"
-mistIcon _ = wicon "f014"
+clearIcon True = iconPango forecastIoClearDayCode
+clearIcon False = iconPango forecastIoClearNightCode
+cloudyIcon True = iconPango dayCloudyCode
+cloudyIcon False = iconPango nightAltCloudyCode
+overcastIcon _ = iconPango cloudyCode
+thunderstormIcon True = iconPango dayThunderstormCode
+thunderstormIcon False = iconPango nightAltThunderstormCode
+drizzleIcon True = iconPango daySprinkleCode
+drizzleIcon False = iconPango nightAltSprinkleCode
+rainIcon True = iconPango dayRainCode
+rainIcon False = iconPango nightAltRainCode
+showerIcon True = iconPango dayShowersCode
+showerIcon False = iconPango nightAltShowersCode
+snowIcon True = iconPango daySnowCode
+snowIcon False = iconPango nightAltSnowCode
+sleetIcon True = iconPango daySleetCode
+sleetIcon False = iconPango nightAltSleetCode
+mistIcon _ = iconPango fogCode
 
 ---------------  Battery Icon Code
 
