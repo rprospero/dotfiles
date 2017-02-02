@@ -10,6 +10,11 @@ import Data.Foldable (foldl')
 import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
 import Data.Monoid ((<>))
 import Data.Text (unpack)
+import Graphics.Icons.AllTheIcons
+import Graphics.Icons.FileIcon hiding (appleCode)
+import Graphics.Icons.FontAwesome hiding (terminalCode)
+import Graphics.Icons.Octicon hiding (terminalCode, calendarCode, globeCode, fileTextCode)
+import Graphics.Icons.Types
 import Network.Download (openURI)
 import Network.HostName
 import System.Process
@@ -114,7 +119,7 @@ wifiStatus = do
   let colour = if state
         then ""
         else "#dc322f"
-  return $ colorize colour "" wifiIcon
+  return $ colorize colour "" $ iconPango wifiCode
 
 barColour x
   | x < 1.0/3.0 = (0,3.0*x,0)
@@ -130,84 +135,7 @@ icon f = do
   showAndReturn box
 
 -- Icon Font Handling
-alltheicon code = "<span font_family='all-the-icons'> &#x" <> code <> ";</span>"
-faicon code = "<span font_family='FontAwesome'> &#x" <> code <> ";</span>"
-fileicon code = "<span font_family='file-icons'> &#x" <> code <> ";</span>"
-octicon code = "<span font_family='github-octicons'> &#x" <> code <> ";</span>"
 wicon code = "<span font_family='Weather Icons'> &#x" <> code <> ";</span>"
-
-haskellIcon = alltheicon "e921"
-googleDriveIcon = alltheicon "e91e"
-hddIcon = faicon "f0a0"
-mailIcon = octicon "f03b"
-arrowsHIcon = faicon "f07e"
-arrowsVIcon = faicon "f07d"
-calendarIcon = octicon "f068"
-commentsIcon = faicon "f086"
-emacsIcon = fileicon "e926"
-firefoxIcon = faicon "f269"
-globeIcon = faicon "f0ac"
-listIcon = faicon "f03a"
-rssIcon = faicon "f09e"
-pictureIcon = faicon "f03e"
-squareIcon = faicon "f0c8"
-tableIcon = faicon "f0ce"
-terminalIcon = faicon "f120"
-textFileIcon = faicon "f15c"
-thIcon = faicon "f00a"
-verilogIcon = fileicon "e949"
-vhdlIcon = fileicon "e9aa"
-wifiIcon = faicon "f1eb"
-youtubeIcon = faicon "F167"
-ycombinatorIcon = faicon "F23B"
-wikipediaIcon = faicon "F266"
-vimeoIcon = faicon "F27D"
-twitterIcon = faicon "F099"
-twitchIcon = faicon "F1E8"
-tumblrIcon = faicon "F173"
-tripadvisorIcon = faicon "F262"
-trelloIcon = faicon "F181"
-trainIcon = faicon "F238"
-streetViewIcon = faicon "F21D"
-steamIcon = faicon "F1B6"
-stackExchangeIcon = faicon "F18D"
-stackOverflowIcon = faicon "F16C"
-spotifyIcon = faicon "F1BC"
-soundcloudIcon = faicon "F1BE"
-snapchatIcon = faicon "F2AB"
-slideshareIcon = faicon "F1E7"
-slackIcon = faicon "F198"
-skypeIcon = faicon "F17E"
-skyatlasIcon = faicon "F216"
-scribdIcon = faicon "F28A"
-redditSquareIcon = faicon "F1A2"
-redditAlienIcon = faicon "F281"
-redditIcon = faicon "F1A1"
-pinterestIcon = faicon "F0D2"
-paypalIcon = faicon "F1ED"
-operaIcon = faicon "F26A"
-openidIcon = faicon "F19B"
-mixcloudIcon = faicon "F289"
-linuxIcon = faicon "F17C"
-linkedinIcon = faicon "F0E1"
-leanpubIcon = faicon "F212"
-leafIcon = faicon "F06C"
-lastfmIcon = faicon "F202"
-instagramIcon = faicon "F16D"
-hackerNewsIcon = faicon "F1D4"
-googleWalletIcon = faicon "F1EE"
-googleIcon = faicon "F1A0"
-googlePlusIcon = faicon "F0D5"
-githubIcon = faicon "F09B"
-foursquareIcon = faicon "F180"
-flickrIcon = faicon "F16E"
-facebookOfficialIcon = faicon "F230"
-compassIcon = faicon "F14E"
-chromeIcon = faicon "F268"
-bitbucketIcon = faicon "F171"
-appleIcon = faicon "F179"
-androidIcon = faicon "F17B"
-amazonIcon = faicon "F270"
 
 rawWeatherIcon :: Int -> Bool -> String
 rawWeatherIcon 200 = thunderstormIcon
@@ -306,13 +234,6 @@ mistIcon _ = wicon "f014"
 
 ---------------  Battery Icon Code
 
-batteryFullIcon = faicon "F240"
-batteryHalfIcon = faicon "F242"
-batteryQuarterIcon = faicon "F243"
-batteryThreeQuarterIcon = faicon "F241"
-batteryEmptyIcon = faicon "F244"
-batteryChargingIcon = alltheicon "e939"
-
 myBatteryInfo :: IO (Maybe BatteryInfo)
 myBatteryInfo = do
   ctx <- batteryContextNew
@@ -326,10 +247,10 @@ batteryIcon = do
   case minfo of
     Nothing -> return ""
     Just info -> case batteryState info of
-      BatteryStateCharging -> return $ batteryChargingIcon
-      BatteryStateFullyCharged -> return batteryChargingIcon
+      BatteryStateCharging -> return $ iconPango batteryChargingCode
+      BatteryStateFullyCharged -> return $ iconPango batteryChargingCode
       BatteryStateDischarging -> return $ appropriateBattery info
-      _ -> return batteryEmptyIcon
+      _ -> return $ iconPango batteryEmptyCode
 
 batteryTime :: IO String
 batteryTime = do
@@ -356,11 +277,11 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
 
 appropriateBattery :: BatteryInfo -> String
 appropriateBattery x
-  | batteryPercentage x < 20.0 = colorize "#dc322f" "" $ batteryEmptyIcon
-  | batteryPercentage x < 40.0 = colorize "#cb4b16" "" $ batteryQuarterIcon
-  | batteryPercentage x < 60.0 = colorize "#b58900" "" $ batteryHalfIcon
-  | batteryPercentage x < 80.0 = batteryThreeQuarterIcon
-  | otherwise = batteryFullIcon
+  | batteryPercentage x < 20.0 = colorize "#dc322f" "" $ iconPango batteryEmptyCode
+  | batteryPercentage x < 40.0 = colorize "#cb4b16" "" $ iconPango batteryQuarterCode
+  | batteryPercentage x < 60.0 = colorize "#b58900" "" $ iconPango batteryHalfCode
+  | batteryPercentage x < 80.0 = iconPango batteryThreeQuartersCode
+  | otherwise = iconPango batteryFullCode
 
 -- Weather Applet
 
@@ -507,53 +428,56 @@ staticLabel label = do
   widgetShowAll w
   return w
 
+staticIcon :: IconCode a => a -> IO Widget
+staticIcon = staticLabel . iconPango
+
 workspaceMangler :: String -> String
-workspaceMangler "main" = terminalIcon
-workspaceMangler "web" = firefoxIcon
-workspaceMangler "emacs" = emacsIcon
-workspaceMangler "documents" = textFileIcon
-workspaceMangler "chat" = commentsIcon
-workspaceMangler "media" = pictureIcon
+workspaceMangler "main" = iconPango terminalCode
+workspaceMangler "web" = iconPango firefoxCode
+workspaceMangler "emacs" = iconPango emacsCode
+workspaceMangler "documents" = iconPango fileTextCode
+workspaceMangler "chat" = iconPango commentsCode
+workspaceMangler "media" = iconPango pictureOCode
 workspaceMangler x = escape x
 
 layoutMangler :: String -> String
 layoutMangler l
-  | "Tall" == l = arrowsVIcon
-  | "Mirror Tall" == l = arrowsHIcon
-  | "Full" == l = squareIcon
-  | "Grid False" == l = thIcon
-  | "Tabbed Bottom Simplest" == l = listIcon
+  | "Tall" == l = iconPango arrowsVCode
+  | "Mirror Tall" == l = iconPango arrowsHCode
+  | "Full" == l = iconPango squareCode
+  | "Grid False" == l = iconPango thCode
+  | "Tabbed Bottom Simplest" == l = iconPango listCode
   | otherwise = l
 
 
 windowShortcuts :: [(String, String)]
-windowShortcuts = [("- Mozilla Firefox", firefoxIcon),
-                   ("Haskell", haskellIcon),
-                   ("Google Drive", googleDriveIcon),
-                   ("Google Sheets", googleDriveIcon),
-                   ("Google Docs", googleDriveIcon),
-                   ("YouTube", youtubeIcon),
-                   ("- Wikipedia", wikipediaIcon),
-                   ("Vimeo", vimeoIcon),
-                   ("Twitter", twitterIcon),
-                   ("Twitch", twitchIcon),
-                   ("TripAdvisor:", tripadvisorIcon),
-                   ("Trello", trelloIcon),
-                   ("Trainline", trainIcon),
-                   ("Google Maps", streetViewIcon),
-                   ("Welcome to Steam", steamIcon),
-                   ("Steam", steamIcon),
-                   ("Stack Exchange", stackExchangeIcon),
-                   ("Stack Overflow", stackOverflowIcon),
-                   ("Reddit", redditIcon),
-                   ("Hacker News", hackerNewsIcon),
-                   ("Google+", googlePlusIcon),
-                   ("Google Wallet", googleWalletIcon),
-                   ("Google", googleIcon),
-                   ("Github", githubIcon),
-                   ("Facebook", facebookOfficialIcon),
-                   ("Apple", appleIcon),
-                   ("Amazon", amazonIcon)]
+windowShortcuts = [("- Mozilla Firefox", iconPango firefoxCode),
+                   ("Haskell", iconPango haskellCode),
+                   ("Google Drive", iconPango googleDriveCode),
+                   ("Google Sheets", iconPango googleDriveCode),
+                   ("Google Docs", iconPango googleDriveCode),
+                   ("YouTube", iconPango youtubeCode),
+                   ("- Wikipedia", iconPango wikipediaWCode),
+                   ("Vimeo", iconPango vimeoCode),
+                   ("Twitter", iconPango twitterCode),
+                   ("Twitch", iconPango twitchCode),
+                   ("TripAdvisor:", iconPango tripadvisorCode),
+                   ("Trello", iconPango trelloCode),
+                   ("Trainline", iconPango trainCode),
+                   ("Google Maps", iconPango streetViewCode),
+                   ("Welcome to Steam", iconPango steamCode),
+                   ("Steam", iconPango steamCode),
+                   ("Stack Exchange", iconPango stackExchangeCode),
+                   ("Stack Overflow", iconPango stackOverflowCode),
+                   ("Reddit", iconPango redditCode),
+                   ("Hacker News", iconPango hackerNewsCode),
+                   ("Google+", iconPango googlePlusCode),
+                   ("Google Wallet", iconPango googleWalletCode),
+                   ("Google", iconPango googleCode),
+                   ("Github", iconPango githubCode),
+                   ("Facebook", iconPango facebookOfficialCode),
+                   ("Apple", iconPango appleCode),
+                   ("Amazon", iconPango amazonCode)]
 
 windowMangler :: String -> String
 windowMangler w = foldl' mangle w windowShortcuts
@@ -594,15 +518,15 @@ main = do
                                         , barPosition = Bottom
                                         , endWidgets = [ tray,
                                                          batteryWidget 5.0, wea,
-                                                         clock, staticLabel calendarIcon,
-                                                         mem, staticLabel verilogIcon] ++
+                                                         clock, staticIcon calendarCode,
+                                                         mem, staticIcon verilogCode] ++
                                                        cpuCharts (cpuCount host) ++
-                                                         [staticLabel vhdlIcon,
+                                                         [staticIcon vhdlCode,
                                                          netup, net,
-                                                         staticLabel globeIcon] ++
+                                                         staticIcon globeCode] ++
                                                        fsList ++
-                                                       [staticLabel hddIcon,
-                                                        pollingLabelNew "" 10 (liveCount (\x -> colorize "#fdf6e3" "" mailIcon <> " " <> show x) myMail) >>= showAndReturn,
+                                                       [staticIcon hddOCode,
+                                                        pollingLabelNew "" 10 (liveCount (\x -> colorize "#fdf6e3" "" (iconPango mailCode) <> " " <> show x) myMail) >>= showAndReturn,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
