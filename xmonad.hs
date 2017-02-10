@@ -125,7 +125,7 @@ myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xb
 myLayoutPrinter x = x
 
 myConfig = def {
-               focusedBorderColor = pBg subTheme,
+               focusedBorderColor = pFg subTheme,
                normalBorderColor = pBg subTheme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
