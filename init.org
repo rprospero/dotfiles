@@ -421,7 +421,7 @@ Add support to python mode for finding errors
 #+END_SRC
 ** rainbow-delimiters
 
- #+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC elisp :tangle yes
 (use-package rainbow-delimiters
              :ensure t
              :config
