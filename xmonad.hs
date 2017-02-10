@@ -14,6 +14,7 @@ import           XMonad.Hooks.FadeInactive
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.HintedGrid
+import           XMonad.Layout.Spacing
 import           XMonad.Layout.Tabbed
 import qualified XMonad.StackSet              as W
 import           XMonad.Prompt
@@ -102,7 +103,7 @@ instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
 instance Shrinker MyShrinker where
   shrinkIt = myShrinkText
 
-myLayoutHook = tabbedBottom MyShrinker myTheme ||| layoutHook def ||| Grid False
+myLayoutHook = tabbedBottom MyShrinker myTheme ||| (smartSpacing 10 $ layoutHook def) ||| (smartSpacing 10 $ Grid False)
 
 iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
 iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
