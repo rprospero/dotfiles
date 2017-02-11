@@ -9,6 +9,7 @@ import Data.ByteString.Lazy (fromStrict)
 import Data.Foldable (foldl')
 import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
 import Data.Monoid ((<>))
+import Data.String.Utils (replace, join)
 import Data.Text (unpack)
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
@@ -386,6 +387,21 @@ weatherIcon w =
       let daytime = (== 'd') . head . reverse . wsIcon $ x
       in flip rawWeatherIcon daytime $ wsId x
 
+weatherDesc :: Weather -> String
+weatherDesc w =
+  let
+    temp = show . round . (+ (-273.15)) . wsTemp . weatherMain $ w
+    desc = join ", " . map wsDescription . weatherStates $ w
+  in
+    temp ++ iconPango celsiusCode ++ " " ++ desc
+
+weatherConditions :: String -> IO String
+weatherConditions w = do
+  wea <- localWeather w
+  case wea of
+    Left err -> return . colorize "#dc322f" "" $ err
+    Right w -> return $ weatherDesc w
+
 weather :: String -> IO String
 weather city = do
   wea <- localWeather city
@@ -520,7 +536,6 @@ main = do
         visibleWorkspace = colorize "#2aa198" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
-      wea = pollingLabelNew "waiting" 300 (weather "Didcot") >>= showAndReturn
       mem = myPollingBar 5 memCallback
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
@@ -531,13 +546,16 @@ main = do
   let fsList = myFSList host
   chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
   mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
+  wcond <- pollingLabelNew "" 300 (weatherConditions "Didcot") >>= showAndReturn
   cpuIcon <- staticIcon vhdlCode
   memIcon <- staticIcon verilogCode
+  weaIcon <- pollingLabelNew "waiting" 300 (weather "Didcot") >>= showAndReturn
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wifi,
-                                                         wea, batteryWidget 300.0,
+                                                         clickWidget weaIcon wcond,
+                                                         batteryWidget 300.0,
                                                          clock, staticIcon calendarCode,
                                                          mem, clickWidget memIcon mhog] ++
                                                        cpuWidget host 5.0 ++
