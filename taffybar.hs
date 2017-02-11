@@ -98,6 +98,23 @@ cpuCount host
   | "Walter" `isSuffixOf` host = 4
   | otherwise = 1
 
+-- CPU Widget
+
+cpuWidget :: String -> Double -> [IO Widget]
+cpuWidget host update = map go $ cpuCharts (cpuCount host)
+  where
+    go chart = do
+      -- base <- pollingLabelNew "" update batteryIcon
+      base <- chart
+      child <- pollingLabelNew "" update batteryTime >>= showAndReturn
+      clickWidget base child
+
+cpuHog :: IO String
+cpuHog = readProcess "ps" ["aux","--sort","%cpu"] "" >>= return . unwords . drop 10 . words . last . lines
+
+memHog :: IO String
+memHog = readProcess "ps" ["aux","--sort","%mem"] "" >>= return . unwords . drop 10 . words . last . lines
+
 ------------------------------
 
 netCallback :: IORef ([Integer]) -> Int -> IO Double
@@ -512,15 +529,19 @@ main = do
   let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
   host <- getHostName
   let fsList = myFSList host
+  chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
+  mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
+  cpuIcon <- staticIcon vhdlCode
+  memIcon <- staticIcon verilogCode
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wifi,
                                                          wea, batteryWidget 300.0,
                                                          clock, staticIcon calendarCode,
-                                                         mem, staticIcon verilogCode] ++
-                                                       cpuCharts (cpuCount host) ++
-                                                         [staticIcon vhdlCode,
+                                                         mem, clickWidget memIcon mhog] ++
+                                                       cpuWidget host 5.0 ++
+                                                         [clickWidget cpuIcon chog,
                                                          netup, net,
                                                          staticIcon globeCode] ++
                                                        fsList ++
