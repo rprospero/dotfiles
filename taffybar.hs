@@ -390,7 +390,7 @@ weather :: String -> IO String
 weather city = do
   wea <- localWeather city
   case wea of
-    Left err -> return . colorize "dc3222f" "" $ err
+    Left err -> return . colorize "#dc322f" "" $ err
     Right w -> return $ weatherIcon w
 
 --  Widget Utilities
