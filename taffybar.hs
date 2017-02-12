@@ -63,7 +63,16 @@ liveCount action value = do
     else return $ action current
 
 myMail :: IO Int
-myMail = read <$> readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
+myMail = do
+  read <$> readProcess "/usr/bin/notmuch" ["count","tag:unread"] ""
+
+mailWidget :: Double -> IO Widget
+mailWidget update = do
+  mvar <- mvarThread update 0 myMail
+  mvarWidget mvar (\count ->
+                      if count == 0
+                      then ""
+                      else colorize "#fdf6e3" "" $ iconPango mailCode <> " " <> show count)
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
@@ -582,7 +591,7 @@ main = do
                                                          staticIcon globeCode] ++
                                                        fsList ++
                                                        [staticIcon hddOCode,
-                                                        pollingLabelNew "" 10 (liveCount (\x -> colorize "#fdf6e3" "" (iconPango mailCode) <> " " <> show x) myMail) >>= showAndReturn,
+                                                        mailWidget 10,
                                                         note]
                                         }
 myFSList :: String -> [IO Widget]
