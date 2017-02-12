@@ -521,11 +521,11 @@ workspaceMangler x = escape x
 
 layoutMangler :: String -> String
 layoutMangler l
-  | "Tall" == l = iconPango arrowsVCode
-  | "Mirror Tall" == l = iconPango arrowsHCode
-  | "Full" == l = iconPango squareCode
-  | "Grid False" == l = iconPango thCode
-  | "Tabbed Bottom Simplest" == l = iconPango listCode
+  | "Mirror Tall" `isSuffixOf` l = iconPango arrowsHCode
+  | "Tall" `isSuffixOf` l = iconPango arrowsVCode
+  | "Full" `isSuffixOf` l = iconPango squareCode
+  | "Grid False" `isSuffixOf` l = iconPango thCode
+  | "Tabbed Bottom Simplest" `isSuffixOf` l = iconPango listCode
   | otherwise = l
 
 
