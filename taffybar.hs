@@ -395,19 +395,19 @@ weatherDesc w =
   in
     temp ++ iconPango celsiusCode ++ " " ++ desc
 
+redErr :: Either String String -> String
+redErr (Left err) = colorize "#dc322f" "" err
+redErr (Right value) = value
+
 weatherConditions :: String -> IO String
 weatherConditions w = do
   wea <- localWeather w
-  case wea of
-    Left err -> return . colorize "#dc322f" "" $ err
-    Right w -> return $ weatherDesc w
+  return . redErr $ weatherDesc <$> wea
 
 weather :: String -> IO String
 weather city = do
   wea <- localWeather city
-  case wea of
-    Left err -> return . colorize "#dc322f" "" $ err
-    Right w -> return $ weatherIcon w
+  return . redErr $ weatherIcon <$> wea
 
 --  Widget Utilities
 
