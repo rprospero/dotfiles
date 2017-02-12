@@ -399,6 +399,13 @@ weatherDesc w =
   in
     temp ++ iconPango celsiusCode ++ " " ++ desc
 
+weatherWidget :: String -> Double -> IO Widget
+weatherWidget location update = do
+  w <- mvarThread update (Left "Not Loaded") $ localWeather "Didcot"
+  base <- mvarWidget w (redErr . fmap weatherIcon)
+  child <- mvarWidget w (redErr . fmap weatherDesc)
+  clickWidget base child
+
 redErr :: Either String String -> String
 redErr (Left err) = colorize "#dc322f" "" err
 redErr (Right value) = value
@@ -561,14 +568,11 @@ main = do
   mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
   cpuIcon <- staticIcon vhdlCode
   memIcon <- staticIcon verilogCode
-  weatherMVar <- mvarThread 300 (Left "Not Loaded") $ localWeather "Didcot"
-  weaIcon <- mvarWidget weatherMVar (redErr . fmap weatherIcon)
-  wcond <- mvarWidget weatherMVar (redErr . fmap weatherDesc)
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
                                         , endWidgets = [ tray, wifi,
-                                                         clickWidget weaIcon wcond,
+                                                         weatherWidget "Didcot" 300.0,
                                                          batteryWidget 300.0,
                                                          clock, staticIcon calendarCode,
                                                          mem, clickWidget memIcon mhog] ++
