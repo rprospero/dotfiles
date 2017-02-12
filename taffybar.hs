@@ -110,7 +110,7 @@ cpuWidget host update = map go $ cpuCharts (cpuCount host)
     go chart = do
       -- base <- pollingLabelNew "" update batteryIcon
       base <- chart
-      child <- pollingLabelNew "" update batteryTime >>= showAndReturn
+      child <- pollingLabelNew "" update cpuHog >>= showAndReturn
       clickWidget base child
 
 cpuHog :: IO String
@@ -260,32 +260,34 @@ myBatteryInfo = do
     Nothing -> return Nothing
     Just c -> getBatteryInfo c
 
-batteryIcon :: IO String
-batteryIcon = do
-  minfo <- myBatteryInfo
-  case minfo of
-    Nothing -> return ""
-    Just info -> case batteryState info of
-      BatteryStateCharging -> return $ iconPango batteryChargingCode
-      BatteryStateFullyCharged -> return $ iconPango batteryChargingCode
-      BatteryStateDischarging -> return $ appropriateBattery info
-      _ -> return $ iconPango batteryEmptyCode
+batteryIcon :: BatteryInfo -> String
+batteryIcon info =
+  case batteryState info of
+    BatteryStateCharging -> iconPango batteryChargingCode
+    BatteryStateFullyCharged -> iconPango batteryChargingCode
+    BatteryStateDischarging -> appropriateBattery info
+    _ -> iconPango batteryEmptyCode
 
-batteryTime :: IO String
-batteryTime = do
+batteryTime :: BatteryInfo -> String
+batteryTime info = do
+  case batteryState info of
+    BatteryStateCharging -> secondsToTime (batteryTimeToFull info) <> " Till Full"
+    BatteryStateDischarging -> secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
+    BatteryStateFullyCharged -> "Charged"
+    x -> show x
+
+batteryValue :: IO (Either String BatteryInfo)
+batteryValue = do
   minfo <- myBatteryInfo
   case minfo of
-    Nothing -> return "Charged"
-    Just info -> case batteryState info of
-      BatteryStateCharging -> return $ secondsToTime (batteryTimeToFull info) <> " Till Full"
-      BatteryStateDischarging -> return $ secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
-      BatteryStateFullyCharged -> return "Charged"
-      x -> return $ show x
+    Nothing -> return $ Left "Battery Not Found"
+    Just info -> return $ Right info
 
 batteryWidget :: Double -> IO Widget
 batteryWidget update = do
-  base <- pollingLabelNew "" update batteryIcon
-  child <- pollingLabelNew "" update batteryTime
+  batteryMVar <- mvarThread update (Left "Not Loaded") $ batteryValue
+  base <- mvarWidget batteryMVar (redErr . (fmap batteryIcon))
+  child <- mvarWidget batteryMVar (redErr . (fmap batteryTime))
   clickWidget base child
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
@@ -404,7 +406,7 @@ redErr (Right value) = value
 
 --  Widget Utilities
 
-mvarThread :: (Show a) => Double -> a -> IO a -> IO (MVar a)
+mvarThread :: Double -> a -> IO a -> IO (MVar a)
 mvarThread delay def action = do
   m <- newMVar def
   forkIO . forever $ do
