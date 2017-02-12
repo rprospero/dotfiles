@@ -289,11 +289,8 @@ batteryValue = do
     Just info -> return $ Right info
 
 batteryWidget :: Double -> IO Widget
-batteryWidget update = do
-  batteryMVar <- mvarThread update (Left "Not Loaded") batteryValue
-  base <- mvarWidget batteryMVar (redErr . fmap batteryIcon)
-  child <- mvarWidget batteryMVar (redErr . fmap batteryTime)
-  clickWidget base child
+batteryWidget update =
+  genericErrorWidget update batteryValue batteryIcon batteryTime
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
@@ -410,16 +407,24 @@ weatherDesc w =
 
 weatherWidget :: String -> Double -> IO Widget
 weatherWidget location update = do
-  w <- mvarThread update (Left "Not Loaded") $ localWeather "Didcot"
-  base <- mvarWidget w (redErr . fmap weatherIcon)
-  child <- mvarWidget w (redErr . fmap weatherDesc)
-  clickWidget base child
+  genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
 
 redErr :: Either String String -> String
 redErr (Left err) = colorize "#dc322f" "" err
 redErr (Right value) = value
 
 --  Widget Utilities
+
+genericWidget :: Double -> IO a -> a -> (a -> String) -> (a -> String) -> IO Widget
+genericWidget update action def render fullRender =
+  m <- mvarThread update def action
+  base <- mvarWidget m render
+  child <- mvarWidget w fullRender
+  clickWidget base child
+
+genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> IO Widget
+genericErrorWidget update action render fullRender =
+  genericWidget update action (redErr . fmap render) (redErr . fmap fullRender)
 
 mvarThread :: Double -> a -> IO a -> IO (MVar a)
 mvarThread delay def action = do
@@ -577,23 +582,24 @@ main = do
   mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
   cpuIcon <- staticIcon vhdlCode
   memIcon <- staticIcon verilogCode
-  defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
-                                        , barHeight = 20
-                                        , barPosition = Bottom
-                                        , endWidgets = [ tray, wifi,
-                                                         weatherWidget "Didcot" 300.0,
-                                                         batteryWidget 300.0,
-                                                         clock, staticIcon calendarCode,
-                                                         mem, clickWidget memIcon mhog] ++
-                                                       cpuWidget host 5.0 ++
-                                                         [clickWidget cpuIcon chog,
-                                                         netup, net,
-                                                         staticIcon globeCode] ++
-                                                       fsList ++
-                                                       [staticIcon hddOCode,
-                                                        mailWidget 10,
-                                                        note]
-                                        }
+  defaultTaffybar defaultTaffybarConfig {
+    startWidgets = [ pager ]
+    , barHeight = 20
+    , barPosition = Bottom
+    , endWidgets = [ tray, wifi,
+                     weatherWidget "Didcot" 300.0,
+                     batteryWidget 300.0,
+                     clock, staticIcon calendarCode,
+                     mem, clickWidget memIcon mhog] ++
+                   cpuWidget host 5.0 ++
+                   [clickWidget cpuIcon chog,
+                     netup, net,
+                     staticIcon globeCode] ++
+                   fsList ++
+                   [staticIcon hddOCode,
+                     mailWidget 10,
+                     note]
+    }
 myFSList :: String -> [IO Widget]
 myFSList host
   | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
