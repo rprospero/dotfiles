@@ -22,7 +22,6 @@ import Graphics.Icons.Types
 import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
-import System.Process
 import Text.Printf
 
 import System.Taffybar
@@ -51,7 +50,7 @@ import Graphics.UI.Gtk.Abstract.Widget (Widget, toWidget)
 import Graphics.UI.Gtk
 
 import Data.IORef
-import System.Process ( readProcess )
+import System.Process ( readProcess, callProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
@@ -75,8 +74,8 @@ myMail = read <$> readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
-  fsOut <- readProcess "df" (["-kP", fs]) ""
-  let x = (/100) . fromIntegral . read . init . head . drop 1 . reverse . words . last . lines $ fsOut
+  fsOut <- readProcess "df" ["-kP", fs] ""
+  let x = (/100) . fromIntegral . read . init . (!! 1) . reverse . words . last . lines $ fsOut
   return x
 
 myFSMonitor :: String -> IO Widget
@@ -93,8 +92,8 @@ cpuCharts :: Int -> [IO Widget]
 cpuCharts count = map makeCpuChart [0..count-1]
 
 makeCpuChart :: Int -> IO Widget
-makeCpuChart cpu = do
-  myPollingBar 5 $ getCPULoad ("cpu" ++ show cpu)  >>= return . sum
+makeCpuChart cpu =
+  myPollingBar 5 $ fmap sum $ getCPULoad ("cpu" ++ show cpu)
 
 cpuCount :: String -> Int
 cpuCount host
@@ -114,14 +113,14 @@ cpuWidget host update = map go $ cpuCharts (cpuCount host)
       clickWidget base child
 
 cpuHog :: IO String
-cpuHog = readProcess "ps" ["aux","--sort","%cpu"] "" >>= return . unwords . drop 10 . words . last . lines
+cpuHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%cpu"] ""
 
 memHog :: IO String
-memHog = readProcess "ps" ["aux","--sort","%mem"] "" >>= return . unwords . drop 10 . words . last . lines
+memHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%mem"] ""
 
 ------------------------------
 
-netCallback :: IORef ([Integer]) -> Int -> IO Double
+netCallback :: IORef [Integer] -> Int -> IO Double
 netCallback ref idx = do
   old <- readIORef ref
   minfo <- getNetInfo "eno1"
@@ -130,7 +129,7 @@ netCallback ref idx = do
     Just [] -> return 0
     Just xs -> do
       writeIORef ref xs
-      return $ (fromIntegral (xs !! idx - old !! idx)) / 30000000
+      return $ fromIntegral (xs !! idx - old !! idx) / 30000000
 
 wifiConnected :: IO Bool
 wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
@@ -269,7 +268,7 @@ batteryIcon info =
     _ -> iconPango batteryEmptyCode
 
 batteryTime :: BatteryInfo -> String
-batteryTime info = do
+batteryTime info =
   case batteryState info of
     BatteryStateCharging -> secondsToTime (batteryTimeToFull info) <> " Till Full"
     BatteryStateDischarging -> secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
@@ -285,9 +284,9 @@ batteryValue = do
 
 batteryWidget :: Double -> IO Widget
 batteryWidget update = do
-  batteryMVar <- mvarThread update (Left "Not Loaded") $ batteryValue
-  base <- mvarWidget batteryMVar (redErr . (fmap batteryIcon))
-  child <- mvarWidget batteryMVar (redErr . (fmap batteryTime))
+  batteryMVar <- mvarThread update (Left "Not Loaded") batteryValue
+  base <- mvarWidget batteryMVar (redErr . fmap batteryIcon)
+  child <- mvarWidget batteryMVar (redErr . fmap batteryTime)
   clickWidget base child
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
@@ -389,7 +388,7 @@ weatherIcon w =
   case weatherStates w of
     [] -> "No Weather"
     x:_ ->
-      let daytime = (== 'd') . head . reverse . wsIcon $ x
+      let daytime = (== 'd') . last . wsIcon $ x
       in flip rawWeatherIcon daytime $ wsId x
 
 weatherDesc :: Weather -> String
@@ -422,11 +421,15 @@ mvarWidget m f =
   in
     pollingLabelNew "" 1 status >>= showAndReturn
 
-clickWidget :: Widget -> Widget -> IO Widget
-clickWidget base child = do
+intoNewBox base = do
   ebox <- eventBoxNew
   containerAdd ebox base
   eventBoxSetVisibleWindow ebox False
+  return ebox
+
+clickWidget :: Widget -> Widget -> IO Widget
+clickWidget base child = do
+  ebox <- intoNewBox base
   window <- makeWindow $ return child
   _ <- on ebox buttonPressEvent $ onClick [SingleClick] (toggleChild "" base window)
   widgetShowAll ebox
@@ -434,9 +437,7 @@ clickWidget base child = do
 
 clickCommand :: Widget -> IO () -> IO Widget
 clickCommand base command = do
-  ebox <- eventBoxNew
-  containerAdd ebox base
-  eventBoxSetVisibleWindow ebox False
+  ebox <- intoNewBox base
   _ <- on ebox buttonPressEvent $ onClick [SingleClick] command
   widgetShowAll ebox
   return (toWidget ebox)
@@ -466,7 +467,7 @@ staticLabel :: String -> IO Widget
 staticLabel label = do
   l <- labelNew $ Just label -- (Nothing :: Maybe String)
   labelSetMarkup l label
-  let w = (toWidget l)
+  let w = toWidget l
   widgetShowAll w
   return w
 
@@ -532,8 +533,8 @@ windowMangler w = foldl' mangle w windowShortcuts
     swap _ _ [] = []
     swap before after x =
       if map toLower before `isPrefixOf` map toLower x
-      then after ++ (drop (length before) x)
-      else head x:(swap before after $ tail x)
+      then after ++ drop (length before) x
+      else head x:swap before after (tail x)
 
 main = do
   netref <- newIORef [0, 0]
@@ -560,8 +561,8 @@ main = do
   cpuIcon <- staticIcon vhdlCode
   memIcon <- staticIcon verilogCode
   weatherMVar <- mvarThread 300 (Left "Not Loaded") $ localWeather "Didcot"
-  weaIcon <- mvarWidget weatherMVar (redErr . (fmap weatherIcon))
-  wcond <- mvarWidget weatherMVar (redErr . (fmap weatherDesc))
+  weaIcon <- mvarWidget weatherMVar (redErr . fmap weatherIcon)
+  wcond <- mvarWidget weatherMVar (redErr . fmap weatherDesc)
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
