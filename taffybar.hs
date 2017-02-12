@@ -144,13 +144,14 @@ netCallback ref idx = do
 wifiConnected :: IO Bool
 wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
 
-wifiStatus :: IO String
-wifiStatus = do
-  state <- wifiConnected
-  let colour = if state
-        then ""
-        else "#dc322f"
-  return $ colorize colour "" $ iconPango wifiCode
+wifiIcon :: Bool -> String
+wifiIcon True = iconPango wifiCode
+wifiIcon False = colorize "#dc322f" "" $ iconPango wifiCode
+
+wifiWidget :: IO Widget
+wifiWidget =
+  genericWidgetSpawn 5 wifiConnected False wifiIcon $
+  callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
 
 barColour :: Double -> (Double, Double, Double)
 barColour x
@@ -434,6 +435,11 @@ genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> (a -> S
 genericErrorWidget update action render fullRender =
   genericWidget update action (Left "Not Loaded") (redErr . fmap render) (redErr . fmap fullRender)
 
+genericWidgetSpawn update action def render command = do
+  m <- mvarThread update def action
+  base <- mvarWidget m render
+  clickCommand base command
+
 mvarThread :: Double -> a -> IO a -> IO (MVar a)
 mvarThread delay def action = do
   m <- newMVar def
@@ -582,17 +588,13 @@ main = do
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
       tray = systrayNew
-  wifiWidget <- pollingLabelNew "" 5 wifiStatus >>= showAndReturn
-  let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
   host <- getHostName
   let fsList = myFSList host
-  chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
-  mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
   defaultTaffybar defaultTaffybarConfig {
     startWidgets = [ pager ]
     , barHeight = 20
     , barPosition = Bottom
-    , endWidgets = [ tray, wifi,
+    , endWidgets = [ tray, wifiWidget,
                      weatherWidget "Didcot" 300.0,
                      batteryWidget 300.0,
                      clock, staticIcon calendarCode,
