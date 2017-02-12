@@ -1,6 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Applicative (empty)
+import Control.Concurrent
+import Control.Concurrent.MVar
+import Control.Monad (forever)
 import Control.Monad.Trans (liftIO)
 import Data.Aeson
 import Data.Char (toLower)
@@ -399,17 +402,23 @@ redErr :: Either String String -> String
 redErr (Left err) = colorize "#dc322f" "" err
 redErr (Right value) = value
 
-weatherConditions :: String -> IO String
-weatherConditions w = do
-  wea <- localWeather w
-  return . redErr $ weatherDesc <$> wea
-
-weather :: String -> IO String
-weather city = do
-  wea <- localWeather city
-  return . redErr $ weatherIcon <$> wea
-
 --  Widget Utilities
+
+mvarThread :: (Show a) => Double -> a -> IO a -> IO (MVar a)
+mvarThread delay def action = do
+  m <- newMVar def
+  forkIO . forever $ do
+    action >>= swapMVar m
+    threadDelay (round $ delay * 1e6)
+  return m
+
+
+mvarWidget :: MVar a -> (a -> String) -> IO Widget
+mvarWidget m f =
+  let
+    status = f <$> readMVar m
+  in
+    pollingLabelNew "" 1 status >>= showAndReturn
 
 clickWidget :: Widget -> Widget -> IO Widget
 clickWidget base child = do
@@ -546,10 +555,11 @@ main = do
   let fsList = myFSList host
   chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
   mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
-  wcond <- pollingLabelNew "" 300 (weatherConditions "Didcot") >>= showAndReturn
   cpuIcon <- staticIcon vhdlCode
   memIcon <- staticIcon verilogCode
-  weaIcon <- pollingLabelNew "waiting" 300 (weather "Didcot") >>= showAndReturn
+  weatherMVar <- mvarThread 300 (Left "Not Loaded") $ localWeather "Didcot"
+  weaIcon <- mvarWidget weatherMVar (redErr . (fmap weatherIcon))
+  wcond <- mvarWidget weatherMVar (redErr . (fmap weatherDesc))
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
                                         , barHeight = 20
                                         , barPosition = Bottom
