@@ -114,8 +114,16 @@ cpuWidget host update = map go $ cpuCharts (cpuCount host)
       child <- pollingLabelNew "" update cpuHog >>= showAndReturn
       clickWidget base child
 
+cpuIcon :: IO Widget
+cpuIcon =
+  genericWidget 10 cpuHog "" (const $ iconPango vhdlCode) id
+
 cpuHog :: IO String
 cpuHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%cpu"] ""
+
+memIcon :: IO Widget
+memIcon =
+  genericWidget 10 memHog "" (const $ iconPango verilogCode) id
 
 memHog :: IO String
 memHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%mem"] ""
@@ -416,15 +424,15 @@ redErr (Right value) = value
 --  Widget Utilities
 
 genericWidget :: Double -> IO a -> a -> (a -> String) -> (a -> String) -> IO Widget
-genericWidget update action def render fullRender =
+genericWidget update action def render fullRender = do
   m <- mvarThread update def action
   base <- mvarWidget m render
-  child <- mvarWidget w fullRender
+  child <- mvarWidget m fullRender
   clickWidget base child
 
-genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> IO Widget
+genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
 genericErrorWidget update action render fullRender =
-  genericWidget update action (redErr . fmap render) (redErr . fmap fullRender)
+  genericWidget update action (Left "Not Loaded") (redErr . fmap render) (redErr . fmap fullRender)
 
 mvarThread :: Double -> a -> IO a -> IO (MVar a)
 mvarThread delay def action = do
@@ -580,8 +588,6 @@ main = do
   let fsList = myFSList host
   chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
   mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
-  cpuIcon <- staticIcon vhdlCode
-  memIcon <- staticIcon verilogCode
   defaultTaffybar defaultTaffybarConfig {
     startWidgets = [ pager ]
     , barHeight = 20
@@ -590,9 +596,9 @@ main = do
                      weatherWidget "Didcot" 300.0,
                      batteryWidget 300.0,
                      clock, staticIcon calendarCode,
-                     mem, clickWidget memIcon mhog] ++
+                     mem, memIcon] ++
                    cpuWidget host 5.0 ++
-                   [clickWidget cpuIcon chog,
+                   [cpuIcon,
                      netup, net,
                      staticIcon globeCode] ++
                    fsList ++
