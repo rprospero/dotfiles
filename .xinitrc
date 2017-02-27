@@ -19,4 +19,4 @@ hsetroot -solid '#002B36' -tile ~/Pictures/tile.png
 #export SSH_AUTH_SOCK
 ###
 # taffybar &!
-# ~/.xmonad/xmonad-x86_64-linux
+~/.xmonad/xmonad-x86_64-linux
