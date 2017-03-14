@@ -3,8 +3,8 @@
                 #define FIXED_FONT xft:inconsolata:pixelsize=9:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=9:antialias=true,hinting=true
                 #define EMACS_FIXED_FONT Inconsolata-9
         #else
-                #define FIXED_FONT xft:inconsolata:pixelsize=16:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=16:antialies=true:hinting=true
-                #define EMACS_FIXED_FONT Inconsolata-16
+                #define FIXED_FONT xft:inconsolata:pixelsize=14:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=14:antialies=true:hinting=true
+                #define EMACS_FIXED_FONT Inconsolata-14
         #endif
 #endif
 
