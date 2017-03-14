@@ -656,7 +656,7 @@ notmuch is a wonderful little utility for managing my mail
        " Sunset"))
 
     (setq org-agenda-start-on-weekday nil)
-    (setq org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
     (setq org-confirm-babel-evaluate nil)
     (setq org-src-fontify-natively t)
     (setq org-agenda-include-diary nil)
