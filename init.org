@@ -64,8 +64,11 @@ desire
            "/opt/X11/bin"
            "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
        ('t (split-string (getenv "PATH") ":")))))
-  (setenv "PATH" (mapconcat 'identity mypaths ":"))
-  (setq exec-path (append mypaths (list "." exec-directory))))
+  (if
+      (not (string-equal system-type "windows-nt"))
+      (progn
+	(setenv "PATH" (mapconcat 'identity mypaths ":"))
+	(setq exec-path (append mypaths (list "." exec-directory))))))
 
 (setq w32-apps-modifier 'super)
 
