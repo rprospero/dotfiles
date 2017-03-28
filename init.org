@@ -1170,7 +1170,18 @@ Automatically display file icons in dired.
   (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
+*** evil nerd commenter
 
+    Better code commenting
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-nerd-commenter
+  :ensure t
+  :config
+  (evilnc-default-hotkeys))
+
+#+END_SRC
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes
