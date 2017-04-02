@@ -63,6 +63,8 @@ desire
            "/sbin"
            "/opt/X11/bin"
            "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
+	 ((s-starts-with? "NDW1748" system-name)
+	  (split-string (getenv "PATH") ";"))
        ('t (split-string (getenv "PATH") ":")))))
   (if
       (not (string-equal system-type "windows-nt"))
@@ -296,8 +298,6 @@ Let's try and make elisp symbols pretty!
 (use-package haskell-mode
   :ensure t
   :config
-  (setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
-  (add-to-list 'exec-path "~/.cabal/bin")
   (setq haskell-tags-on-save t)
 
   ;; (autoload 'ghc-init "ghc" nil t)
@@ -659,7 +659,7 @@ notmuch is a wonderful little utility for managing my mail
        " Sunset"))
 
     (setq org-agenda-start-on-weekday nil)
-    (setq org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
     (setq org-confirm-babel-evaluate nil)
     (setq org-src-fontify-natively t)
     (setq org-agenda-include-diary nil)
@@ -1164,16 +1164,29 @@ Automatically display file icons in dired.
 
 *** which-key
 
+
+
   #+BEGIN_SRC elisp :tangle yes
 (use-package which-key
   :diminish which-key-mode
   :ensure t
   :config
-  (setq which-key-mode t)
+  (which-key-mode)
   (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
+*** evil nerd commenter
 
+    Better code commenting
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-nerd-commenter
+  :ensure t
+  :config
+  (evilnc-default-hotkeys))
+
+#+END_SRC
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes
