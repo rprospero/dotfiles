@@ -473,6 +473,7 @@ workspaceMangler x = escape x
 
 layoutMangler :: String -> String
 layoutMangler l
+  | "SmartSpacing " `isPrefixOf` l = layoutMangler . unwords . drop 2 . words $ l
   | "Tall" == l = iconPango arrowsVCode
   | "Mirror Tall" == l = iconPango arrowsHCode
   | "Full" == l = iconPango squareCode
