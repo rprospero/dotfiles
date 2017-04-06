@@ -1007,6 +1007,20 @@ Include useful mode hooks when moving into latex mode
   (setq aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
  #+END_SRC
 
+** alert
+
+A basic emacs customication system.  Slack uses this to handle system
+messages and other parts of emacs could probably benefit from it.  I
+really need to tweak the customisation.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package alert
+  :commands (alert)
+  :init
+  (setq alert-default-style 'libnotify))
+#+END_SRC
+
+
 ** all-the-icons
 
 Use the all-the-icons package to get icon fonts.
