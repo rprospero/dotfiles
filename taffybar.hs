@@ -515,6 +515,18 @@ windowShortcuts = [("- Mozilla Firefox", iconPango firefoxCode),
                    ("Apple", iconPango appleCode),
                    ("Amazon", iconPango amazonCode)]
 
+iconShortener :: Int -> String -> String
+iconShortener count message = go count 0 message
+  where
+    go 0 _ _ = ""
+    go _ _ "" = ""
+    go n 0 ('<':xs) = '<':go n 2 xs
+    go n 0 (x:xs) = x:go (n-1) 0 xs
+    go n 1 ('>':xs) = '>':go (n-1) 0 xs
+    go n b ('>':xs) = '>':go n (b-1) xs
+    go n b (x:xs) = x : go n b xs
+
+
 windowMangler :: String -> String
 windowMangler w = foldl' mangle w windowShortcuts
   where
@@ -533,7 +545,7 @@ main = do
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
-        activeWindow = windowMangler . escape . take 40,
+        activeWindow = iconShortener 80 . windowMangler . escape,
         activeWorkspace = colorize "#859900" "" . workspaceMangler,
         hiddenWorkspace = colorize "#268bd2" "" . workspaceMangler,
         urgentWorkspace = colorize "#002b36" "#268bd2" . workspaceMangler,
