@@ -20,6 +20,8 @@ import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
 import System.Process
+import Text.Parsec (Parsec, anyChar, choice, eof, many, many1, parse, skipMany1, string, try)
+import Text.Parsec.Char (noneOf, char)
 import Text.Printf
 
 import System.Taffybar
@@ -482,75 +484,66 @@ layoutMangler l
   | otherwise = l
 
 
-windowShortcuts :: [(String, String)]
-windowShortcuts = [("- Mozilla Firefox", iconPango firefoxCode),
-                   ("Haskell", iconPango haskellCode),
-                   ("Google Drive", iconPango googleDriveCode),
-                   ("Google Sheets", iconPango googleDriveCode),
-                   ("Google Docs", iconPango googleDriveCode),
-                   ("YouTube", iconPango youtubeCode),
-                   ("- Wikipedia", iconPango wikipediaWCode),
-                   ("Vimeo", iconPango vimeoCode),
-                   ("Twitter", iconPango twitterCode),
-                   ("Twitch", iconPango twitchCode),
-                   ("TripAdvisor:", iconPango tripadvisorCode),
-                   ("Trello", iconPango trelloCode),
-                   ("Trainline", iconPango trainCode),
-                   ("*Slack - Channel*", iconPango slackCode),
-                   ("Slack", iconPango slackCode),
-                   ("Python", iconPango pythonCode),
-                   ("Google Maps", iconPango streetViewCode),
-                   ("Welcome to Steam", iconPango steamCode),
-                   ("Steam", iconPango steamCode),
-                   ("Stack Exchange", iconPango stackExchangeCode),
-                   ("Stack Overflow", iconPango stackOverflowCode),
-                   ("Skype", iconPango skypeCode),
-                   ("Reddit", iconPango redditCode),
-                   ("Jenkins", iconPango jenkinsCode),
-                   ("Inbox ", "📧"),
-                   ("Hacker News", iconPango hackerNewsCode),
-                   ("Google+", iconPango googlePlusCode),
-                   ("Google Wallet", iconPango googleWalletCode),
-                   ("Google Search", iconPango googleCode),
-                   ("Gmail ", "📧"),
-                   ("Google", iconPango googleCode),
-                   ("Github", iconPango githubCode),
-                   ("Facebook", iconPango facebookOfficialCode),
-                   ("Emacs", iconPango emacsCode),
-                   ("Apple", iconPango appleCode),
-                   ("Amazon", iconPango amazonCode)]
+windowShortcuts :: [Parsec String () String]
+windowShortcuts = [
+                   string "- Mozilla Firefox" >> return (iconPango firefoxCode),
+                   string "Haskell" >> return (iconPango haskellCode),
+                   string "Google Drive" >> return (iconPango googleDriveCode),
+                   string "Google Sheets" >> return (iconPango googleDriveCode),
+                   string "Google Docs" >> return (iconPango googleDriveCode),
+                   string "YouTube" >> return (iconPango youtubeCode),
+                   string "- Wikipedia" >> return (iconPango wikipediaWCode),
+                   string "Vimeo" >> return (iconPango vimeoCode),
+                   string "Twitter" >> return (iconPango twitterCode),
+                   string "Twitch" >> return (iconPango twitchCode),
+                   string "TripAdvisor:" >> return (iconPango tripadvisorCode),
+                   string "Trello" >> return (iconPango trelloCode),
+                   string "Trainline" >> return (iconPango trainCode),
+                   string "*Slack - Channel*" >> return (iconPango slackCode),
+                   string "Slack" >> return (iconPango slackCode),
+                   string "Python" >> return (iconPango pythonCode),
+                   string "Google Maps" >> return (iconPango streetViewCode),
+                   string "Welcome to Steam" >> return (iconPango steamCode),
+                   string "Steam" >> return (iconPango steamCode),
+                   string "Stack Exchange" >> return (iconPango stackExchangeCode),
+                   string "Stack Overflow" >> return (iconPango stackOverflowCode),
+                   string "Skype" >> return (iconPango skypeCode),
+                   string "Reddit" >> return (iconPango redditCode),
+                   string "Jenkins" >> return (iconPango jenkinsCode),
+                   string "Inbox " >> return "📧",
+                   string "Hacker News" >> return (iconPango hackerNewsCode),
+                   string "Google+" >> return (iconPango googlePlusCode),
+                   string "Google Wallet" >> return (iconPango googleWalletCode),
+                   string "Google Search" >> return (iconPango googleCode),
+                   string "Gmail " >> return "📧",
+                   string "Google" >> return (iconPango googleCode),
+                   string "Github" >> return (iconPango githubCode),
+                   string "Facebook" >> return (iconPango facebookOfficialCode),
+                   string "Emacs" >> return (iconPango emacsCode),
+                   string "Apple" >> return (iconPango appleCode),
+                   string "Amazon" >> return (iconPango amazonCode),
+                   string "emacs@" >> skipMany1 (anyChar) >> return (iconPango emacsCode),
+                   skipMany1 (noneOf " @") >> char '@' >> skipMany1 (noneOf " :") >> char ':' >> return (iconPango terminalCode)]
 
-iconShortener :: Int -> String -> String
-iconShortener count message = go count 0 message
-  where
-    go 0 _ _ = ""
-    go _ _ "" = ""
-    go n 0 ('<':xs) = '<':go n 2 xs
-    go n 0 (x:xs) = x:go (n-1) 0 xs
-    go n 1 ('>':xs) = '>':go (n-1) 0 xs
-    go n b ('>':xs) = '>':go n (b-1) xs
-    go n b (x:xs) = x : go n b xs
+mangler :: Parsec String () [String]
+mangler = do
+  result <- many1 $ choice $ map try windowShortcuts ++ [fmap return anyChar]
+  eof
+  return result
 
 
-windowMangler :: String -> String
-windowMangler w = foldl' mangle w windowShortcuts
-  where
-    mangle x (before, after) =
-      if map toLower before `isInfixOf` map toLower x
-      then swap before after x
-      else x
-    swap _ _ [] = []
-    swap before after x =
-      if map toLower before `isPrefixOf` map toLower x
-      then after ++ (drop (length before) x)
-      else head x:(swap before after $ tail x)
+windowMangler :: Int -> String -> String
+windowMangler cnt w =
+  case parse mangler "" w of
+    Right x -> concat . take cnt $ x
+    Left x -> drop 2 . dropWhile (/= '\n') $ show x
 
 main = do
   netref <- newIORef [0, 0]
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
-        activeWindow = iconShortener 80 . windowMangler . escape,
+        activeWindow = windowMangler 80 . escape,
         activeWorkspace = colorize "#859900" "" . workspaceMangler,
         hiddenWorkspace = colorize "#268bd2" "" . workspaceMangler,
         urgentWorkspace = colorize "#002b36" "#268bd2" . workspaceMangler,
