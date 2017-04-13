@@ -57,7 +57,6 @@ main :: IO ()
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
-  spawn "taffybar"
   xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
 
 data NameSegment = Prefix String | Suffix String | Subst String String
