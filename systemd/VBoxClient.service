@@ -1,0 +1,9 @@
+[Unit]
+Description=VirtualBox helpers
+
+[Service]
+ExecStart=/usr/bin/VBoxClient-all
+Type=forking
+
+[Install]
+WantedBy=graphical-session.target
