@@ -1,5 +1,6 @@
 import           Control.Monad                (liftM2, filterM,msum)
 import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
+import           Data.Maybe (fromMaybe)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -8,7 +9,6 @@ import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Actions.DynamicWorkspaces
 import           XMonad.Actions.Search
-import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.FadeInactive
 import           XMonad.Hooks.ManageDocks
@@ -50,15 +50,12 @@ myManageHook = composeAll . concat $
     myClassMediaShifts = ["Gimp"]
     role = stringProperty "WM_WINDOW_ROLE"
 
-toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
-toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
-
 main :: IO ()
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "systemctl --user start xmonad.target"
-  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook $ myConfig
+  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook myConfig
 
 data NameSegment = Prefix String | Suffix String | Subst String String
 
@@ -73,10 +70,10 @@ replace s old new =
 shrinkSegment :: String -> NameSegment -> Maybe String
 shrinkSegment s (Prefix prefix) = stripPrefix prefix s
 shrinkSegment s (Suffix suffix)
-  | isSuffixOf suffix s = Just $ reverse $ drop (length suffix) $ reverse s
+  | suffix `isSuffixOf` s = Just $ reverse $ drop (length suffix) $ reverse s
   | otherwise = Nothing
 shrinkSegment s (Subst before after)
-  | isInfixOf before s = Just $ replace s before after
+  | before `isInfixOf`  s = Just $ replace s before after
   | otherwise = Nothing
 
 mySegments :: [NameSegment]
@@ -89,10 +86,10 @@ mySegments = [
   Suffix " - Hoogle"]
 
 dropSegment :: String -> String
-dropSegment s =
-  case msum $ map (shrinkSegment s) mySegments of
-    Just x -> x
-    Nothing -> init s
+dropSegment s = fromMaybe (init s) . msum $ map (shrinkSegment s) mySegments
+  -- case msum $ map (shrinkSegment s) mySegments of
+  --   Just x -> x
+  --   Nothing -> init s
 myShrinkText :: s -> String -> [String]
 myShrinkText _ "" = [""]
 myShrinkText s cs = cs:myShrinkText s (dropSegment cs)
@@ -103,7 +100,7 @@ instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
 instance Shrinker MyShrinker where
   shrinkIt = myShrinkText
 
-myLayoutHook = tabbedBottom MyShrinker myTheme ||| (smartSpacing 10 $ layoutHook def) ||| (smartSpacing 10 $ Grid False)
+myLayoutHook = tabbedBottom MyShrinker myTheme ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
 
 myConfig = def {
                focusedBorderColor = pFg subTheme,
@@ -151,18 +148,18 @@ moreIntelligent (SearchEngine name site) = searchEngineF name f
     f s = if or ["http://" `isPrefixOf` s,
                  "https://" `isPrefixOf` s,
                  "ftp://" `isPrefixOf` s,
-                 and ['.' `elem` s, not $ ' '`elem` s ]]
+                 ('.' `elem` s) && (' '`notElem` s )]
           then s
           else site s
 
+thunarPrompt :: X ()
 thunarPrompt = mkXPrompt Thunar defPrompt directoryComplete (spawn . ("thunar "++))
 
 directoryComplete :: String -> IO [String]
 directoryComplete x = do
   let (dir, cur) = splitFileName x
   dirs <- getDirectoryContents dir
-  realDirs <- filterM doesDirectoryExist $ map (dir </>) $ filter (cur `isPrefixOf`) dirs
-  return realDirs
+  filterM doesDirectoryExist $ map (dir </>) $ filter (cur `isPrefixOf`) dirs
 
 data Thunar = Thunar
 
@@ -175,17 +172,10 @@ mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
 
 
 mySearchPredicate :: String -> String -> Bool
-mySearchPredicate query item = and . map (`isInfixOf` item) . words $ query
+mySearchPredicate query item = all (`isInfixOf` item) . words $ query
 
+defPrompt :: XPConfig
 defPrompt = promptTheme subTheme def {historyFilter = nub}
-
-colourTheme :: Theme -> XPConfig -> XPConfig
-colourTheme t x = x {fgColor = inactiveTextColor t,
-                     bgColor = "black",
-                     fgHLight = activeTextColor t,
-                     bgHLight = "black",
-                     borderColor = activeBorderColor t,
-                     font = fontName t}
 
 promptTheme :: PromptTheme -> XPConfig -> XPConfig
 promptTheme t x = x {fgColor = pFg t,
@@ -209,6 +199,7 @@ tabTheme p x = x {inactiveTextColor = pFg p,
 myTheme :: Theme
 myTheme = tabTheme subTheme $ theme kavonForestTheme
 
+subTheme :: PromptTheme
 subTheme = solarizedTheme
 
 data PromptTheme = PromptTheme {
@@ -219,6 +210,7 @@ data PromptTheme = PromptTheme {
   pBC :: String,
   pFont :: String}
 
+moeTheme :: PromptTheme
 moeTheme = PromptTheme {
   pFg = "#c6c6c6",
   pBg = "#303030",
@@ -227,6 +219,7 @@ moeTheme = PromptTheme {
   pBC = "#c6c6c6",
   pFont = fontName def}
 
+grandShellTheme :: PromptTheme
 grandShellTheme = PromptTheme {
   pBg = "black",
   pFg = "gray",
@@ -235,6 +228,7 @@ grandShellTheme = PromptTheme {
   pBC = "gray",
   pFont = fontName def}
 
+monokaiTheme :: PromptTheme
 monokaiTheme = PromptTheme {
   pFg = "#F8F8F2",
   pBg = "#272822",
@@ -243,6 +237,7 @@ monokaiTheme = PromptTheme {
   pBC = "#F8F8F2",
   pFont = fontName def}
 
+sanityBrightTheme :: PromptTheme
 sanityBrightTheme = PromptTheme {
   pFg = "#eaeaea",
   pBg = "#000000",
@@ -251,6 +246,7 @@ sanityBrightTheme = PromptTheme {
   pBC = "#eaeaea",
   pFont = fontName def}
 
+sanityEightiesTheme :: PromptTheme
 sanityEightiesTheme = PromptTheme {
   pFg = "#cccccc",
   pBg = "#2d2d2d",
@@ -259,6 +255,7 @@ sanityEightiesTheme = PromptTheme {
   pBC = "#cccccc",
   pFont = fontName def}
 
+cyberPunkTheme :: PromptTheme
 cyberPunkTheme = PromptTheme {
   pFg = "#d3d3d3",
   pBg = "#000000",
@@ -267,6 +264,7 @@ cyberPunkTheme = PromptTheme {
   pBC = "#d3d3d3",
   pFont = fontName def}
 
+darkToothTheme :: PromptTheme
 darkToothTheme = PromptTheme {
   pFg = "#FDF4C1",
   pBg = "#282828",
@@ -275,6 +273,7 @@ darkToothTheme = PromptTheme {
   pBC = "#FDF4C1",
   pFont = fontName def}
 
+materialTheme :: PromptTheme
 materialTheme = PromptTheme {
   pFg = "#ffffff",
   pBg = "#263238",
@@ -283,6 +282,7 @@ materialTheme = PromptTheme {
   pBC = "#ffffff",
   pFont = fontName def}
 
+tronTheme :: PromptTheme
 tronTheme = PromptTheme {
   pFg = "#d3f9ee",
   pBg = "#081724",
@@ -291,6 +291,7 @@ tronTheme = PromptTheme {
   pBC = "#d3f9ee",
   pFont = fontName def}
 
+solarizedTheme :: PromptTheme
 solarizedTheme = PromptTheme {
   pFg = "#839496",
   pBg = "#002b36",
