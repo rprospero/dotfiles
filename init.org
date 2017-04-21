@@ -1240,7 +1240,7 @@ current line of code.  Why is that so hard to understand?
   :diminish which-key-mode
   :ensure t
   :config
-  (setq which-key-mode t)
+  (which-key-mode)
   (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
