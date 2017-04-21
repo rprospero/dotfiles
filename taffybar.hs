@@ -3,14 +3,11 @@
 import Control.Applicative (empty)
 import Control.Monad.Trans (liftIO)
 import Data.Aeson
-import Data.Char (toLower)
 import Data.ByteString (ByteString)
 import Data.ByteString.Lazy (fromStrict)
-import Data.Foldable (foldl')
-import Data.List (isSuffixOf, isPrefixOf, isInfixOf)
+import Data.List (isSuffixOf, isPrefixOf)
 import Data.Monoid ((<>))
-import Data.String.Utils (replace, join)
-import Data.Text (unpack)
+import Data.String.Utils (join)
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
 import Graphics.Icons.FontAwesome hiding (terminalCode)
@@ -19,25 +16,19 @@ import Graphics.Icons.Types
 import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
-import System.Process
-import Text.Parsec (Parsec, anyChar, choice, eof, many, many1, parse, skipMany1, string, try)
+import Text.Parsec (Parsec, anyChar, choice, eof, many1, parse, skipMany1, string, try)
 import Text.Parsec.Char (noneOf, char)
 import Text.Printf
 
 import System.Taffybar
 
-import System.Taffybar.CommandRunner
-import System.Taffybar.FSMonitor
 import System.Taffybar.Pager (colorize, escape)
 import System.Taffybar.Systray
 import System.Taffybar.TaffyPager
 import System.Taffybar.SimpleClock
 import System.Taffybar.FreedesktopNotifications
-import System.Taffybar.Weather
-import System.Taffybar.MPRIS
 
 import System.Taffybar.Widgets.PollingBar
-import System.Taffybar.Widgets.PollingGraph
 import System.Taffybar.Widgets.Util
 
 import System.Information.Battery
@@ -45,19 +36,21 @@ import System.Information.Memory
 import System.Information.CPU2
 import System.Information.Network
 
-import Graphics.UI.Gtk.Display.Image (Image, imageNewFromFile)
+import Graphics.UI.Gtk.Display.Image (imageNewFromFile)
 import Graphics.UI.Gtk.Abstract.Widget (Widget, toWidget)
 import Graphics.UI.Gtk
 
 import Data.IORef
-import System.Process ( readProcess )
+import System.Process ( readProcess, callProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
+myPollingBar :: Double -> IO Double -> IO Widget
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
                                                            barPadding = 0,
                                                            barWidth = 9})
 
 
+showAndReturn :: WidgetClass w => w -> IO Widget
 showAndReturn l = do
   widgetShowAll l
   return $ toWidget l
@@ -74,8 +67,8 @@ myMail = read <$> readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
-  fsOut <- readProcess "df" (["-kP", fs]) ""
-  let x = (/100) . fromIntegral . read . init . head . drop 1 . reverse . words . last . lines $ fsOut
+  fsOut <- readProcess "df" ["-kP", fs] ""
+  let x = (/100) . fromIntegral . read . init . (!! 1) . reverse . words . last . lines $ fsOut
   return x
 
 myFSMonitor :: String -> IO Widget
@@ -92,8 +85,7 @@ cpuCharts :: Int -> [IO Widget]
 cpuCharts count = map makeCpuChart [0..count-1]
 
 makeCpuChart :: Int -> IO Widget
-makeCpuChart cpu = do
-  myPollingBar 5 $ getCPULoad ("cpu" ++ show cpu)  >>= return . sum
+makeCpuChart cpu = myPollingBar 5 (sum <$> getCPULoad ("cpu" ++ show cpu))
 
 cpuCount :: String -> Int
 cpuCount host
@@ -113,14 +105,14 @@ cpuWidget host update = map go $ cpuCharts (cpuCount host)
       clickWidget base child
 
 cpuHog :: IO String
-cpuHog = readProcess "ps" ["aux","--sort","%cpu"] "" >>= return . unwords . drop 10 . words . last . lines
+cpuHog = unwords . drop 10 . words . last . lines <$> readProcess "ps" ["aux","--sort","%cpu"] ""
 
 memHog :: IO String
-memHog = readProcess "ps" ["aux","--sort","%mem"] "" >>= return . unwords . drop 10 . words . last . lines
+memHog = unwords . drop 10 . words . last . lines <$> readProcess "ps" ["aux","--sort","%mem"] ""
 
 ------------------------------
 
-netCallback :: IORef ([Integer]) -> Int -> IO Double
+netCallback :: IORef [Integer] -> Int -> IO Double
 netCallback ref idx = do
   old <- readIORef ref
   minfo <- getNetInfo "eno1"
@@ -129,7 +121,7 @@ netCallback ref idx = do
     Just [] -> return 0
     Just xs -> do
       writeIORef ref xs
-      return $ (fromIntegral (xs !! idx - old !! idx)) / 30000000
+      return $ fromIntegral (xs !! idx - old !! idx) / 30000000
 
 wifiConnected :: IO Bool
 wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
@@ -142,18 +134,11 @@ wifiStatus = do
         else "#dc322f"
   return $ colorize colour "" $ iconPango wifiCode
 
+barColour :: Double -> (Double, Double, Double)
 barColour x
   | x < 1.0/3.0 = (0,3.0*x,0)
   | x < 2.0/3.0 = (3*x-1,1,0)
   | otherwise = (1,abs (3-3*x),0)
-
--- Insert image icons
-icon :: String -> IO Widget
-icon f = do
-  box <- hBoxNew False 0
-  img <- imageNewFromFile $ "/home/adam/dotfiles/" ++ f
-  boxPackStart box img PackNatural 0
-  showAndReturn box
 
 rawWeatherIcon :: Int -> Bool -> String
 rawWeatherIcon 200 = thunderstormIcon
@@ -231,23 +216,33 @@ rawWeatherIcon 961 =  const "?"
 rawWeatherIcon 962 =  const "?"
 rawWeatherIcon _ = const "?"
 
+clearIcon :: Bool -> String
 clearIcon True = iconPango forecastIoClearDayCode
 clearIcon False = iconPango forecastIoClearNightCode
+cloudyIcon :: Bool -> String
 cloudyIcon True = iconPango dayCloudyCode
 cloudyIcon False = iconPango nightAltCloudyCode
+overcastIcon :: Bool -> String
 overcastIcon _ = iconPango cloudyCode
+thunderstormIcon :: Bool -> String
 thunderstormIcon True = iconPango dayThunderstormCode
 thunderstormIcon False = iconPango nightAltThunderstormCode
+drizzleIcon :: Bool -> String
 drizzleIcon True = iconPango daySprinkleCode
 drizzleIcon False = iconPango nightAltSprinkleCode
+rainIcon :: Bool -> String
 rainIcon True = iconPango dayRainCode
 rainIcon False = iconPango nightAltRainCode
+showerIcon :: Bool -> String
 showerIcon True = iconPango dayShowersCode
 showerIcon False = iconPango nightAltShowersCode
+snowIcon :: Bool -> String
 snowIcon True = iconPango daySnowCode
 snowIcon False = iconPango nightAltSnowCode
+sleetIcon :: Bool -> String
 sleetIcon True = iconPango daySleetCode
 sleetIcon False = iconPango nightAltSleetCode
+mistIcon :: Bool -> String
 mistIcon _ = iconPango fogCode
 
 ---------------  Battery Icon Code
@@ -457,7 +452,7 @@ staticLabel :: String -> IO Widget
 staticLabel label = do
   l <- labelNew $ Just label -- (Nothing :: Maybe String)
   labelSetMarkup l label
-  let w = (toWidget l)
+  let w = toWidget l
   widgetShowAll w
   return w
 
@@ -522,7 +517,7 @@ windowShortcuts = [
                    string "Emacs" >> return (iconPango emacsCode),
                    string "Apple" >> return (iconPango appleCode),
                    string "Amazon" >> return (iconPango amazonCode),
-                   string "emacs@" >> skipMany1 (anyChar) >> return (iconPango emacsCode),
+                   string "emacs@" >> skipMany1 anyChar >> return (iconPango emacsCode),
                    skipMany1 (noneOf " @") >> char '@' >> skipMany1 (noneOf " :") >> char ':' >> return (iconPango terminalCode)]
 
 mangler :: Parsec String () [String]
