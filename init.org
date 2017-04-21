@@ -165,7 +165,7 @@ Give a default e-mail address.
 
 #+BEGIN_SRC elisp :tangle yes
 
-(setq user-mail-address "a.washington@sheffield.ac.uk")
+(setq user-mail-address "adam.washington@stfc.ac.uk")
 
 #+END_SRC
 * Apps
