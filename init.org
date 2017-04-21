@@ -631,7 +631,7 @@ notmuch is a wonderful little utility for managing my mail
    :name "SasView"
    :client-id "165525662918.164903213860"
    :client-secret (funcall (plist-get (car (auth-source-search :max 1 :host "sasview.slack.com")) :secret))
-   :token  "xoxp-165525662918-165534925718-164909748788-1c5b4fc3311f2098a15bc56be15a5baf"
+   :token (funcall (plist-get (car (auth-source-search :max 1 :host "token.sasview.slack.com")) :secret))
    :subscribed-channels '(general random build github trac jenkins))
 
   (evil-define-key 'normal slack-info-mode-map
