@@ -105,25 +105,6 @@ instance Shrinker MyShrinker where
 
 myLayoutHook = tabbedBottom MyShrinker myTheme ||| (smartSpacing 10 $ layoutHook def) ||| (smartSpacing 10 $ Grid False)
 
-iconifyWorkspaces "web" = "<icon=/home/adam/Downloads/fox.xbm/>"
-iconifyWorkspaces "emacs" = "<icon=/home/adam/Downloads/code.xbm/>"
-iconifyWorkspaces "documents" = "<icon=/home/adam/Downloads/docs.xbm/>"
-iconifyWorkspaces x = x
-
-myPP :: PP
-myPP = xmobarPP { ppLayout = myLayoutPrinter
-                , ppVisible = xmobarColor "#bbbb00" "black" . wrap "(" ")" . iconifyWorkspaces
-                , ppHidden = xmobarColor "#888888" "black" . iconifyWorkspaces
-                , ppUrgent = xmobarColor "#FF0000" "black" . wrap "!" "!" . iconifyWorkspaces
-                , ppCurrent = xmobarColor "#FFFF00" "black" . wrap "[" "]" . iconifyWorkspaces
-  }
-
-myLayoutPrinter :: String -> String
-myLayoutPrinter "Full" = "<icon=/home/adam/dotfiles/layout_full.xbm/>"
-myLayoutPrinter "Tall" = "<icon=/home/adam/dotfiles/layout_tall.xbm/>"
-myLayoutPrinter "Mirror Tall" = "<icon=/home/adam/dotfiles/layout_mirror_tall.xbm/>"
-myLayoutPrinter x = x
-
 myConfig = def {
                focusedBorderColor = pFg subTheme,
                normalBorderColor = pBg subTheme,
