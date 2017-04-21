@@ -168,6 +168,22 @@ Give a default e-mail address.
 (setq user-mail-address "adam.washington@stfc.ac.uk")
 
 #+END_SRC
+
+I don't like emacs backup files.  They're coarse and rough and
+irritating, and the get everywhere.  I'm going to confine them to a
+single directory.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq backup-by-copying t)
+(setq backup-directory-alist (quote (("." . "~/.saves"))))
+(setq kept-new-versions 6)
+(setq vc-make-backup-files t)
+(setq version-control t)
+
+#+END_SRC
+
+
 * Apps
 ** Dired
 
