@@ -115,7 +115,7 @@ myConfig = def {
              }
              `additionalKeys`
              [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -l")
-             , ((controlMask, xK_Print), spawn "sleep 0,2; scrot -s")
+             , ((controlMask, xK_Print), spawn "scrot -u")
              , ((0, xK_Print), spawn "scrot")
              , ((mod4Mask, xK_f), spawn "firefox")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
