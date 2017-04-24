@@ -197,6 +197,15 @@ two directories far more reasonable.
 (setq dired-dwim-target t)
 
 #+END_SRC
+
+Adding the =h= switch onto dired listing gives file sizes in a human
+readable format, instead of just a raw byte counts
+
+#+BEGIN_SRC elisp :tangle yes
+(setq dired-listing-switches "-alh")
+
+#+END_SRC
+
 ** Images
 
 Load images as images, instead of as bye arrays
