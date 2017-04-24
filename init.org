@@ -633,11 +633,15 @@ notmuch is a wonderful little utility for managing my mail
   :config
   (setq
    elfeed-feeds
-   '("http://www.xkcd.org/atom.xml"
-     "https://www.reddit.com/r/haskell.rss"
+   '(("http://www.xkcd.org/atom.xml" comic)
+     ("http://phdcomics.com/gradfeed.php" comic)
      "http://www.merriam-webster.com/wotd/feed/rss2"
      "http://sachachua.com/blog/feed/"
+     "https://planet.haskell.org/rss20.xml"
      "https://wordsmith.org/awad/rss1.xml"
+     ("http://emacsninja.com/feed.atom" sw emacs)
+     ("http://emacshorrors.com/feed.atom" sw emacs)
+     ("http://endlessparentheses.com/atom.xml" sw emacs)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
 
  #+END_SRC
@@ -1157,6 +1161,9 @@ Automatically display file icons in dired.
   (setq evil-insert-state-modes
     '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-entry-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
   (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
   (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
   (evil-set-initial-state 'notmuch-search-mode 'emacs)
