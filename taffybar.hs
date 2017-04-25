@@ -63,7 +63,7 @@ liveCount action value = do
     else return $ action current
 
 myMail :: IO Int
-myMail = read <$> readProcess "/usr/local/bin/notmuch" ["count","tag:unread"] ""
+myMail = read <$> readProcess "/usr/bin/notmuch" ["count","tag:unread"] ""
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
