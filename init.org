@@ -177,6 +177,7 @@ single directory.
 
 (setq backup-by-copying t)
 (setq backup-directory-alist (quote (("." . "~/.saves"))))
+(setq delete-old-versions t)
 (setq kept-new-versions 6)
 (setq vc-make-backup-files t)
 (setq version-control t)
