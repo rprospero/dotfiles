@@ -39,7 +39,7 @@
 # You will need to specify one section per account below.  You may
 # not use "general" for an account name.
 
-accounts = Professional, Personal
+accounts = Professional, Personal, Work
 
 # Offlineimap can synchronize more than one account at a time.  If you
 # want to enable this feature, set the below value to something
@@ -181,8 +181,8 @@ remoterepository = GmailProfessional
 
 [Account Work]
 
-localrepository = GmailLocalWork
-remoterepository = GmailWork
+localrepository = LocalWork
+remoterepository = Work
 
 [Account Personal]
 
@@ -317,9 +317,9 @@ type = GmailMaildir
 
 localfolders = ~/Maildir/Professional
 
-[Repository GmailLocalWork]
+[Repository LocalWork]
 
-type = GmailMaildir
+type = Maildir
 
 localfolders = ~/Maildir/Work
 
@@ -377,17 +377,17 @@ folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 
 #maxconnections = 2
 
-[Repository GmailWork]
+[Repository Work]
 
-type = Gmail
+type = IMAP
 realdelete = no
 
-# Specify the Gmail user name. This is the only mandatory parameter.
-remoteuser = a.washington@sheffield.ac.uk
-remotepasseval = passwords["Work"]
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+remotehost = 127.0.0.1
+remoteuser = adam.washington@stfc.ac.uk
+remotepasseval = get_authinfo_password("127.0.0.1", "adam.washington@stfc.ac.uk")
+remoteport=1143
+ssl=no
 
-folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 [Repository GmailPersonal]
 
 type = Gmail
