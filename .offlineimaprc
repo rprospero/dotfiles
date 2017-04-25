@@ -39,7 +39,7 @@
 # You will need to specify one section per account below.  You may
 # not use "general" for an account name.
 
-accounts = Professional, Personal, Work
+accounts = Professional, Personal
 
 # Offlineimap can synchronize more than one account at a time.  If you
 # want to enable this feature, set the below value to something
@@ -348,8 +348,8 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = adam.l.washington@gmail.com
-remotepasseval = passwords["Professional"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+remotepasseval = get_authinfo_password("imap.gmail.com", "adam.l.washington@gmail.com")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 
@@ -385,7 +385,7 @@ realdelete = no
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = a.washington@sheffield.ac.uk
 remotepasseval = passwords["Work"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 [Repository GmailPersonal]
@@ -395,7 +395,7 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = rprospero@gmail.com
-remotepasseval = passwords["Personal"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+remotepasseval = get_authinfo_password("imap.gmail.com", "rprospero@gmail.com")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 # folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
