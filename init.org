@@ -1156,6 +1156,18 @@ Automatically display file icons in dired.
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 #+END_SRC
+
+Display icons when switching buffers
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package all-the-icons-ivy
+  :ensure t
+  :config
+  (all-the-icons-ivy-setup))
+
+
+#+END_SRC
+
 ** company
 
  #+BEGIN_SRC elisp :tangle yes
