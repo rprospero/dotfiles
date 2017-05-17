@@ -625,7 +625,8 @@ notmuch is a wonderful little utility for managing my mail
           (:name "drafts" :query "tag:draft" :key "d")
           (:name "all mail" :query "*" :key "a")
           (:name "Today's mail" :query "date:0d..")
-          (:name "promotional" :query "to:promotional tag:inbox")))))
+          (:name "promotional" :query "to:promotional tag:inbox")
+          (:name "SasView" :query "Sas from:notifications@github.com")))))
 
 #+END_SRC
 ** elfeed
