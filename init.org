@@ -1207,6 +1207,8 @@ Display icons when switching buffers
   (evil-set-initial-state 'notmuch-search-mode 'emacs)
   (evil-set-initial-state 'notmuch-show-mode 'emacs)
   (evil-global-set-key 'normal "zi" 'counsel-imenu)
+  (evil-global-set-key 'normal "zj" 'flycheck-next-error)
+  (evil-global-set-key 'normal "zk" 'flycheck-previous-error)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
