@@ -1537,15 +1537,6 @@ own hotkey.  Why not steal F5 from the browser?
  #+END_SRC
 
 
-*** ivy-purpose
-
-  #+BEGIN_SRC elisp :tangle yes
-(use-package ivy-purpose
-  :ensure t
-  :config
-  (ivy-purpose-setup))
-  #+END_SRC
-
 ** Winner
 
    Winner mode allows me to undo and redo changes to the window layout
