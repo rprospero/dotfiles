@@ -239,6 +239,7 @@ Always revert images files without asking.
       (setq magit-git-executable "/usr/bin/git"))
   :config
   (setq diff-switches "-u"))
+  (setq magit-bury-buffer-function 'magit-mode-quit-window)
  #+END_SRC
 
 
