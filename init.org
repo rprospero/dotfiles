@@ -752,6 +752,7 @@ directory of STFC.
        (nth 4 (split-string (diary-sunrise-sunset)))
        " Sunset"))
 
+    (setq org-imenu-depth 4)
     (setq org-agenda-start-on-weekday nil)
     (setq org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
     (setq org-confirm-babel-evaluate nil)
