@@ -1522,6 +1522,8 @@ own hotkey.  Why not steal F5 from the browser?
   ("C-c C-, C-l" . purpose-load-window-layout)
   :config
   (purpose-mode)
+  (purpose-x-kill-setup)
+  (purpose-x-magit-single-on)
   (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
   (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
