@@ -1205,6 +1205,7 @@ Display icons when switching buffers
   (evil-add-hjkl-bindings elfeed-search-mode-map 'emacs)
   (evil-set-initial-state 'notmuch-search-mode 'emacs)
   (evil-set-initial-state 'notmuch-show-mode 'emacs)
+  (evil-global-set-key 'normal "zi" 'counsel-imenu)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
@@ -1336,7 +1337,6 @@ This is a place for my own personal key bindings.
 
 #+BEGIN_SRC elisp :tangle yes
 
-(bind-key "C-c ." 'imenu)
 (bind-key "C-x C-b" 'ibuffer)
 (bind-key "M-/" 'hippie-expand)
 (bind-key "M-d" 'avy-goto-char-timer)
