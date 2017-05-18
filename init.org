@@ -1496,12 +1496,18 @@ own hotkey.  Why not steal F5 from the browser?
 
 #+BEGIN_SRC elisp :tangle yes
 (use-package spaceline
-  :ensure t)
+  :ensure t
+  :config
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+
 (use-package spaceline-all-the-icons
   :ensure t
   :after spaceline
-  :config (spaceline-all-the-icons-theme))
-
+  :config
+  (spaceline-all-the-icons-theme)
+  (spaceline-toggle-all-the-icons-time-off)
+  (spaceline-toggle-all-the-icons-git-ahead-on)
+  (spaceline-toggle-all-the-icons-projectile-on))
 #+END_SRC
 
 
