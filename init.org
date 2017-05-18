@@ -1331,7 +1331,8 @@ current line of code.  Why is that so hard to understand?
    :standard-input f
    :error-patterns
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
-   :modes (markdown-mode text-mode org-mode)))
+   :modes (markdown-mode text-mode org-mode))
+  (add-to-list 'flycheck-checkers 'proselint))
  #+END_SRC
 
 ** Key Bindings
