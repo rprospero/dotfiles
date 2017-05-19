@@ -1080,73 +1080,7 @@ Use the all-the-icons package to get icon fonts.
 
  #+BEGIN_SRC elisp :tangle yes
 (use-package all-the-icons
-  :ensure t
-  :config
-  (defun custom-modeline-modified ()
-    (let* ((config-alist
-            '(("*" all-the-icons-faicon-family all-the-icons-faicon "chain-broken" :height 2.2 :v-adjust -0.0
-	       :foreground "red")
-              ("-" all-the-icons-faicon-family all-the-icons-faicon "link" :height 1.2 :v-adjust -0.0)
-              ("%" all-the-icons-octicon-family all-the-icons-octicon "lock" :height 1.2 :v-adjust 0.1)))
-           (result (cdr (assoc (format-mode-line "%*") config-alist))))
-      (propertize (apply (cadr result) (cddr result))
-                  'face `(:family
-			  ,(funcall (car result))
-			  :foreground
-			  ,(cond
-			    ((equalp (caddr result) "chain-broken")
-			     (face-attribute 'font-lock-warning-face :foreground))
-			    ((equalp (caddr result) "lock")
-			     (face-attribute 'font-lock-string-face :foreground))
-			    ('t (face-attribute 'default :foreground)))))))
-
- 
-  (defun custom-modeline-mode-icon ()
-    (format " %s"
-	    (propertize (all-the-icons-icon-for-buffer)
-			'help-echo (format "Major-mode: `%s`" major-mode)
-			'face `(:height
-				1.2
-				:foreground 
-				,(face-attribute 'font-lock-string-face :foreground)
-				:family ,(all-the-icons-icon-family-for-buffer)))))
-
-  (setq-default mode-line-format
-	'("%e" mode-line-front-space
-	  ;; Standard info about the current buffer
-	  mode-line-mule-info
-	  mode-line-client
-	  (:eval (custom-modeline-modified))
-	  mode-line-remote
-	  mode-line-frame-identification
-	  mode-line-buffer-identification
-	  " "
-	  mode-line-position
-	  ;; Some specific information about the current buffer:
-	  ; lunaryorn-projectile-mode-line ; Project information
-          ; (vc-mode lunaryorn-vc-mode-line) ; VC information
-          ; (flycheck-mode flycheck-mode-line) ; Flycheck status
-          ; (multiple-cursors-mode mc/mode-line) ; Number of cursors
-          ;; Misc information, notably battery state and function name
-          " "
-          mode-line-misc-info
-          ;; And the modes, which I don't really care for anyway
-	  " "
-	  ;; mode-line-modes
-	  (:eval 
-	   (mapcar
-	    (lambda (node)
-	      (cond
-	       ((not (listp node)) node)
-	       ((not (listp (cadr node))) node)
-	       ((not (listp (cdadr node))) node)
-	       ((equalp (cadadr node) 'mode-name)
-		(custom-modeline-mode-icon))
-	       ((equalp (cadadr node) 'minor-mode-alist)
-		node)
-	       ('t node)))
-	    mode-line-modes))
-	  mode-line-end-spaces)))
+  :ensure t)
  #+END_SRC
 
 Automatically display file icons in dired.
