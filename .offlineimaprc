@@ -196,7 +196,7 @@ remoterepository = GmailPersonal
 # frequently to do that (in minutes) here.  You can also specify
 # fractional minutes (ie, 3.25).
 
-# autorefresh = 5
+autorefresh = 5
 
 # OfflineImap can replace a number of full updates by quick
 # synchronizations.  It only synchronizes a folder if 1) a Maildir
@@ -210,7 +210,7 @@ remoterepository = GmailPersonal
 # another full synchronization (requires autorefresh).  Updates are
 # always performed after <autorefresh> minutes, be they quick or full.
 
-# quick = 10
+quick = 10
 
 # You can specify a pre and post sync hook to execute a external command.
 # In this case a call to imapfilter to filter mail before the sync process
@@ -219,7 +219,7 @@ remoterepository = GmailPersonal
 # start.
 
 # presynchook = imapfilter
-# postsynchook = notifysync.sh
+postsynchook = notmuch new
 
 # You can also specify parameters to the commands
 # presynchook = imapfilter -c someotherconfig.lua
@@ -345,6 +345,7 @@ localfolders = ~/Maildir/Personal
 
 type = Gmail
 realdelete = no
+synclabels = yes
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = adam.l.washington@gmail.com
