@@ -1,0 +1,4 @@
+[Unit]
+Description=All of the utilities for an xmonad session
+Wants=taffybar.service
+BindsTo=graphical-session.target

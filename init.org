@@ -66,8 +66,11 @@ desire
 	 ((s-starts-with? "NDW1748" system-name)
 	  (split-string (getenv "PATH") ";"))
        ('t (split-string (getenv "PATH") ":")))))
-  (setenv "PATH" (mapconcat 'identity mypaths ":"))
-  (setq exec-path (append mypaths (list "." exec-directory))))
+  (if
+      (not (string-equal system-type "windows-nt"))
+      (progn
+	(setenv "PATH" (mapconcat 'identity mypaths ":"))
+	(setq exec-path (append mypaths (list "." exec-directory))))))
 
 (setq w32-apps-modifier 'super)
 
@@ -164,9 +167,26 @@ Give a default e-mail address.
 
 #+BEGIN_SRC elisp :tangle yes
 
-(setq user-mail-address "a.washington@sheffield.ac.uk")
+(setq user-mail-address "adam.washington@stfc.ac.uk")
 
 #+END_SRC
+
+I don't like emacs backup files.  They're coarse and rough and
+irritating, and the get everywhere.  I'm going to confine them to a
+single directory.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(setq backup-by-copying t)
+(setq backup-directory-alist (quote (("." . "~/.saves"))))
+(setq delete-old-versions t)
+(setq kept-new-versions 6)
+(setq vc-make-backup-files t)
+(setq version-control t)
+
+#+END_SRC
+
+
 * Apps
 ** Dired
 
@@ -180,6 +200,15 @@ two directories far more reasonable.
 (setq dired-dwim-target t)
 
 #+END_SRC
+
+Adding the =h= switch onto dired listing gives file sizes in a human
+readable format, instead of just a raw byte counts
+
+#+BEGIN_SRC elisp :tangle yes
+(setq dired-listing-switches "-alh")
+
+#+END_SRC
+
 ** Images
 
 Load images as images, instead of as bye arrays
@@ -212,6 +241,7 @@ Always revert images files without asking.
       (setq magit-git-executable "/usr/bin/git"))
   :config
   (setq diff-switches "-u"))
+  (setq magit-bury-buffer-function 'magit-mode-quit-window)
  #+END_SRC
 
 
@@ -300,12 +330,13 @@ Let's try and make elisp symbols pretty!
   ;; (autoload 'ghc-init "ghc" nil t)
   ;; (autoload 'ghc-debug "ghc" nil t)
   ;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
   ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook
    'haskell-mode-hook
    (lambda ()
      (push '("\\" . ?λ) prettify-symbols-alist)
+     (push '(">>=" . ?↣) prettify-symbols-alist)
      (push '("->" . ?→) prettify-symbols-alist)
      (push '("<-" . ?←) prettify-symbols-alist)
      (push '("=>" . ?⇒) prettify-symbols-alist)
@@ -594,7 +625,8 @@ notmuch is a wonderful little utility for managing my mail
           (:name "drafts" :query "tag:draft" :key "d")
           (:name "all mail" :query "*" :key "a")
           (:name "Today's mail" :query "date:0d..")
-          (:name "promotional" :query "to:promotional tag:inbox")))))
+          (:name "promotional" :query "to:promotional tag:inbox")
+          (:name "SasView" :query "Sas from:notifications@github.com")))))
 
 #+END_SRC
 ** elfeed
@@ -605,15 +637,80 @@ notmuch is a wonderful little utility for managing my mail
   :config
   (setq
    elfeed-feeds
-   '("http://www.xkcd.org/atom.xml"
-     "https://www.reddit.com/r/emacs.rss"
-     "https://www.reddit.com/r/haskell.rss"
+   '(("http://www.xkcd.org/atom.xml" comic)
+     ("http://phdcomics.com/gradfeed.php" comic)
      "http://www.merriam-webster.com/wotd/feed/rss2"
+     "http://sachachua.com/blog/feed/"
+     "https://planet.haskell.org/rss20.xml"
      "https://wordsmith.org/awad/rss1.xml"
+     ("http://emacsninja.com/feed.atom" sw emacs)
+     ("http://emacshorrors.com/feed.atom" sw emacs)
+     ("http://endlessparentheses.com/atom.xml" sw emacs)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
 
  #+END_SRC
 
+** Slack
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package slack
+  :commands (slack-start)
+  :init
+  (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+  (setq slack-prefer-current-team t)
+  :config
+
+  (slack-register-team
+   :name "SasView"
+   :client-id "165525662918.164903213860"
+   :client-secret (funcall (plist-get (car (auth-source-search :max 1 :host "sasview.slack.com")) :secret))
+   :token (funcall (plist-get (car (auth-source-search :max 1 :host "token.sasview.slack.com")) :secret))
+   :subscribed-channels '(general random build github trac jenkins))
+
+  (evil-define-key 'normal slack-info-mode-map
+    ",u" 'slack-room-update-messages)
+  (evil-define-key 'normal slack-mode-map
+    ",c" 'slack-buffer-kill
+    ",ra" 'slack-message-add-reaction
+    ",rr" 'slack-message-remove-reaction
+    ",rs" 'slack-message-show-reaction-users
+    ",pl" 'slack-room-pins-list
+    ",pa" 'slack-message-pins-add
+    ",pr" 'slack-message-pins-remove
+    ",mm" 'slack-message-write-another-buffer
+    ",me" 'slack-message-edit
+    ",md" 'slack-message-delete
+    ",u" 'slack-room-update-messages
+    ",2" 'slack-message-embed-mention
+    ",3" 'slack-message-embed-channel
+    "\C-n" 'slack-buffer-goto-next-message
+    "\C-p" 'slack-buffer-goto-prev-message)
+   (evil-define-key 'normal slack-edit-message-mode-map
+    ",k" 'slack-message-cancel-edit
+    ",s" 'slack-message-send-from-buffer
+    ",2" 'slack-message-embed-mention
+    ",3" 'slack-message-embed-channel))
+
+#+END_SRC
+
+** EUDC
+
+EUDC is the LDAP client for emacs.  It should allow me to query the
+directory of STFC.
+
+#+BEGIN_SRC elisp :tangle yes
+(require 'ldap)
+(require 'eudc)
+(setq eudc-server-hotlist
+      (quote (("127.0.0.1:1389" . ldap))))
+(setq ldap-host-parameters-alist
+      `(("127.0.0.1:1389"
+	 base "ou=people"
+	 binddn "CLRC\\auv61894"
+	 passwd ,(funcall (plist-get (car (auth-source-search :max 1 :host "127.0.0.1" :port 1389)) :secret))
+	 auth simple)))
+
+#+END_SRC
 
 * org
 
@@ -655,6 +752,7 @@ notmuch is a wonderful little utility for managing my mail
        (nth 4 (split-string (diary-sunrise-sunset)))
        " Sunset"))
 
+    (setq org-imenu-depth 4)
     (setq org-agenda-start-on-weekday nil)
     (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
     (setq org-confirm-babel-evaluate nil)
@@ -962,6 +1060,20 @@ Include useful mode hooks when moving into latex mode
   (setq aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
  #+END_SRC
 
+** alert
+
+A basic emacs customication system.  Slack uses this to handle system
+messages and other parts of emacs could probably benefit from it.  I
+really need to tweak the customisation.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package alert
+  :commands (alert)
+  :init
+  (setq alert-default-style 'libnotify))
+#+END_SRC
+
+
 ** all-the-icons
 
 Use the all-the-icons package to get icon fonts.
@@ -1047,6 +1159,18 @@ Automatically display file icons in dired.
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 #+END_SRC
+
+Display icons when switching buffers
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package all-the-icons-ivy
+  :ensure t
+  :config
+  (all-the-icons-ivy-setup))
+
+
+#+END_SRC
+
 ** company
 
  #+BEGIN_SRC elisp :tangle yes
@@ -1073,10 +1197,18 @@ Automatically display file icons in dired.
   (setq evil-insert-state-modes
     '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-entry-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
   (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
   (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
+  (evil-add-hjkl-bindings elfeed-show-mode-map 'emacs)
+  (evil-add-hjkl-bindings elfeed-search-mode-map 'emacs)
   (evil-set-initial-state 'notmuch-search-mode 'emacs)
   (evil-set-initial-state 'notmuch-show-mode 'emacs)
+  (evil-global-set-key 'normal "zi" 'counsel-imenu)
+  (evil-global-set-key 'normal "zj" 'flycheck-next-error)
+  (evil-global-set-key 'normal "zk" 'flycheck-previous-error)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
@@ -1118,6 +1250,21 @@ Automatically display file icons in dired.
   :ensure t)
 
 #+END_SRC
+
+*** evil-nerd-commenter
+
+Add the evil nerd commenter, as =comment-dwim= never actually does
+what I mean.  Seriously, I have never hit =M-;= and wanted to put a
+comment at the end of the line.  I always want to comment out the
+current line of code.  Why is that so hard to understand?
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package evil-nerd-commenter
+  :ensure t
+  :config
+  (evilnc-default-hotkeys))
+#+END_SRC
+
 *** god-mode
 
   I have a little utility function to change the cursor type depending
@@ -1166,7 +1313,7 @@ Automatically display file icons in dired.
   :diminish which-key-mode
   :ensure t
   :config
-  (setq which-key-mode t)
+  (which-key-mode)
   (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
@@ -1184,7 +1331,8 @@ Automatically display file icons in dired.
    :standard-input f
    :error-patterns
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
-   :modes (markdown-mode text-mode org-mode)))
+   :modes (markdown-mode text-mode org-mode))
+  (add-to-list 'flycheck-checkers 'proselint))
  #+END_SRC
 
 ** Key Bindings
@@ -1193,7 +1341,6 @@ This is a place for my own personal key bindings.
 
 #+BEGIN_SRC elisp :tangle yes
 
-(bind-key "C-c ." 'imenu)
 (bind-key "C-x C-b" 'ibuffer)
 (bind-key "M-/" 'hippie-expand)
 (bind-key "M-d" 'avy-goto-char-timer)
@@ -1345,6 +1492,23 @@ own hotkey.  Why not steal F5 from the browser?
   :config
   (sml/apply-theme 'respectful))
  #+END_SRC
+** space-line 
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package spaceline
+  :ensure t
+  :config
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+
+(use-package spaceline-all-the-icons
+  :ensure t
+  :after spaceline
+  :config
+  (spaceline-all-the-icons-theme)
+  (spaceline-toggle-all-the-icons-time-off)
+  (spaceline-toggle-all-the-icons-git-ahead-on)
+  (spaceline-toggle-all-the-icons-projectile-on))
+#+END_SRC
 
 
 ** unbound
@@ -1380,28 +1544,22 @@ own hotkey.  Why not steal F5 from the browser?
   ("C-c C-, C-l" . purpose-load-window-layout)
   :config
   (purpose-mode)
+  (purpose-x-kill-setup)
+  (purpose-x-magit-single-on)
   (add-to-list 'purpose-user-mode-purposes '(haskell-cabal-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(eshell-mode . terminal))
   (add-to-list 'purpose-user-mode-purposes '(jabber-chat-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(slack-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(notmuch-hello-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(notmuch-message-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(notmuch-search-mode . chat))
   (add-to-list 'purpose-user-mode-purposes '(notmuch-show-mode . chat))
+  (add-to-list 'purpose-user-mode-purposes '(org-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
-  (add-to-list 'purpose-user-mode-purposes '(magit-mode . magit))
   (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
   (purpose-compile-user-configuration))
  #+END_SRC
 
-
-*** ivy-purpose
-
-  #+BEGIN_SRC elisp :tangle yes
-(use-package ivy-purpose
-  :ensure t
-  :config
-  (ivy-purpose-setup))
-  #+END_SRC
 
 ** Winner
 

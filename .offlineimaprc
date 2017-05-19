@@ -181,8 +181,8 @@ remoterepository = GmailProfessional
 
 [Account Work]
 
-localrepository = GmailLocalWork
-remoterepository = GmailWork
+localrepository = LocalWork
+remoterepository = Work
 
 [Account Personal]
 
@@ -317,9 +317,9 @@ type = GmailMaildir
 
 localfolders = ~/Maildir/Professional
 
-[Repository GmailLocalWork]
+[Repository LocalWork]
 
-type = GmailMaildir
+type = Maildir
 
 localfolders = ~/Maildir/Work
 
@@ -348,8 +348,8 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = adam.l.washington@gmail.com
-remotepasseval = passwords["Professional"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+remotepasseval = get_authinfo_password("imap.gmail.com", "adam.l.washington@gmail.com")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 
@@ -377,17 +377,17 @@ folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 
 #maxconnections = 2
 
-[Repository GmailWork]
+[Repository Work]
 
-type = Gmail
+type = IMAP
 realdelete = no
 
-# Specify the Gmail user name. This is the only mandatory parameter.
-remoteuser = a.washington@sheffield.ac.uk
-remotepasseval = passwords["Work"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+remotehost = 127.0.0.1
+remoteuser = adam.washington@stfc.ac.uk
+remotepasseval = get_authinfo_password("127.0.0.1", "adam.washington@stfc.ac.uk")
+remoteport=1143
+ssl=no
 
-folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
 [Repository GmailPersonal]
 
 type = Gmail
@@ -395,7 +395,7 @@ realdelete = no
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = rprospero@gmail.com
-remotepasseval = passwords["Personal"]
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+remotepasseval = get_authinfo_password("imap.gmail.com", "rprospero@gmail.com")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 
 # folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail','Promotional']
