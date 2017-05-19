@@ -13,6 +13,8 @@ xrdb ~/.Xresources
 
 trayer --edge bottom --align right --SetDockType true --SetPartialStrut true --expand true --width 192 --widthtype pixel --height 13 --transparent true --alpha 0 --tint 0x000000 &
 
-nm-applet &
+# nm-applet &
 
 xsetroot -cursor_name left_ptr
+
+xsetroot -solid '#002B36' # -tile ~/Pictures/tile.png
