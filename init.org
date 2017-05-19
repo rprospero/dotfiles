@@ -1276,7 +1276,8 @@ source code
    :error-patterns
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode))
-  (add-to-list 'flycheck-checkers 'proselint))
+  (add-to-list 'flycheck-checkers 'proselint)
+  (add-hook 'prog-mode-hook 'flycheck-mode))
  #+END_SRC
 
 ** Key Bindings
