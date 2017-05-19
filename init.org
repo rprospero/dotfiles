@@ -1199,6 +1199,16 @@ current line of code.  Why is that so hard to understand?
   (evilnc-default-hotkeys))
 #+END_SRC
 
+*** evil-indent-plus
+Evil indent plus does a great job at handling Python and Haskell
+source code
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package evil-indent-plus
+  :ensure t)
+
+#+END_SRC
+
 *** god-mode
 
   I have a little utility function to change the cursor type depending
