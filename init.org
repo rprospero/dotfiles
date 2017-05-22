@@ -1161,6 +1161,7 @@ Display icons when switching buffers
 (use-package evil-god-state
   :ensure t
   :config
+  (which-key-enable-god-mode-support)
   (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
   #+END_SRC
 
