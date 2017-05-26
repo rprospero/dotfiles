@@ -1155,6 +1155,19 @@ Display icons when switching buffers
  #+END_SRC
 
 
+*** which-key
+
+
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package which-key
+  :diminish which-key-mode
+  :ensure t
+  :config
+  (which-key-mode)
+  (setq which-key-show-operator-state-maps t))
+  #+END_SRC
+
 *** evil-god-state
 
   #+BEGIN_SRC elisp :tangle yes
@@ -1257,19 +1270,6 @@ source code
       (god-local-mode-pause)))
 
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
-  #+END_SRC
-
-*** which-key
-
-
-
-  #+BEGIN_SRC elisp :tangle yes
-(use-package which-key
-  :diminish which-key-mode
-  :ensure t
-  :config
-  (which-key-mode)
-  (setq which-key-show-operator-state-maps t))
   #+END_SRC
 
 *** evil nerd commenter
