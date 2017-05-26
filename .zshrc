@@ -45,7 +45,7 @@ ZSH_THEME="pygmalion"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git lein)
+plugins=(git lein cabal screen colorize)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -90,3 +90,5 @@ export EDITOR=emacsclient
 alias ghc-core="ghc -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
 
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

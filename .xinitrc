@@ -11,7 +11,7 @@ xrdb -cpp cpp ~/.Xresources
 
 # compton &
 # hsetroot -solid '#002B36'
-hsetroot -solid '#002B36' -tile ~/Pictures/tile.png
+xsetroot -solid '#002B36' # -tile ~/Pictures/tile.png
 
 #start the keyring daemon
 #eval $(gnome-keyring-daemon -s)

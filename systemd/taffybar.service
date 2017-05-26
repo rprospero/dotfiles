@@ -1,0 +1,9 @@
+[Unit]
+Description=Taffybar status bar
+
+[Service]
+ExecStart=/home/adam/.cabal/bin/taffybar
+Restart=always
+
+[Install]
+WantedBy=xmonad.target
