@@ -268,18 +268,6 @@ Always revert images files without asking.
   :ensure t)
  #+END_SRC
 
-** Systemctl
-
-   I'm working on an interface to systemd through emacs.  The bits of
-   it can go in here for now.
-
-#+BEGIN_SRC elisp :tangle yes
-(if (s-prefix? "nadia" system-name)
-    (progn
-        (add-to-list 'load-path "~/Code/systemct-el/")
-        (require 'systemct))
-  nil)
-#+END_SRC
 
 * Code
 
