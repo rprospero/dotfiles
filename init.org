@@ -1184,6 +1184,19 @@ Display icons when switching buffers
  #+END_SRC
 
 
+*** which-key
+
+
+
+  #+BEGIN_SRC elisp :tangle yes
+(use-package which-key
+  :diminish which-key-mode
+  :ensure t
+  :config
+  (which-key-mode)
+  (setq which-key-show-operator-state-maps t))
+  #+END_SRC
+
 *** evil-god-state
 
   #+BEGIN_SRC elisp :tangle yes
@@ -1288,18 +1301,18 @@ source code
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
   #+END_SRC
 
-*** which-key
+*** evil nerd commenter
 
-  #+BEGIN_SRC elisp :tangle yes
-(use-package which-key
-  :diminish which-key-mode
+    Better code commenting
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-nerd-commenter
   :ensure t
   :config
-  (which-key-mode)
-  (setq which-key-show-operator-state-maps t))
-  #+END_SRC
+  (evilnc-default-hotkeys))
 
-
+#+END_SRC
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes

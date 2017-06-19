@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Applicative (empty)
+import Control.Concurrent
+import Control.Monad (forever)
 import Control.Monad.Trans (liftIO)
 import Data.Aeson
 import Data.ByteString (ByteString)
@@ -36,7 +38,6 @@ import System.Information.Memory
 import System.Information.CPU2
 import System.Information.Network
 
-import Graphics.UI.Gtk.Display.Image (imageNewFromFile)
 import Graphics.UI.Gtk.Abstract.Widget (Widget, toWidget)
 import Graphics.UI.Gtk
 
@@ -48,7 +49,6 @@ myPollingBar :: Double -> IO Double -> IO Widget
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
                                                            barPadding = 0,
                                                            barWidth = 9})
-
 
 showAndReturn :: WidgetClass w => w -> IO Widget
 showAndReturn l = do
@@ -63,7 +63,16 @@ liveCount action value = do
     else return $ action current
 
 myMail :: IO Int
-myMail = read <$> readProcess "/usr/bin/notmuch" ["count","tag:unread"] ""
+myMail = do
+  read <$> readProcess "/usr/bin/notmuch" ["count","tag:unread"] ""
+
+mailWidget :: Double -> IO Widget
+mailWidget update = do
+  mvar <- mvarThread update 0 myMail
+  mvarWidget mvar (\count ->
+                      if count == 0
+                      then ""
+                      else colorize "#fdf6e3" "" $ iconPango mailCode <> " " <> show count)
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
@@ -85,7 +94,8 @@ cpuCharts :: Int -> [IO Widget]
 cpuCharts count = map makeCpuChart [0..count-1]
 
 makeCpuChart :: Int -> IO Widget
-makeCpuChart cpu = myPollingBar 5 (sum <$> getCPULoad ("cpu" ++ show cpu))
+makeCpuChart cpu =
+  myPollingBar 5 $ sum <$> getCPULoad ("cpu" ++ show cpu)
 
 cpuCount :: String -> Int
 cpuCount host
@@ -101,14 +111,22 @@ cpuWidget host update = map go $ cpuCharts (cpuCount host)
     go chart = do
       -- base <- pollingLabelNew "" update batteryIcon
       base <- chart
-      child <- pollingLabelNew "" update batteryTime >>= showAndReturn
+      child <- pollingLabelNew "" update cpuHog >>= showAndReturn
       clickWidget base child
 
+cpuIcon :: IO Widget
+cpuIcon =
+  genericWidget 10 cpuHog "" (const $ iconPango vhdlCode) id
+
 cpuHog :: IO String
-cpuHog = unwords . drop 10 . words . last . lines <$> readProcess "ps" ["aux","--sort","%cpu"] ""
+cpuHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%cpu"] ""
+
+memIcon :: IO Widget
+memIcon =
+  genericWidget 10 memHog "" (const $ iconPango verilogCode) id
 
 memHog :: IO String
-memHog = unwords . drop 10 . words . last . lines <$> readProcess "ps" ["aux","--sort","%mem"] ""
+memHog = (unwords . drop 10 . words . last . lines) <$> readProcess "ps" ["aux","--sort","%mem"] ""
 
 ------------------------------
 
@@ -126,13 +144,14 @@ netCallback ref idx = do
 wifiConnected :: IO Bool
 wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
 
-wifiStatus :: IO String
-wifiStatus = do
-  state <- wifiConnected
-  let colour = if state
-        then ""
-        else "#dc322f"
-  return $ colorize colour "" $ iconPango wifiCode
+wifiIcon :: Bool -> String
+wifiIcon True = iconPango wifiCode
+wifiIcon False = colorize "#dc322f" "" $ iconPango wifiCode
+
+wifiWidget :: IO Widget
+wifiWidget =
+  genericWidgetSpawn 5 wifiConnected False wifiIcon $
+  callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
 
 barColour :: Double -> (Double, Double, Double)
 barColour x
@@ -140,6 +159,7 @@ barColour x
   | x < 2.0/3.0 = (3*x-1,1,0)
   | otherwise = (1,abs (3-3*x),0)
 
+-- Insert image icons
 rawWeatherIcon :: Int -> Bool -> String
 rawWeatherIcon 200 = thunderstormIcon
 rawWeatherIcon 201 = thunderstormIcon
@@ -254,33 +274,32 @@ myBatteryInfo = do
     Nothing -> return Nothing
     Just c -> getBatteryInfo c
 
-batteryIcon :: IO String
-batteryIcon = do
-  minfo <- myBatteryInfo
-  case minfo of
-    Nothing -> return ""
-    Just info -> case batteryState info of
-      BatteryStateCharging -> return $ iconPango batteryChargingCode
-      BatteryStateFullyCharged -> return $ iconPango batteryChargingCode
-      BatteryStateDischarging -> return $ appropriateBattery info
-      _ -> return $ iconPango batteryEmptyCode
+batteryIcon :: BatteryInfo -> String
+batteryIcon info =
+  case batteryState info of
+    BatteryStateCharging -> iconPango batteryChargingCode
+    BatteryStateFullyCharged -> iconPango batteryChargingCode
+    BatteryStateDischarging -> appropriateBattery info
+    _ -> iconPango batteryEmptyCode
 
-batteryTime :: IO String
-batteryTime = do
+batteryTime :: BatteryInfo -> String
+batteryTime info =
+  case batteryState info of
+    BatteryStateCharging -> secondsToTime (batteryTimeToFull info) <> " Till Full"
+    BatteryStateDischarging -> secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
+    BatteryStateFullyCharged -> "Charged"
+    x -> show x
+
+batteryValue :: IO (Either String BatteryInfo)
+batteryValue = do
   minfo <- myBatteryInfo
   case minfo of
-    Nothing -> return "Charged"
-    Just info -> case batteryState info of
-      BatteryStateCharging -> return $ secondsToTime (batteryTimeToFull info) <> " Till Full"
-      BatteryStateDischarging -> return $ secondsToTime (batteryTimeToEmpty info) <> " Till Empty"
-      BatteryStateFullyCharged -> return "Charged"
-      x -> return $ show x
+    Nothing -> return $ Left "Battery Not Found"
+    Just info -> return $ Right info
 
 batteryWidget :: Double -> IO Widget
-batteryWidget update = do
-  base <- pollingLabelNew "" update batteryIcon
-  child <- pollingLabelNew "" update batteryTime
-  clickWidget base child
+batteryWidget update =
+  genericErrorWidget update batteryValue batteryIcon batteryTime
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
@@ -319,6 +338,7 @@ instance FromJSON Weather where
     v .: "dt" <*>
     v .: "id" <*>
     v .: "name"
+  parseJSON _ = empty
 
 data WeatherStats = WeatherStats {
   wsTemp :: Double,
@@ -336,6 +356,7 @@ instance FromJSON WeatherStats where
     v .: "temp_max" <*>
     v .: "pressure" <*>
     v .: "humidity"
+  parseJSON _ = empty
 
 data WeatherState = WeatherState {
   wsId :: Int,
@@ -351,6 +372,7 @@ instance FromJSON WeatherState where
     v .: "main" <*>
     v .: "description" <*>
     v .: "icon"
+  parseJSON _ = empty
 
 data Coord = Coord {
   coordLat :: Double,
@@ -371,7 +393,7 @@ localWeather :: String -> IO (Either String Weather)
 localWeather city = do
   text <- openURI $ "http://api.openweathermap.org/data/2.5/weather?q=" <> city <> "&appid=932841262ade6126df76f1196989509e"
   return $ case text of
-    Left error -> Left error
+    Left err -> Left err
     Right body -> case getWeather body of
       Nothing -> Left $ "Cannot parse weather: " <> take 20 (show text)
       Just w -> Right w
@@ -381,7 +403,7 @@ weatherIcon w =
   case weatherStates w of
     [] -> "No Weather"
     x:_ ->
-      let daytime = (== 'd') . head . reverse . wsIcon $ x
+      let daytime = (== 'd') . last . wsIcon $ x
       in flip rawWeatherIcon daytime $ wsId x
 
 weatherDesc :: Weather -> String
@@ -392,27 +414,58 @@ weatherDesc w =
   in
     temp ++ iconPango celsiusCode ++ " " ++ desc
 
+weatherWidget :: String -> Double -> IO Widget
+weatherWidget location update = do
+  genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
+
 redErr :: Either String String -> String
 redErr (Left err) = colorize "#dc322f" "" err
 redErr (Right value) = value
 
-weatherConditions :: String -> IO String
-weatherConditions w = do
-  wea <- localWeather w
-  return . redErr $ weatherDesc <$> wea
-
-weather :: String -> IO String
-weather city = do
-  wea <- localWeather city
-  return . redErr $ weatherIcon <$> wea
-
 --  Widget Utilities
 
-clickWidget :: Widget -> Widget -> IO Widget
-clickWidget base child = do
+genericWidget :: Double -> IO a -> a -> (a -> String) -> (a -> String) -> IO Widget
+genericWidget update action def render fullRender = do
+  m <- mvarThread update def action
+  base <- mvarWidget m render
+  child <- mvarWidget m fullRender
+  clickWidget base child
+
+genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
+genericErrorWidget update action render fullRender =
+  genericWidget update action (Left "Not Loaded") (redErr . fmap render) (redErr . fmap fullRender)
+
+genericWidgetSpawn update action def render command = do
+  m <- mvarThread update def action
+  base <- mvarWidget m render
+  clickCommand base command
+
+mvarThread :: Double -> a -> IO a -> IO (MVar a)
+mvarThread delay def action = do
+  m <- newMVar def
+  _ <- forkIO . forever $ do
+    _ <- action >>= swapMVar m
+    threadDelay (round $ delay * 1e6)
+  return m
+
+
+mvarWidget :: MVar a -> (a -> String) -> IO Widget
+mvarWidget m f =
+  let
+    status = f <$> readMVar m
+  in
+    pollingLabelNew "" 1 status >>= showAndReturn
+
+intoNewBox :: WidgetClass w => w -> IO EventBox
+intoNewBox base = do
   ebox <- eventBoxNew
   containerAdd ebox base
   eventBoxSetVisibleWindow ebox False
+  return ebox
+
+clickWidget :: Widget -> Widget -> IO Widget
+clickWidget base child = do
+  ebox <- intoNewBox base
   window <- makeWindow $ return child
   _ <- on ebox buttonPressEvent $ onClick [SingleClick] (toggleChild "" base window)
   widgetShowAll ebox
@@ -420,9 +473,7 @@ clickWidget base child = do
 
 clickCommand :: Widget -> IO () -> IO Widget
 clickCommand base command = do
-  ebox <- eventBoxNew
-  containerAdd ebox base
-  eventBoxSetVisibleWindow ebox False
+  ebox <- intoNewBox base
   _ <- on ebox buttonPressEvent $ onClick [SingleClick] command
   widgetShowAll ebox
   return (toWidget ebox)
@@ -549,33 +600,26 @@ main = do
       net = myPollingBar 1 $ netCallback netref 0
       netup = myPollingBar 1 $ netCallback netref 1
       tray = systrayNew
-  wifiWidget <- pollingLabelNew "" 5 wifiStatus >>= showAndReturn
-  let wifi = clickCommand wifiWidget $ callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
   host <- getHostName
   let fsList = myFSList host
-  chog <- pollingLabelNew "" 5 cpuHog >>= showAndReturn
-  mhog <- pollingLabelNew "" 5 memHog >>= showAndReturn
-  wcond <- pollingLabelNew "" 300 (weatherConditions "Didcot") >>= showAndReturn
-  cpuIcon <- staticIcon vhdlCode
-  memIcon <- staticIcon verilogCode
-  weaIcon <- pollingLabelNew "waiting" 300 (weather "Didcot") >>= showAndReturn
-  defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager ]
-                                        , barHeight = 20
-                                        , barPosition = Bottom
-                                        , endWidgets = [ tray, wifi,
-                                                         clickWidget weaIcon wcond,
-                                                         batteryWidget 300.0,
-                                                         clock, staticIcon calendarCode,
-                                                         mem, clickWidget memIcon mhog] ++
-                                                       cpuWidget host 5.0 ++
-                                                         [clickWidget cpuIcon chog,
-                                                         netup, net,
-                                                         staticIcon globeCode] ++
-                                                       fsList ++
-                                                       [staticIcon hddOCode,
-                                                        pollingLabelNew "" 10 (liveCount (\x -> colorize "#fdf6e3" "" (iconPango mailCode) <> " " <> show x) myMail) >>= showAndReturn,
-                                                        note]
-                                        }
+  defaultTaffybar defaultTaffybarConfig {
+    startWidgets = [ pager ]
+    , barHeight = 20
+    , barPosition = Bottom
+    , endWidgets = [ tray, wifiWidget,
+                     weatherWidget "Didcot" 300.0,
+                     batteryWidget 300.0,
+                     clock, staticIcon calendarCode,
+                     mem, memIcon] ++
+                   cpuWidget host 5.0 ++
+                   [cpuIcon,
+                     netup, net,
+                     staticIcon globeCode] ++
+                   fsList ++
+                   [staticIcon hddOCode,
+                     mailWidget 10,
+                     note]
+    }
 myFSList :: String -> [IO Widget]
 myFSList host
   | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
