@@ -26,7 +26,7 @@ desire
 (let
     ((mypaths
       (cond
-       ((s-ends-with? "shef.ac.uk" system-name)
+       ((system-is-sheffield)
         (list
          "$NPM_PACKAGES/bin"
          "/home/adam/.local/bin"
@@ -47,10 +47,7 @@ desire
          "/usr/bin"
          "/bin"
          (getenv "PATH")))
-         ((or
-            (s-starts-with? "adams-mbp" system-name)
-            (s-starts-with? "Adams-MBP" system-name)
-            (s-starts-with? "Adams-MacBook" system-name))
+         ((system-is-macbook)
           (list
            "/Users/adam/Library/Python/2.7/bin/"
            "/Users/adam/.local/bin/"
@@ -63,11 +60,11 @@ desire
            "/sbin"
            "/opt/X11/bin"
            "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
-	 ((s-starts-with? "NDW1748" system-name)
+	 ((system-is-arch)
 	  (split-string (getenv "PATH") ";"))
        ('t (split-string (getenv "PATH") ":")))))
   (if
-      (not (string-equal system-type "windows-nt"))
+      (not (system-is-windows))
       (progn
 	(setenv "PATH" (mapconcat 'identity mypaths ":"))
 	(setq exec-path (append mypaths (list "." exec-directory))))))
@@ -185,7 +182,52 @@ single directory.
 (setq version-control t)
 
 #+END_SRC
+** Machine recognition
 
+Since different computers have different file structures and
+capabilities, Emacs needs to customise itself for the specific
+computer that it is running on.  To this end, the functions below
+identify computers and operating systems.  This should simplify much
+of the code.
+
+#+BEGIN_SRC elisp :tangle yes
+(defun insert-system-name ()
+  "Get current system's name."
+  (interactive)
+  (insert (format "%s" (system-name))))
+
+(defun insert-system-type ()
+  "Get the current system OS."
+  (interactive)
+  (insert (format "%s" system-type)))
+
+(defun system-is-darwin ()
+  "Are we on a Mac?"
+  (string-equal system-type "darwin"))
+
+(defun system-is-windows ()
+  "Are we on (*shudder*) Windows?"
+  (string-equal system-type "windows-nt"))
+
+(defun system-is-linux ()
+  "Are we on Linux?"
+  (string-equal system-type "gnu/linux"))
+
+(defun system-is-arch ()
+  "Are we on the Arch Virtualbox?"
+  (s-starts-with? "NDW1748" (system-name)))
+
+(defun system-is-sheffield ()
+  "Are we on the old Sheffield workstation?"
+  (s-ends-with? "shef.ac.uk" (system-name)))
+
+(defun system-is-macbook ()
+  "Are we on my Sheffield Macbook?"
+  (or
+   (s-starts-with? "adams-mbp" (system-name))
+   (s-starts-with? "Adams-MBP" (system-name))
+   (s-starts-with? "Adams-MacBook" (system-name))))
+#+END_SRC
 
 * Apps
 ** Dired
@@ -242,10 +284,7 @@ Always revert images files without asking.
   :bind (("C-x g" . magit-status))
   :init
   (if
-      (or
-	 (s-starts-with-p "adams-mbp" system-name)
-	 (s-starts-with-p "Adams-MBP" system-name)
-  	 (s-starts-with-p "Adams-MacBook" system-name))
+      (system-is-macbook)
       (setq magit-git-executable "/usr/bin/git"))
   :config
   (setq diff-switches "-u"))
