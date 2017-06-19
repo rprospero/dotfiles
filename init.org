@@ -736,7 +736,9 @@ directory of STFC.
        (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
     (setq org-agenda-files
           (quote
-           ("~/org/google.org" "~/org/agenda.org" "~/Dropbox/agenda.org")))
+           ("~/org/sync.org"
+	    "~/org/appointments.org"
+	    "~/org/personal-notes.org")))
     (setq calendar-latitude 53.3836)
     (setq calendar-longitude 1.4669)
 
