@@ -1422,6 +1422,16 @@ _q_uit		_=_ equalise
   (evil-define-key 'normal global-map
     "zw" 'hydra-windows/body))
 #+END_SRC
+*** hydra-ivy
+
+    Add hydra bindings to ivy
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package ivy-hydra
+  :ensure t)
+
+#+END_SRC
 
 ** Key Bindings
 
