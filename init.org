@@ -1346,6 +1346,29 @@ source code
   (add-to-list 'flycheck-checkers 'proselint)
   (add-hook 'prog-mode-hook 'flycheck-mode))
  #+END_SRC
+** hydra
+
+   Hydra is a useful little utility for making custom keyboard DSLs.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package hydra
+  :ensure t
+  :config
+  (defhydra hydra-flycheck ()
+    ("X" (progn
+	   (let ((current-prefix-arg 4))
+	   (call-interactively 'flycheck-disable-checker))) "enable" :color blue)
+    ("x" flycheck-disable-checker "disable" :color blue)
+    ("v" flycheck-verify-setup "verify" :color blue)
+    ("e" flycheck-display-error-at-point "explain" :color blue)
+    ("j" flycheck-next-error "next")
+    ("k" flycheck-previous-error "previous"))
+  (evil-define-key 'normal flycheck-mode-map
+    "zf" 'hydra-flycheck/body))
+
+
+#+END_SRC
 
 ** Key Bindings
 
