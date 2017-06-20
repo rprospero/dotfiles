@@ -581,6 +581,7 @@ eww.  FIXME
  #+BEGIN_SRC elisp :tangle yes
 (use-package twittering-mode
              :bind (("C-c t" . twit))
+	     :ensure t
              :config
              (setq twittering-use-master-password t)
              (setq twittering-timer-interval 30))
