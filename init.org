@@ -1457,6 +1457,12 @@ This is a place for my own personal key bindings.
 (bind-key "M-/" 'hippie-expand)
 (bind-key "M-d" 'avy-goto-char-timer)
 
+(defun my-notmuch-archive (&optional arg)
+  (interactive "p")
+  (kmacro-exec-ring-item (quote ([45 117 110 114 101 97 100 32 45 105 110 98 111 120 return] 0 "%d")) arg))
+
+(bind-key "a" 'my-notmuch-archive 'notmuch-search-mode-map)
+
 #+END_SRC
 *** Kill this buffer
 
