@@ -19,9 +19,63 @@ desire
 
 #+END_SRC
 
+Load the string package.  We need this for a lot of the other code.
+
 #+BEGIN_SRC elisp :tangle yes
 (use-package s
   :ensure t)
+
+#+END_SRC
+** Machine recognition
+
+Since different computers have different file structures and
+capabilities, Emacs needs to customise itself for the specific
+computer that it is running on.  To this end, the functions below
+identify computers and operating systems.  This should simplify much
+of the code.
+
+#+BEGIN_SRC elisp :tangle yes
+(defun insert-system-name ()
+  "Get current system's name."
+  (interactive)
+  (insert (format "%s" (system-name))))
+
+(defun insert-system-type ()
+  "Get the current system OS."
+  (interactive)
+  (insert (format "%s" system-type)))
+
+(defun system-is-darwin ()
+  "Are we on a Mac?"
+  (string-equal system-type "darwin"))
+
+(defun system-is-windows ()
+  "Are we on (*shudder*) Windows?"
+  (string-equal system-type "windows-nt"))
+
+(defun system-is-linux ()
+  "Are we on Linux?"
+  (string-equal system-type "gnu/linux"))
+
+(defun system-is-arch ()
+  "Are we on the Arch Virtualbox?"
+  (s-starts-with? "NDW1748" (system-name)))
+
+(defun system-is-sheffield ()
+  "Are we on the old Sheffield workstation?"
+  (s-ends-with? "shef.ac.uk" (system-name)))
+
+(defun system-is-macbook ()
+  "Are we on my Sheffield Macbook?"
+  (or
+   (s-starts-with? "adams-mbp" (system-name))
+   (s-starts-with? "Adams-MBP" (system-name))
+   (s-starts-with? "Adams-MacBook" (system-name))))
+#+END_SRC
+
+** Handle system paths
+
+#+BEGIN_SRC elisp :tangle yes
 
 (let
     ((mypaths
@@ -74,6 +128,8 @@ desire
 
 #+END_SRC
 
+** Prettify
+
 Next, let's get rid of the window chrome.  It's just so ugly.
 
 #+BEGIN_SRC elisp :tangle yes
@@ -107,6 +163,8 @@ Make everything pretty!
 (global-prettify-symbols-mode t)
 
 #+END_SRC
+
+** Unsorted
 
 Use diminish to stop minor modes from taking over the entire taskbar.
 
@@ -181,52 +239,6 @@ single directory.
 (setq vc-make-backup-files t)
 (setq version-control t)
 
-#+END_SRC
-** Machine recognition
-
-Since different computers have different file structures and
-capabilities, Emacs needs to customise itself for the specific
-computer that it is running on.  To this end, the functions below
-identify computers and operating systems.  This should simplify much
-of the code.
-
-#+BEGIN_SRC elisp :tangle yes
-(defun insert-system-name ()
-  "Get current system's name."
-  (interactive)
-  (insert (format "%s" (system-name))))
-
-(defun insert-system-type ()
-  "Get the current system OS."
-  (interactive)
-  (insert (format "%s" system-type)))
-
-(defun system-is-darwin ()
-  "Are we on a Mac?"
-  (string-equal system-type "darwin"))
-
-(defun system-is-windows ()
-  "Are we on (*shudder*) Windows?"
-  (string-equal system-type "windows-nt"))
-
-(defun system-is-linux ()
-  "Are we on Linux?"
-  (string-equal system-type "gnu/linux"))
-
-(defun system-is-arch ()
-  "Are we on the Arch Virtualbox?"
-  (s-starts-with? "NDW1748" (system-name)))
-
-(defun system-is-sheffield ()
-  "Are we on the old Sheffield workstation?"
-  (s-ends-with? "shef.ac.uk" (system-name)))
-
-(defun system-is-macbook ()
-  "Are we on my Sheffield Macbook?"
-  (or
-   (s-starts-with? "adams-mbp" (system-name))
-   (s-starts-with? "Adams-MBP" (system-name))
-   (s-starts-with? "Adams-MacBook" (system-name))))
 #+END_SRC
 
 * Apps
