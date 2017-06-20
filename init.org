@@ -1365,9 +1365,35 @@ source code
     ("j" flycheck-next-error "next")
     ("k" flycheck-previous-error "previous"))
   (evil-define-key 'normal flycheck-mode-map
-    "zf" 'hydra-flycheck/body))
-
-
+    "zf" 'hydra-flycheck/body)
+  (defhydra hydra-flyspell ()
+    ("j" flyspell-goto-next-error "next")
+    ("l" ispell-word "fix")
+    ("I" ispell-pdict-save "insert")
+    ("a" flyspell-auto-correct-word "auto"))
+  (evil-define-key 'normal flyspell-mode-map
+    "zf" 'hydra-flyspell/body)
+  (defhydra hydra-apropos (:color blue)
+    "Apropos"
+    ("a" apropos "apropos")
+    ("c" apropos-command "cmd")
+    ("d" apropos-documentation "doc")
+    ("e" apropos-value "val")
+    ("l" apropos-library "lib")
+    ("o" apropos-user-option "option")
+    ("u" apropos-user-option "option")
+    ("v" apropos-variable "var")
+    ("i" info-apropos "info")
+    ("t" tags-apropos "tags")
+    ("z" hydra-customize-apropos/body "customize"))
+  (defhydra hydra-customize-apropos (:color blue)
+    "Apropos (customize)"
+    ("a" customize-apropos "apropos")
+    ("f" customize-apropos-faces "faces")
+    ("g" customize-apropos-groups "groups")
+    ("o" customize-apropos-options "options"))
+  (evil-define-key 'normal global-map
+    "z?" 'hydra-apropos/body))
 #+END_SRC
 
 ** Key Bindings
