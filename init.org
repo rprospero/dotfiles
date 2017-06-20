@@ -1393,7 +1393,34 @@ source code
     ("g" customize-apropos-groups "groups")
     ("o" customize-apropos-options "options"))
   (evil-define-key 'normal global-map
-    "z?" 'hydra-apropos/body))
+    "z?" 'hydra-apropos/body)
+  (defhydra hydra-windows (:hint nil)
+   "
+Movement^^	^Resize^	^Split^         ^Dedicate^
+----------------------------------------------------------------
+_h_ ←		_H_ X←	_|_ vertical	_d_ purpose
+_j_ ↓		_J_ X↓^	_-_ horizontal	_D_ buffer
+_k_ ↑		_K_ X↑^	_x_ close
+_l_ →		_L_ X→
+_q_uit		_=_ equalise
+"
+   ("j" windmove-down)
+   ("k" windmove-up)
+   ("h" windmove-left)
+   ("l" windmove-right)
+   ("J" shrink-window)
+   ("K" enlarge-window)
+   ("H" shrink-window-horizontally)
+   ("L" enlarge-window-horizontally)
+   ("=" balance-windows)
+   ("-" split-window-below)
+   ("|" split-window-right)
+   ("x" delete-window)
+   ("d" purpose-toggle-window-purpose-dedicated)
+   ("D" purpose-toggle-window-buffer-dedicated)
+   ("q" nil))
+  (evil-define-key 'normal global-map
+    "zw" 'hydra-windows/body))
 #+END_SRC
 
 ** Key Bindings
