@@ -741,6 +741,20 @@ notmuch is a wonderful little utility for managing my mail
 
 #+END_SRC
 
+** Tramp
+
+#+BEGIN_SRC elisp :tangle yes
+(setq my-tramp-ssh-completions
+      '((tramp-parse-sconfig "~/.ssh/config")
+	(tramp-parse-sknownhosts "~/.ssh/known_hosts")))
+
+(mapc
+ (lambda (method)
+   (tramp-set-completion-function method my-tramp-ssh-completions))
+ '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh" "sshx"))
+
+#+END_SRC
+
 ** EUDC
 
 EUDC is the LDAP client for emacs.  It should allow me to query the
