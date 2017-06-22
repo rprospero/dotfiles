@@ -272,6 +272,16 @@ Get dired to intergate with imenu, since that just makes sense.
 
 #+END_SRC
 
+Direct Quick Sort offers more sorting optins than just name and time
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package dired-quick-sort
+  :ensure t
+  :config
+  (dired-quick-sort-setup))
+#+END_SRC
+
 ** Images
 
 Load images as images, instead of as bye arrays
