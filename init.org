@@ -688,13 +688,15 @@ notmuch is a wonderful little utility for managing my mail
    elfeed-feeds
    '(("http://www.xkcd.org/atom.xml" comic)
      ("http://phdcomics.com/gradfeed.php" comic)
-     "http://www.merriam-webster.com/wotd/feed/rss2"
-     "http://sachachua.com/blog/feed/"
-     "https://planet.haskell.org/rss20.xml"
-     "https://wordsmith.org/awad/rss1.xml"
+     ("http://www.merriam-webster.com/wotd/feed/rss2" education)
+     ("http://sachachua.com/blog/feed/" sw emacs)
+     ("https://planet.haskell.org/rss20.xml" sw haskell)
+     ("https://wordsmith.org/awad/rss1.xml" education)
      ("http://emacsninja.com/feed.atom" sw emacs)
      ("http://emacshorrors.com/feed.atom" sw emacs)
      ("http://endlessparentheses.com/atom.xml" sw emacs)
+     ("http://endlessparentheses.com/atom.xml" sw emacs)
+     ("http://pragmaticemacs.com/feed/" sw emacs)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
 
  #+END_SRC
