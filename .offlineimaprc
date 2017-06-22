@@ -178,11 +178,15 @@ footer = "\n"
 
 localrepository = GmailLocalProfessional
 remoterepository = GmailProfessional
+autorefresh = 5
+quick = 10
 
 [Account Work]
 
 localrepository = LocalWork
 remoterepository = Work
+autorefresh = 5
+quick = 10
 
 [Account Personal]
 
