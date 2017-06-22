@@ -8,6 +8,7 @@ desire
 (setq package-archives
  (quote
   (("gnu" . "http://elpa.gnu.org/packages/")
+   ("org" . "http://orgmode.org/elpa/")
    ; ("marmalade" . "http://marmalade-repo.org/packages/")
    ("melpa" . "http://melpa.milkbox.net/packages/"))))
 (package-initialize)
@@ -911,6 +912,15 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 #+END_SRC
 
+We need the org-contrib package for some lesser known libraries
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package org-plus-contrib
+  :ensure t)
+
+
+#+END_SRC
+
 ** htmlize
 
  Org-mode uses the htmlize library to highlight the code in the
@@ -923,6 +933,15 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
  #+END_SRC
 
+** org-notmuch
+
+We need to load the contrib package to get notmuch links into org
+
+#+BEGIN_SRC elisp :tangle yes
+
+(require 'org-notmuch)
+
+#+END_SRC
 
 * Prose
 
