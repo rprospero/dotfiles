@@ -1364,6 +1364,36 @@ source code
   (evilnc-default-hotkeys))
 
 #+END_SRC
+
+*** evil snipe
+
+The evil-snipe package should let me zip around text a bit faster than
+I can currently do with f/F/t/T
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-snipe
+  :ensure t
+  :config
+  (evil-snipe-override-mode 1))
+
+#+END_SRC
+
+*** evil easymotion
+
+easymotion helps with the fact that I don't instantly know how many
+lines or characters I'm looking at 90% of the time when using evil.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-easymotion
+  :ensure t
+  :config
+  (evilem-default-keybindings "RET"))
+
+
+#+END_SRC
+
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes
