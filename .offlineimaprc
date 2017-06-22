@@ -180,6 +180,7 @@ localrepository = GmailLocalProfessional
 remoterepository = GmailProfessional
 autorefresh = 5
 quick = 10
+synclabels = yes
 
 [Account Work]
 
@@ -284,7 +285,7 @@ postsynchook = notmuch new
 # Specifies if we want to sync GMail lables with the local repository.
 # Effective only for GMail IMAP repositories.
 #
-#synclabels = no
+synclabels = yes
 
 # Name of the header to use for label storage.  Format for the header
 # value differs for different headers, because there are some de-facto
