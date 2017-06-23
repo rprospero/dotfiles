@@ -38,7 +38,7 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    emacs sudo git openssh tmux zsh firefox gnupg dbus stack ghc taffybar haskellPackages.taffybar ghc lightdm
+    emacs sudo git openssh tmux zsh firefox gnupg dbus stack ghc taffybar haskellPackages.taffybar ghc lightdm oh-my-zsh
   ];
 
   fonts = {
@@ -50,6 +50,8 @@
 	      inconsolata
 	];
   };
+
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
 
