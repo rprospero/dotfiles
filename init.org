@@ -845,6 +845,12 @@ directory of STFC.
       ("\\.x?html?\\'" . default)
       ("\\.pdf\\'" . system))))
 
+   (setq org-capture-templates
+	 (quote
+	  (("m" "Unsorted Mail Tasks" entry
+	    (file+headline "~/org/appointments.org" "Unsorted Mail")
+	    "** TODO%?\n    SCHEDULED:%T\n\n    %a"))))
+
 
     (setq org-latex-listings (quote minted))
     (setq org-latex-packages-alist (quote (("" "minted" nil))))
