@@ -1314,7 +1314,9 @@ current line of code.  Why is that so hard to understand?
 (use-package evil-nerd-commenter
   :ensure t
   :config
-  (evilnc-default-hotkeys))
+  (evilnc-default-hotkeys)
+  :bind
+  ("C-c c" . org-capture))
 #+END_SRC
 
 *** evil-indent-plus
@@ -1367,19 +1369,6 @@ source code
 
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
   #+END_SRC
-
-*** evil nerd commenter
-
-    Better code commenting
-
-#+BEGIN_SRC elisp :tangle yes
-
-(use-package evil-nerd-commenter
-  :ensure t
-  :config
-  (evilnc-default-hotkeys))
-
-#+END_SRC
 
 *** evil snipe
 
