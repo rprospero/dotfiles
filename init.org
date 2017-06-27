@@ -1622,13 +1622,23 @@ own hotkey.  Why not steal F5 from the browser?
 
 ** link-hint
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle no
 (use-package link-hint
   :ensure t
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
  #+END_SRC
+ 
+** ace-link
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package ace-link
+  :ensure t
+  :config
+  (ace-link-setup-default)
+  (define-key org-mode-map (kbd "M-o") 'ace-link-org))
+#+END_SRC
 
 
 ** projectile
