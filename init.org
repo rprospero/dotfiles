@@ -795,10 +795,7 @@ directory of STFC.
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb)
-	 :map org-agenda-mode-map
-	 ("RET" . org-agenda-goto)
-	 ([tab] . org-agenda-switch-to))
+         ("C-c b" . org-iswitchb))
   :config
   (progn
     (setq holiday-other-holidays
@@ -901,6 +898,10 @@ directory of STFC.
              nil
              nil)))
 
+
+    (require 'org-agenda)
+    (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
+    (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
     (add-hook 'org-mode-hook 'auto-fill-mode)
     (add-hook 'org-mode-hook 'flyspell-mode)))
 
