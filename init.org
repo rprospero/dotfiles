@@ -548,15 +548,17 @@ review again so that I can remember exactly how they work.  FIXME
 
 #+END_SRC
 
-We'll set the default browser to firefox for now.  At some point, I
-want to make function that intelligently decides between firefox and
-eww.  FIXME
+** eww 
+
+ We will use =eww= as our default browser, with the option to escape
+ to firefox if things get bad.
 
 #+BEGIN_SRC elisp :tangle yes
-
-(setq browse-url-browser-function 'browse-url-firefox)
-
+(setq browse-url-browser-function 'eww-browse-url)
 #+END_SRC
+
+I customise the eww bindings to make them more [[evil][VimFx]]
+
 ** jabber
 
  #+BEGIN_SRC elisp :tangle yes
@@ -1228,29 +1230,46 @@ Display icons when switching buffers
 ** evil
 
  #+BEGIN_SRC elisp :tangle yes
-(use-package evil
-  :ensure t
-  :config
-  (setq evil-escape-unordered-key-sequence t)
-  (setq evil-insert-state-modes
-    '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
-  (evil-mode)
-  (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
-  (add-to-list 'evil-emacs-state-modes 'elfeed-entry-mode)
-  (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
-  (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
-  (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
-  (evil-add-hjkl-bindings elfeed-show-mode-map 'emacs)
-  (evil-add-hjkl-bindings elfeed-search-mode-map 'emacs)
-  (evil-set-initial-state 'notmuch-search-mode 'emacs)
-  (evil-set-initial-state 'notmuch-show-mode 'emacs)
-  (evil-define-key 'normal flycheck-mode-map
-    "zj" 'flycheck-next-error
-    "zk" 'flycheck-previous-error)
-  (evil-define-key 'normal flyspell-mode-map
-    "zj" 'flyspell-goto-next-error)
-  (evil-global-set-key 'normal "zi" 'counsel-imenu)
-  (add-hook 'git-commit-mode-hook #'evil-insert-state))
+   (use-package evil
+     :ensure t
+     :config
+     (setq evil-escape-unordered-key-sequence t)
+     (setq evil-insert-state-modes
+       '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
+     (evil-mode)
+     (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
+     (add-to-list 'evil-emacs-state-modes 'elfeed-entry-mode)
+     (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
+     (add-to-list 'evil-emacs-state-modes 'eww-mode)
+     (evil-add-hjkl-bindings notmuch-search-mode-map 'emacs)
+     (evil-add-hjkl-bindings notmuch-show-mode-map 'emacs)
+     (evil-add-hjkl-bindings elfeed-show-mode-map 'emacs)
+     (evil-add-hjkl-bindings elfeed-search-mode-map 'emacs)
+     (evil-add-hjkl-bindings
+      eww-mode-map 'emacs
+      (kbd "f") 'ace-link-eww
+      (kbd "t") 'eww-browse-with-external-browser
+      (kbd "o") 'eww
+      (kbd "r") 'eww-reload
+      (kbd "/") 'evil-search-forward
+      (kbd "n") 'evil-search-next
+      (kbd "N") 'evil-search-previous
+      (kbd "[") 'eww-previous-url
+      (kbd "]") 'eww-next-url
+      (kbd "gr") 'eww-readable
+      (kbd "gu") 'eww-up-url
+      (kbd "gU") 'eww-top-url
+      (kbd "H") 'eww-back-url
+      (kbd "L") 'eww-forward-url)
+     (evil-set-initial-state 'notmuch-search-mode 'emacs)
+     (evil-set-initial-state 'notmuch-show-mode 'emacs)
+     (evil-define-key 'normal flycheck-mode-map
+       "zj" 'flycheck-next-error
+       "zk" 'flycheck-previous-error)
+     (evil-define-key 'normal flyspell-mode-map
+       "zj" 'flyspell-goto-next-error)
+     (evil-global-set-key 'normal "zi" 'counsel-imenu)
+     (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
 
