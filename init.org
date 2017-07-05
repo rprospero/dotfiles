@@ -793,7 +793,10 @@ directory of STFC.
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
+         ("C-c b" . org-iswitchb)
+	 :map org-agenda-mode-map
+	 ("RET" . org-agenda-goto)
+	 ([tab] . org-agenda-switch-to))
   :config
   (progn
     (setq holiday-other-holidays
@@ -845,6 +848,12 @@ directory of STFC.
       ("\\.x?html?\\'" . default)
       ("\\.pdf\\'" . system))))
 
+   (setq org-capture-templates
+	 (quote
+	  (("m" "Unsorted Mail Tasks" entry
+	    (file+headline "~/org/appointments.org" "Unsorted Mail")
+	    "** TODO%?\n    SCHEDULED:%T\n\n    %a"))))
+
 
     (setq org-latex-listings (quote minted))
     (setq org-latex-packages-alist (quote (("" "minted" nil))))
@@ -879,7 +888,7 @@ directory of STFC.
     (setq
      org-agenda-day-face-function
      (function
-      jd:org-agenda-day-face-holidays-function))
+      my-org-agenda-day-face-holidays-function))
     ; (require 'org-notify)
     (setq org-agenda-custom-commands
           '(("c" . "My Custom Agendas")
@@ -1308,7 +1317,9 @@ current line of code.  Why is that so hard to understand?
 (use-package evil-nerd-commenter
   :ensure t
   :config
-  (evilnc-default-hotkeys))
+  (evilnc-default-hotkeys)
+  :bind
+  ("C-c c" . org-capture))
 #+END_SRC
 
 *** evil-indent-plus
@@ -1361,19 +1372,6 @@ source code
 
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
   #+END_SRC
-
-*** evil nerd commenter
-
-    Better code commenting
-
-#+BEGIN_SRC elisp :tangle yes
-
-(use-package evil-nerd-commenter
-  :ensure t
-  :config
-  (evilnc-default-hotkeys))
-
-#+END_SRC
 
 *** evil snipe
 
@@ -1616,13 +1614,23 @@ own hotkey.  Why not steal F5 from the browser?
 
 ** link-hint
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC elisp :tangle no
 (use-package link-hint
   :ensure t
   :bind
   ("C-c o" . link-hint-open-link)
   ("C-c c" . link-hint-copy-link))
  #+END_SRC
+ 
+** ace-link
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package ace-link
+  :ensure t
+  :config
+  (ace-link-setup-default)
+  (define-key org-mode-map (kbd "M-o") 'ace-link-org))
+#+END_SRC
 
 
 ** projectile
