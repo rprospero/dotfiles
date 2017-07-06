@@ -776,16 +776,18 @@ EUDC is the LDAP client for emacs.  It should allow me to query the
 directory of STFC.
 
 #+BEGIN_SRC elisp :tangle yes
-(require 'ldap)
-(require 'eudc)
-(setq eudc-server-hotlist
-      (quote (("127.0.0.1:1389" . ldap))))
-(setq ldap-host-parameters-alist
-      `(("127.0.0.1:1389"
-	 base "ou=people"
-	 binddn "CLRC\\auv61894"
-	 passwd ,(funcall (plist-get (car (auth-source-search :max 1 :host "127.0.0.1" :port 1389)) :secret))
-	 auth simple)))
+(add-hook
+ 'eudc-mode-hook
+ (lambda ()
+   (progn
+     (setq eudc-server-hotlist
+	   (quote (("127.0.0.1:1389" . ldap))))
+     (setq ldap-host-parameters-alist
+	   `(("127.0.0.1:1389"
+	      base "ou=people"
+	      binddn "CLRC\\auv61894"
+	      passwd ,(funcall (plist-get (car (auth-source-search :max 1 :host "127.0.0.1" :port 1389)) :secret))
+	      auth simple))))))
 
 #+END_SRC
 
