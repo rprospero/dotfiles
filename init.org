@@ -1395,20 +1395,6 @@ source code
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
   #+END_SRC
 
-*** evil snipe
-
-The evil-snipe package should let me zip around text a bit faster than
-I can currently do with f/F/t/T
-
-#+BEGIN_SRC elisp :tangle yes
-
-(use-package evil-snipe
-  :ensure t
-  :config
-  (evil-snipe-override-mode 1))
-
-#+END_SRC
-
 *** evil easymotion
 
 easymotion helps with the fact that I don't instantly know how many
