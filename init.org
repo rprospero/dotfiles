@@ -1333,7 +1333,9 @@ Display icons when switching buffers
 #+BEGIN_SRC elisp :tangle yes
 (use-package evil-org
   :diminish evil-org-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook evil-org-mode))
 
 #+END_SRC
 
