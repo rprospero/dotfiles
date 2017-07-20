@@ -1485,8 +1485,9 @@ necessary.
     ("X" (progn
 	   (let ((current-prefix-arg 4))
 	   (call-interactively 'flycheck-disable-checker))) "enable" :color blue)
-    ("x" flycheck-disable-checker "disable" :color blue)
-    ("v" flycheck-verify-setup "verify" :color blue)
+    ("x" flycheck-disable-checker "disable")
+    ("v" flycheck-verify-setup "verify")
+    ("c" flycheck-select-checker "checkerer")
     ("e" flycheck-display-error-at-point "explain" :color blue)
     ("j" flycheck-next-error "next")
     ("k" flycheck-previous-error "previous"))
