@@ -282,6 +282,15 @@ Direct Quick Sort offers more sorting optins than just name and time
   (dired-quick-sort-setup))
 #+END_SRC
 
+Dired imenu makes dired navigation so much more consistent with the
+rest of evil.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package dired-imenu
+:ensure t)
+
+#+END_SRC
+
 ** Images
 
 Load images as images, instead of as bye arrays
