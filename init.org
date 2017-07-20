@@ -1469,7 +1469,8 @@ necessary.
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode))
   (add-to-list 'flycheck-checkers 'proselint)
-  (add-hook 'prog-mode-hook 'flycheck-mode))
+  (add-hook 'prog-mode-hook 'flycheck-mode)
+  (flycheck-add-next-checker 'python-flake8 'python-pylint))
  #+END_SRC
 ** hydra
 
