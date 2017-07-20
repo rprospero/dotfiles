@@ -1438,6 +1438,22 @@ highlight to indicate that a 2f/2F will still find the correct word.
 
 #+END_SRC
 
+*** evil text object python
+
+This package allows for using evil operations on the structure of
+python statements, instead of just looking at things on a line by line
+basis.  Due to Python's whitespace sensitive setup, this might be
+necessary.
+
+#+BEGIN_SRC elips
+
+(use-package evil-text-object-python
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'evil-text-object-python-add-bindings))
+
+#+END_SRC
+
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes
