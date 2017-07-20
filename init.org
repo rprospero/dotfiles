@@ -1421,6 +1421,23 @@ lines or characters I'm looking at 90% of the time when using evil.
 
 #+END_SRC
 
+
+*** evil quickscope
+
+evil quickscope highlight unique characters in the words around the
+cursor to identify the best options for using the f/t/F/T keys for
+navigation.  If there is no best single character, it uses a blue
+highlight to indicate that a 2f/2F will still find the correct word.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-quickscope
+  :ensure t
+  :config
+  (global-evil-quickscope-always-mode 1))
+
+#+END_SRC
+
 ** flycheck
 
  #+BEGIN_SRC elisp :tangle yes
