@@ -282,6 +282,18 @@ Direct Quick Sort offers more sorting optins than just name and time
   (dired-quick-sort-setup))
 #+END_SRC
 
+Dired-collapse gets rid of annoying chains of single file directories
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package dired-collapse
+  :ensure t
+  :config
+  (add-hook 'dired-mode-hook dired-collapse-mode)
+
+#+END_SRC
+
+
 ** Images
 
 Load images as images, instead of as bye arrays
