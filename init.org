@@ -289,7 +289,7 @@ Dired-collapse gets rid of annoying chains of single file directories
 (use-package dired-collapse
   :ensure t
   :config
-  (add-hook 'dired-mode-hook dired-collapse-mode)
+  (add-hook 'dired-mode-hook dired-collapse-mode))
 
 #+END_SRC
 
