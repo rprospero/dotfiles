@@ -294,6 +294,15 @@ Dired-collapse gets rid of annoying chains of single file directories
 #+END_SRC
 
 
+Dired imenu makes dired navigation so much more consistent with the
+rest of evil.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package dired-imenu
+:ensure t)
+
+#+END_SRC
+
 ** Images
 
 Load images as images, instead of as bye arrays
@@ -1336,7 +1345,9 @@ Display icons when switching buffers
 #+BEGIN_SRC elisp :tangle yes
 (use-package evil-org
   :diminish evil-org-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook evil-org-mode))
 
 #+END_SRC
 
@@ -1407,20 +1418,6 @@ source code
   (define-key god-local-mode-map (kbd "I") 'mortal-mode))
   #+END_SRC
 
-*** evil snipe
-
-The evil-snipe package should let me zip around text a bit faster than
-I can currently do with f/F/t/T
-
-#+BEGIN_SRC elisp :tangle yes
-
-(use-package evil-snipe
-  :ensure t
-  :config
-  (evil-snipe-override-mode 1))
-
-#+END_SRC
-
 *** evil easymotion
 
 easymotion helps with the fact that I don't instantly know how many
@@ -1433,6 +1430,39 @@ lines or characters I'm looking at 90% of the time when using evil.
   :config
   (evilem-default-keybindings "RET"))
 
+
+#+END_SRC
+
+
+*** evil quickscope
+
+evil quickscope highlight unique characters in the words around the
+cursor to identify the best options for using the f/t/F/T keys for
+navigation.  If there is no best single character, it uses a blue
+highlight to indicate that a 2f/2F will still find the correct word.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package evil-quickscope
+  :ensure t
+  :config
+  (global-evil-quickscope-always-mode 1))
+
+#+END_SRC
+
+*** evil text object python
+
+This package allows for using evil operations on the structure of
+python statements, instead of just looking at things on a line by line
+basis.  Due to Python's whitespace sensitive setup, this might be
+necessary.
+
+#+BEGIN_SRC elips
+
+(use-package evil-text-object-python
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'evil-text-object-python-add-bindings))
 
 #+END_SRC
 
@@ -1451,7 +1481,8 @@ lines or characters I'm looking at 90% of the time when using evil.
    ((warning line-start (file-name) ":" line ":" column ": " (message) line-end))
    :modes (markdown-mode text-mode org-mode))
   (add-to-list 'flycheck-checkers 'proselint)
-  (add-hook 'prog-mode-hook 'flycheck-mode))
+  (add-hook 'prog-mode-hook 'flycheck-mode)
+  (flycheck-add-next-checker 'python-flake8 'python-pylint))
  #+END_SRC
 ** hydra
 
@@ -1466,8 +1497,9 @@ lines or characters I'm looking at 90% of the time when using evil.
     ("X" (progn
 	   (let ((current-prefix-arg 4))
 	   (call-interactively 'flycheck-disable-checker))) "enable" :color blue)
-    ("x" flycheck-disable-checker "disable" :color blue)
-    ("v" flycheck-verify-setup "verify" :color blue)
+    ("x" flycheck-disable-checker "disable")
+    ("v" flycheck-verify-setup "verify")
+    ("c" flycheck-select-checker "checkerer")
     ("e" flycheck-display-error-at-point "explain" :color blue)
     ("j" flycheck-next-error "next")
     ("k" flycheck-previous-error "previous"))
