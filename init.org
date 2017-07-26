@@ -1446,7 +1446,7 @@ highlight to indicate that a 2f/2F will still find the correct word.
 (use-package evil-quickscope
   :ensure t
   :config
-  (global-evil-quickscope-always-mode 1))
+  (global-evil-quickscope-mode 1))
 
 #+END_SRC
 
