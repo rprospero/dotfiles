@@ -287,9 +287,7 @@ Dired-collapse gets rid of annoying chains of single file directories
 #+BEGIN_SRC elisp :tangle yes
 
 (use-package dired-collapse
-  :ensure t
-  :config
-  (add-hook 'dired-mode-hook dired-collapse-mode))
+  :ensure t)
 
 #+END_SRC
 
