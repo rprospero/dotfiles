@@ -282,6 +282,16 @@ Direct Quick Sort offers more sorting optins than just name and time
   (dired-quick-sort-setup))
 #+END_SRC
 
+Dired-collapse gets rid of annoying chains of single file directories
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package dired-collapse
+  :ensure t)
+
+#+END_SRC
+
+
 Dired imenu makes dired navigation so much more consistent with the
 rest of evil.
 
