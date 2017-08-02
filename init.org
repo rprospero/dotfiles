@@ -1371,7 +1371,9 @@ source code
 
 #+BEGIN_SRC elisp :tangle yes
 (use-package evil-indent-plus
-  :ensure t)
+  :ensure t
+  :config
+  (evil-indent-plus-default-bindings))
 
 #+END_SRC
 
