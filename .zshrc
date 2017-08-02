@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=/home/adam/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -11,7 +11,7 @@ ZSH_THEME="pygmalion"
 # CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -45,7 +45,7 @@ ZSH_THEME="pygmalion"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git lein cabal screen colorize)
+plugins=(git lein cabal screen colorize tmux)
 
 source $ZSH/oh-my-zsh.sh
 
