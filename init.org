@@ -1791,6 +1791,7 @@ from time to time and see if anything has improved.
   :config
   (spaceline-all-the-icons-theme)
   (spaceline-toggle-all-the-icons-time-off)
+  (spaceline-toggle-all-the-icons-region-info-off)
   (spaceline-toggle-all-the-icons-git-ahead-on)
   (spaceline-toggle-all-the-icons-projectile-on))
 #+END_SRC
