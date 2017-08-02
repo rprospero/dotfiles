@@ -1665,6 +1665,38 @@ own hotkey.  Why not steal F5 from the browser?
   (setq counsel-mode t))
   #+END_SRC
 
+**** counsel-dash
+
+Dash is an offline documentation framework.  The open source version
+is [[https://zealdocs.org/][Zeal]].  It's useful for getting programming documentation without
+needing to load up a google search.  It's especially useful when
+there's no internet access or the scipy website is down yet again.
+
+FIXME: The current version of counsel-dash relies on helm-dash, which
+subsequently relies on Helm.  I may be able to get rid of the helm
+dependency in the future if this changes.  I need to check on this
+from time to time and see if anything has improved.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package counsel-dash 
+  :ensure t
+  :config
+  (setq counsel-dash-browser-func 'eww)
+  (setq counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets")
+  (add-hook 'python-mode-hook
+	    (lambda () (setq-local counsel-dash-docsets
+			      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3"))))
+  (add-hook 'elisp-mode
+	    (lambda () (setq-local counsel-dash-docsets
+			      '("Emacs_Lisp"))))
+  (add-hook 'haskell-mode
+	    (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
+  (add-hook 'html-mode
+	    (lambda () (setq-local counsel-dash-docsets '("HTML" "CSS"))))
+  (evil-define-key 'normal global-map
+    "zd" 'counsel-dash))
+
+#+END_SRC
 
 *** flyspell-correct-ivy
 
