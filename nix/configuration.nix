@@ -13,6 +13,8 @@
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
+  nixpkgs.config.allowUnfree = true;
+
   # Select internationalisation properties.
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -26,7 +28,7 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    emacs sudo git openssh tmux zsh firefox gnupg dbus stack ghc taffybar haskellPackages.taffybar ghc lightdm oh-my-zsh
+    emacs sudo git openssh tmux zsh firefox gnupg dbus stack ghc taffybar haskellPackages.taffybar ghc lightdm oh-my-zsh dropbox mesa
   ];
 
   fonts = {
