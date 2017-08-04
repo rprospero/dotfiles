@@ -1457,7 +1457,7 @@ python statements, instead of just looking at things on a line by line
 basis.  Due to Python's whitespace sensitive setup, this might be
 necessary.
 
-#+BEGIN_SRC elips
+#+BEGIN_SRC elisp :tangle yes
 
 (use-package evil-text-object-python
   :ensure t
