@@ -1291,6 +1291,9 @@ Display icons when switching buffers
      (evil-define-key 'normal flyspell-mode-map
        "zj" 'flyspell-goto-next-error)
      (evil-global-set-key 'normal "zi" 'counsel-imenu)
+     (evil-define-key 'normal org-mode-map
+       "zi" 'counsel-org-goto)
+     (evil-global-set-key 'normal "zg" 'counsel-rg)
      (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
