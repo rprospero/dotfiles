@@ -1352,22 +1352,6 @@ Display icons when switching buffers
 
 #+END_SRC
 
-*** evil-nerd-commenter
-
-Add the evil nerd commenter, as =comment-dwim= never actually does
-what I mean.  Seriously, I have never hit =M-;= and wanted to put a
-comment at the end of the line.  I always want to comment out the
-current line of code.  Why is that so hard to understand?
-
-#+BEGIN_SRC elisp :tangle yes
-(use-package evil-nerd-commenter
-  :ensure t
-  :config
-  (evilnc-default-hotkeys)
-  :bind
-  ("C-c c" . org-capture))
-#+END_SRC
-
 *** evil-indent-plus
 Evil indent plus does a great job at handling Python and Haskell
 source code
@@ -1460,13 +1444,29 @@ python statements, instead of just looking at things on a line by line
 basis.  Due to Python's whitespace sensitive setup, this might be
 necessary.
 
-#+BEGIN_SRC elips
+#+BEGIN_SRC elisp :tangle yes
 
 (use-package evil-text-object-python
   :ensure t
   :config
   (add-hook 'python-mode-hook 'evil-text-object-python-add-bindings))
 
+#+END_SRC
+
+*** evil-nerd-commenter
+
+Add the evil nerd commenter, as =comment-dwim= never actually does
+what I mean.  Seriously, I have never hit =M-;= and wanted to put a
+comment at the end of the line.  I always want to comment out the
+current line of code.  Why is that so hard to understand?
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package evil-nerd-commenter
+  :ensure t
+  :config
+  (evilnc-default-hotkeys)
+  :bind
+  ("C-c c" . org-capture))
 #+END_SRC
 
 ** flycheck
