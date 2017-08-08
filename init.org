@@ -728,6 +728,7 @@ notmuch is a wonderful little utility for managing my mail
      ("http://endlessparentheses.com/atom.xml" sw emacs)
      ("http://endlessparentheses.com/atom.xml" sw emacs)
      ("http://pragmaticemacs.com/feed/" sw emacs)
+     ("https://www.reddit.com/r/emacs/.rss" sw emacs)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
 
  #+END_SRC
