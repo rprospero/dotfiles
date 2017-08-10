@@ -60,7 +60,9 @@ of the code.
 
 (defun system-is-arch ()
   "Are we on the Arch Virtualbox?"
-  (s-starts-with? "NDW1748" (system-name)))
+  (or
+   (s-starts-with? "NDLT969a" (system-name))
+   (s-starts-with? "NDW1748" (system-name))))
 
 (defun system-is-sheffield ()
   "Are we on the old Sheffield workstation?"
