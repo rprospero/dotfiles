@@ -118,7 +118,9 @@ of the code.
            "/opt/X11/bin"
            "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
 	 ((system-is-arch)
-	  (split-string (getenv "PATH") ";"))
+	  (append
+	   (split-string (getenv "PATH") ":")
+	   (list "~/bin")))
        ('t (split-string (getenv "PATH") ":")))))
   (if
       (not (system-is-windows))
