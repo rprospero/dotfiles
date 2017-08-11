@@ -1256,6 +1256,19 @@ Display icons when switching buffers
   :diminish company-mode)
 #+END_SRC
 
+*** company-emoji
+
+This should allow me to more easily type emoji.  Because that's what my life has been missing.
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package company-emoji
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-emoji))
+
+#+END_SRC
+
+
 
 
 ** evil
