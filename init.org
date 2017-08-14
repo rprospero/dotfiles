@@ -631,6 +631,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
              :bind (("C-c t" . twit))
 	     :ensure t
              :config
+	     (add-hook 'twittering-edit-mode-hook 'company-mode)
              (setq twittering-use-master-password t)
              (setq twittering-timer-interval 30))
  #+END_SRC
@@ -1273,6 +1274,20 @@ This should allow me to more easily type emoji.  Because that's what my life has
 
 
 
+
+*** company-math
+
+Let's use company-math mode so that we don't have to keep using the TeX input method
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package company-math
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-math-symbols-unicode))
+
+#+END_SRC
+
+😄
 
 ** evil
 
