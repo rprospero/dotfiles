@@ -881,7 +881,10 @@ directory of STFC.
 	 (quote
 	  (("m" "Unsorted Mail Tasks" entry
 	    (file+headline "~/org/appointments.org" "Unsorted Mail")
-	    "** TODO%?\n    SCHEDULED:%T\n\n    %a"))))
+	    "** TODO%?\n    SCHEDULED:%T\n\n    %a")
+	   ("v" "Vocab" entry
+	    (file+headline "~/org/appointments.org" "Vocab")
+	    "** TODO %a\n    SCHEDULED:%T%?\n\n    %a"))))
 
 
     (setq org-latex-listings (quote minted))
@@ -1369,8 +1372,13 @@ This should allow me to more easily type emoji.  Because that's what my life has
 (use-package evil-org
   :diminish evil-org-mode
   :ensure t
+  :after org
   :config
-  (add-hook 'org-mode-hook evil-org-mode))
+  (require 'evil-org)
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme))))
 
 #+END_SRC
 
