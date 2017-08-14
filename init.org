@@ -1823,6 +1823,7 @@ from time to time and see if anything has improved.
   :after spaceline
   :config
   (spaceline-all-the-icons-theme)
+  (spaceline-toggle-all-the-icons-buffer-size-off)
   (spaceline-toggle-all-the-icons-time-off)
   (spaceline-toggle-all-the-icons-region-info-off)
   (spaceline-toggle-all-the-icons-git-ahead-on)
