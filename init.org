@@ -856,7 +856,8 @@ directory of STFC.
     (defun adam-org-sunrise ()
       (concat
        (nth 1 (split-string (diary-sunrise-sunset)))
-       " Sunrise"))
+       " Sunrise for "
+       (string-remove-prefix "(" (nth 9 (split-string (diary-sunrise-sunset))))))
     (defun adam-org-sunset ()
       (concat
        (nth 4 (split-string (diary-sunrise-sunset)))
