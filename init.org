@@ -861,13 +861,27 @@ At some point, I need to turn this into a proper package.
 
 	     (if (plist-get meeting 'all-day)
 		""
-	       (format "%02d:%02d--%02d:%02d"
-		       (caddr (plist-get meeting 'start))
-		       (cadr (plist-get meeting 'start))
-		       (caddr (plist-get meeting 'stop))
-		       (cadr (plist-get meeting 'stop))))
+	       (adam-relative-date-format
+		(plist-get meeting 'start)
+		(plist-get meeting 'stop)
+		date))
 	     (plist-get meeting 'subject))
-	  (format "%s no" meeting)))))
+	  (format "" meeting)))))
+
+(defun adam-relative-date-format (begin end local)
+     (pcase-let
+	 ((`(,month ,day ,year) local)
+       	  (`(,es ,em ,eh ,eD ,eM ,eY) begin)
+       	  (`(,bs ,bm ,bh ,bD ,bM ,bY) end))
+       (cond
+	((and (= day eD) (= month eM) (= year eY)
+	      (= day bD) (= month bM) (= year bY))
+	 (format "%2d:%02d--%2d:%02d" bh bm eh em))
+	((and (= day eD) (= month eM) (= year eY))
+	 (format "%2d:%02d" eh em))
+	((and (= day bD) (= month bM) (= year bY))
+	 (format "%2d:%02d" bh bm))
+       	 "")))
 
 (defun adam-parse-calendar-item (item)
   (setq result '(all-day ()))
