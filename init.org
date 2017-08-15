@@ -820,6 +820,90 @@ directory of STFC.
 
 #+END_SRC
 
+
+** excorporate
+
+Excorporate pulls calendar data from an exchange server.  I've then
+written *way* too much code to allow this to interface with the
+org-mode agenda, allowing me to insert my outlook agenda directly into org.
+
+#+BEGIN_SRC elisp :tangle yes
+
+(use-package excorporate
+  :ensure t
+  :config
+  (setq excorporate-configuration "adam.washington@stfc.ac.uk"))
+
+#+END_SRC
+
+*** excorporate org
+
+This is my little code to put my Exchange calendar into my
+org-agenda.  It's probably horribly broken.  Additionally, it depends
+on [[https://github.com/skeeto/elisp-latch][latch.el]], which isn't available as a package and had to be
+installed manually.
+
+At some point, I need to turn this into a proper package.
+
+#+BEGIN_SRC elisp :tangle yes
+(add-to-list 'load-path "/home/adam/.emacs.d/scripts")
+
+(require 'latch)
+
+(defun adam-date-test (&optional mark)
+  ;; (format "13:43 Hello %s World %s" date entry))
+  (if exco--connections
+      (let
+	  ((meeting (car (adam-get-meetings date))))
+	(if meeting
+	    (format
+	     "%s %s"
+
+	     (if (plist-get meeting 'all-day)
+		 ""
+	       (format "%s--%s"
+		       (string-remove-suffix
+			":00Z"
+			(cadr
+			 (split-string
+			  (plist-get meeting 'start) "T")))
+		       (string-remove-suffix
+			":00Z"
+			(cadr
+			 (split-string
+			  (plist-get meeting 'stop) "T")))))
+	     (plist-get meeting 'subject))
+	  (format "%s no" meeting)))))
+
+(defun adam-parse-calendar-item (item)
+  (setq result '(all-day ()))
+  (dolist (key item result)
+    (if (listp key)
+	(cond
+	 ((eq 'Subject (car key))
+	  (setq result
+		(plist-put result 'subject (cdr key))))
+	 ((eq 'End (car key))
+	  (setq result
+		(plist-put result 'stop (cdr key))))
+	 ((eq 'IsAllDayEvent (car key))
+	  (setq result
+		(plist-put result 'all-day (cdr key))))
+	 ((eq 'Start (car key))
+	  (setq result
+		(plist-put result 'start (cdr key))))))))
+
+(defun adam-get-meetings (date)
+  (lexical-let ((promise (make-promise)))
+    (exco-get-meetings-for-day
+     "adam.washington@stfc.ac.uk"
+     (car date) (cadr date) (caddr date)
+     (lambda (ident resp) (deliver promise resp)))
+    (mapcar #'adam-parse-calendar-item
+	    (cdar (last (car (last (cdr (cadaar (retrieve promise))))))))))
+
+#+END_SRC
+
 * org
 
 #+BEGIN_SRC elisp :tangle yes
