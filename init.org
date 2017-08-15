@@ -270,7 +270,7 @@ readable format, instead of just a raw byte counts
 
 Get dired to intergate with imenu, since that just makes sense.
 
-#+BEGIN_SRC elisp :trangle yes
+#+BEGIN_SRC elisp :tangle yes
 (use-package dired-imenu
   :ensure t)
 
