@@ -854,24 +854,18 @@ At some point, I need to turn this into a proper package.
   ;; (format "13:43 Hello %s World %s" date entry))
   (if exco--connections
       (let
-	  ((meeting (car (adam-get-meetings date))))
+	  ((meeting (car-safe (adam-get-meetings date))))
 	(if meeting
 	    (format
 	     "%s %s"
 
 	     (if (plist-get meeting 'all-day)
-		 ""
-	       (format "%s--%s"
-		       (string-remove-suffix
-			":00Z"
-			(cadr
-			 (split-string
-			  (plist-get meeting 'start) "T")))
-		       (string-remove-suffix
-			":00Z"
-			(cadr
-			 (split-string
-			  (plist-get meeting 'stop) "T")))))
+		""
+	       (format "%02d:%02d--%02d:%02d"
+		       (caddr (plist-get meeting 'start))
+		       (cadr (plist-get meeting 'start))
+		       (caddr (plist-get meeting 'stop))
+		       (cadr (plist-get meeting 'stop))))
 	     (plist-get meeting 'subject))
 	  (format "%s no" meeting)))))
 
@@ -885,22 +879,35 @@ At some point, I need to turn this into a proper package.
 		(plist-put result 'subject (cdr key))))
 	 ((eq 'End (car key))
 	  (setq result
-		(plist-put result 'stop (cdr key))))
+		(plist-put result 'stop
+			   (decode-time (date-to-time (cdr key))))))
 	 ((eq 'IsAllDayEvent (car key))
 	  (setq result
 		(plist-put result 'all-day (cdr key))))
 	 ((eq 'Start (car key))
 	  (setq result
-		(plist-put result 'start (cdr key))))))))
+		(plist-put result 'start
+			   (decode-time (date-to-time (cdr key))))))))))
 
 (defun adam-get-meetings (date)
-  (lexical-let ((promise (make-promise)))
+  (lexical-let
+      ((promise (make-promise))
+       (month (car date))
+       (day (cadr date))
+       (year (caddr date)))
     (exco-get-meetings-for-day
      "adam.washington@stfc.ac.uk"
-     (car date) (cadr date) (caddr date)
+     month day year
      (lambda (ident resp) (deliver promise resp)))
-    (mapcar #'adam-parse-calendar-item
-	    (cdar (last (car (last (cdr (cadaar (retrieve promise))))))))))
+     (-filter
+      (lambda (x)
+	(pcase-let
+	    ((`(,second ,minute ,hour ,date)
+	      (plist-get x 'stop)))
+	  (not
+	   (and (eq date day) (eq hour 0) (eq minute 0)))))
+      (mapcar #'adam-parse-calendar-item
+	      (cdar (last (car (last (cdr (cadaar (retrieve promise)))))))))))
 
 #+END_SRC
 
