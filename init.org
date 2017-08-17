@@ -1661,7 +1661,7 @@ current line of code.  Why is that so hard to understand?
     "zf" 'hydra-flycheck/body)
   (defhydra hydra-flyspell ()
     ("j" flyspell-goto-next-error "next")
-    ("l" ispell-word "fix")
+    ("l" flyspell-correct-previous-word-generic "fix")
     ("I" ispell-pdict-save "insert")
     ("a" flyspell-auto-correct-word "auto"))
   (evil-define-key 'normal flyspell-mode-map
@@ -1860,7 +1860,7 @@ from time to time and see if anything has improved.
 (use-package flyspell-correct-ivy
   :ensure t
   :config
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+  (require 'flyspell-correct-ivy))
   #+END_SRC
 
 
