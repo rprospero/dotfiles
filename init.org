@@ -850,8 +850,7 @@ At some point, I need to turn this into a proper package.
 
 (require 'latch)
 
-(defun adam-date-test (&optional mark)
-  ;; (format "13:43 Hello %s World %s" date entry))
+(defun excorporate-first-meeting (&optional mark)
   (if exco--connections
       (let
 	  ((meeting (car-safe (adam-get-meetings date))))
@@ -865,8 +864,23 @@ At some point, I need to turn this into a proper package.
 		(plist-get meeting 'start)
 		(plist-get meeting 'stop)
 		date))
-	     (plist-get meeting 'subject))
-	  (format "" meeting)))))
+	     (plist-get meeting 'subject))))))
+
+(defun excorporate-second-meeting (&optional mark)
+  (if exco--connections
+      (let
+	  ((meeting (car-safe (cdr-safe (adam-get-meetings date)))))
+	(if meeting
+	    (format
+	     "%s %s"
+
+	     (if (plist-get meeting 'all-day)
+		""
+	       (adam-relative-date-format
+		(plist-get meeting 'start)
+		(plist-get meeting 'stop)
+		date))
+	     (plist-get meeting 'subject))))))
 
 (defun adam-relative-date-format (begin end local)
      (pcase-let
