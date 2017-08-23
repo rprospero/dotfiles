@@ -1445,6 +1445,9 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
       (kbd "L") 'eww-forward-url)
      (evil-set-initial-state 'notmuch-search-mode 'emacs)
      (evil-set-initial-state 'notmuch-show-mode 'emacs)
+     (evil-global-set-key 'normal " xs" 'save-buffer)
+     (evil-global-set-key 'normal " xf" 'counsel-find-file)
+     (evil-global-set-key 'normal " xe" 'eval-last-sexp)
      (evil-define-key 'normal flycheck-mode-map
        "zj" 'flycheck-next-error
        "zk" 'flycheck-previous-error)
@@ -1469,16 +1472,6 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
   :config
   (which-key-mode)
   (setq which-key-show-operator-state-maps t))
-  #+END_SRC
-
-*** evil-god-state
-
-  #+BEGIN_SRC elisp :tangle yes
-(use-package evil-god-state
-  :ensure t
-  :config
-  (which-key-enable-god-mode-support)
-  (evil-define-key 'normal global-map " " 'evil-execute-in-god-state))
   #+END_SRC
 
 
@@ -1529,46 +1522,6 @@ source code
 
 #+END_SRC
 
-*** god-mode
-
-  I have a little utility function to change the cursor type depending
-  on whether we are in god mode.  Now that I have evil-god mode, this
-  may no longer be necessary.
-
-#+BEGIN_SRC elisp :tangle yes
-
-(defun my-update-cursor ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'box
-                      'bar)))
-(setq cursor-type 'bar)
-
-#+END_SRC
-
-
-
-  #+BEGIN_SRC elisp :tangle yes
-(use-package god-mode
-  :bind (("<Scroll_Lock>" . god-mode-all))
-  :config
-  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
-  (add-to-list 'god-exempt-major-modes 'magit-mode)
-  (add-to-list 'god-exempt-major-modes 'Group)
-  (add-to-list 'god-exempt-major-modes 'Messages)
-  (add-to-list 'god-exempt-major-modes 'jabber-chat-mode)
-  (define-minor-mode mortal-mode
-    "Allow temporary departures from god-mode."
-    :lighter " mortal"
-    :keymap '(([return] . (lambda ()
-                            "Exit mortal-mode and resume god mode." (interactive)
-                            (god-local-mode-resume)
-                            (mortal-mode 0))))
-    (when mortal-mode
-      (god-local-mode-pause)))
-
-  (define-key god-local-mode-map (kbd "I") 'mortal-mode))
-  #+END_SRC
 
 *** evil easymotion
 
