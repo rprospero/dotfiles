@@ -1484,7 +1484,7 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
        " pxe" 'projectile-run-eshell
        " pxs" 'projectile-run-shell
        " pxt" 'projectile-run-term
-       " pf" 'counsel-projectile-find-file
+       " pf" 'counsel-projectile
        " pb" 'counsel-projectile-switch-to-buffer
        " pp" 'counsel-projectile-switch-project
        " pg" 'counsel-projectile-rg
@@ -1503,10 +1503,14 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
        "zk" 'flycheck-previous-error)
      (evil-define-key 'normal flyspell-mode-map
        "zj" 'flyspell-goto-next-error)
-     (evil-global-set-key 'normal "zi" 'counsel-imenu)
+     (evil-define-key 'normal prog-mode-map
+       "zi" 'counsel-imenu)
+     (evil-define-key 'normal org-mode-map
+       "zi" 'counsel-imenu)
+     (evil-define-key 'normal dired-mode-map
+       "zi" 'counsel-imenu)
      (evil-define-key 'normal org-mode-map
        "zi" 'counsel-org-goto)
-     (evil-global-set-key 'normal "zg" 'counsel-rg)
      (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
@@ -1703,7 +1707,7 @@ current line of code.  Why is that so hard to understand?
     ("g" customize-apropos-groups "groups")
     ("o" customize-apropos-options "options"))
   (evil-define-key 'normal global-map
-    "z?" 'hydra-apropos/body)
+    " ?" 'hydra-apropos/body)
   (defhydra hydra-windows (:hint nil)
    "
 Movement^^	^Resize^	^Split^         ^Dedicate^
@@ -1730,7 +1734,7 @@ _q_uit		_=_ equalise
    ("D" purpose-toggle-window-buffer-dedicated)
    ("q" nil))
   (evil-define-key 'normal global-map
-    "zw" 'hydra-windows/body))
+    " w" 'hydra-windows/body))
 #+END_SRC
 *** hydra-ivy
 
@@ -1866,7 +1870,7 @@ from time to time and see if anything has improved.
 	    (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
   (add-hook 'html-mode
 	    (lambda () (setq-local counsel-dash-docsets '("HTML" "CSS"))))
-  (evil-define-key 'normal global-map
+  (evil-define-key 'normal prog-mode-map
     "zd" 'counsel-dash))
 
 #+END_SRC
