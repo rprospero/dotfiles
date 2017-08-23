@@ -530,6 +530,24 @@ Add support to python mode for finding errors
 #+BEGIN_SRC elisp :tangle yes
 (add-hook 'python-mode-hook 'flymake-keys)
 #+END_SRC
+
+*** auto-virtualenv
+
+With any luck, auto-virtualenv will take care of the virtualenv issues
+that I never quite understand.
+
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package auto-virtualenv
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'autho-virtualenv-set-virtualenv)
+  (add-hook 'window-configuration-change-hook 'auto-virtualenv-set-virtualenv)
+  (add-hook 'focus-in-hook 'auto-virtualenv-set-virtualenv))
+
+#+END_SRC
+
+
 ** rainbow-delimiters
 
 #+BEGIN_SRC elisp :tangle yes
