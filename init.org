@@ -523,7 +523,6 @@ Let's make our python prettier, too!
             (push '("sigma" . ?σ) prettify-symbols-alist)
             (push '("lambda" . ?λ) prettify-symbols-alist)
             (push '("**2" . ?²) prettify-symbols-alist)))
-
 #+END_SRC
 
 Add support to python mode for finding errors
@@ -1841,7 +1840,7 @@ from time to time and see if anything has improved.
   (setq counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets")
   (add-hook 'python-mode-hook
 	    (lambda () (setq-local counsel-dash-docsets
-			      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3"))))
+			      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3" "Qt_5"))))
   (add-hook 'elisp-mode
 	    (lambda () (setq-local counsel-dash-docsets
 			      '("Emacs_Lisp"))))
