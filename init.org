@@ -1409,6 +1409,18 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 😄
 
+
+*** company-qml
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package company-qml
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-qml))
+
+
+#+END_SRC
+
 ** evil
 
  #+BEGIN_SRC elisp :tangle yes
