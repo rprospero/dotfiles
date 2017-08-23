@@ -1448,6 +1448,8 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
      (evil-global-set-key 'normal " xs" 'save-buffer)
      (evil-global-set-key 'normal " xf" 'counsel-find-file)
      (evil-global-set-key 'normal " xe" 'eval-last-sexp)
+     (evil-define-key 'normal org-mode-map
+       " cvt" 'org-babel-tangle)
      (evil-define-key 'normal flycheck-mode-map
        "zj" 'flycheck-next-error
        "zk" 'flycheck-previous-error)
