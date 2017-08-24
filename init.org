@@ -327,7 +327,6 @@ Always revert images files without asking.
  #+BEGIN_SRC elisp :tangle yes
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status))
   :init
   (if
       (system-is-macbook)
@@ -358,17 +357,6 @@ Always revert images files without asking.
 
 
 ** Universal
-
-Bind the keys for finding the flymake errors, because I can never
-remember the default bindings.
-
-#+BEGIN_SRC elisp :tangle yes
-
-(defun flymake-keys ()
-  (local-set-key [(meta down)] 'flymake-goto-next-error)
-  (local-set-key [(meta up)] 'flymake-goto-prev-error))
-
-#+END_SRC
 
 Which-function mode helps me when I'm stuck in some giant routine and
 lose track of where I am in the program.  There's the function, right
@@ -1787,7 +1775,6 @@ This is a place for my own personal key bindings.
 
 #+BEGIN_SRC elisp :tangle yes
 
-(bind-key "C-x C-b" 'ibuffer)
 (bind-key "M-/" 'hippie-expand)
 (bind-key "M-d" 'avy-goto-char-timer)
 
