@@ -1478,46 +1478,69 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
     (kbd "L") 'eww-forward-url)
   (evil-set-initial-state 'notmuch-search-mode 'emacs)
   (evil-set-initial-state 'notmuch-show-mode 'emacs)
-  (evil-global-set-key 'normal " xs" 'save-buffer)
-  (evil-global-set-key 'normal " xf" 'counsel-find-file)
-  (evil-global-set-key 'normal " xb" 'ivy-switch-buffer)
-  (evil-global-set-key 'normal " xB" 'ibuffer)
-  (evil-global-set-key 'normal " xk" 'kill-this-buffer)
-  (evil-global-set-key 'normal " xe" 'eval-last-sexp)
-  (evil-define-key 'normal projectile-mode-map
-    " pxe" 'projectile-run-eshell
-    " pxs" 'projectile-run-shell
-    " pxt" 'projectile-run-term
-    " pf" 'counsel-projectile
-    " pb" 'counsel-projectile-switch-to-buffer
-    " pp" 'counsel-projectile-switch-project
-    " pg" 'counsel-projectile-rg
-    " ps" 'projectile-save-project-buffers
-    " pB" 'projectile-ibuffer
-    " pk" 'projectile-kill-buffers
-    " pc" 'projectile-compile-project
-    " pv" 'projectile-vc
-    " pR" 'projectile-replace-regexp
-    " pr" 'projectile-run-project)
-  (evil-define-key 'normal org-mode-map
-    " c'" 'org-edit-special
-    " cvt" 'org-babel-tangle)
-  (evil-define-key 'normal flycheck-mode-map
-    "zj" 'flycheck-next-error
-    "zk" 'flycheck-previous-error)
-  (evil-define-key 'normal flyspell-mode-map
-    "zj" 'flyspell-goto-next-error)
-  (evil-define-key 'normal prog-mode-map
-    "zi" 'counsel-imenu)
-  (evil-define-key 'normal org-mode-map
-    "zi" 'counsel-imenu)
-  (evil-define-key 'normal dired-mode-map
-    "zi" 'counsel-imenu)
-  (evil-define-key 'normal org-mode-map
-    "zi" 'counsel-org-goto)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
+
+*** general
+
+The general package is a set of convenience scripts for defining key
+bindings
+
+#+BEGIN_SRC elisp :tangle yes
+(use-package general
+  :ensure t
+  :config
+  (setq general-default-prefix "SPC")
+  (setq general-default-non-normal-prefix "M-SPC")
+
+  (general-define-key
+   :infix "p"
+   :states '(normal emacs insert)
+   "xe" 'projectile-run-eshell
+   "xs" 'projectile-run-shell
+   "xt" 'projectile-run-term
+   "f" 'counsel-projectile
+   "b" 'counsel-projectile-switch-to-buffer
+   "p" 'counsel-projectile-switch-project
+   "g" 'counsel-projectile-rg
+   "s" 'projectile-save-project-buffers
+   "B" 'projectile-ibuffer
+   "k" 'projectile-kill-buffers
+   "c" 'projectile-compile-project
+   "v" 'projectile-vc
+   "R" 'projectile-replace-regexp
+   "r" 'projectile-run-project)
+
+  (general-define-key
+   :prefix ""
+   :states '(normal)
+   :keymaps '(prog-mode-map dired-mode-map)
+    "zi" 'counsel-imenu)
+
+  (general-define-key
+   :prefix ""
+   :states '(normal)
+   :keymaps 'org-mode-map
+   "zi" 'counsel-org-goto)
+
+  (general-define-key
+   :states '(normal insert emacs)
+   :keymaps '(org-mode-map)
+   :infix "c"
+   "'" 'org-edit-special
+   "vt" 'org-babel-tangle)
+
+  (general-define-key
+   :infix "x"
+   :states '(normal insert emacs)
+   "s" 'save-buffer
+   "f" 'counsel-find-file
+   "b" 'ivy-switch-buffer
+   "B" 'ibuffer
+   "k" 'kill-this-buffer
+   "e" 'eval-last-sexp))
+#+END_SRC
 
 *** which-key
 
@@ -1682,15 +1705,19 @@ current line of code.  Why is that so hard to understand?
     ("e" flycheck-display-error-at-point "explain" :color blue)
     ("j" flycheck-next-error "next")
     ("k" flycheck-previous-error "previous"))
-  (evil-define-key 'normal flycheck-mode-map
-    "zf" 'hydra-flycheck/body)
+  (general-define-key
+   :states '(normal)
+   :keymaps '(flycheck-mode-map)
+   "f" 'hydra-flycheck/body)
   (defhydra hydra-flyspell ()
     ("j" flyspell-goto-next-error "next")
     ("l" flyspell-correct-previous-word-generic "fix")
     ("I" ispell-pdict-save "insert")
     ("a" flyspell-auto-correct-word "auto"))
-  (evil-define-key 'normal flyspell-mode-map
-    "zf" 'hydra-flyspell/body)
+  (general-define-key
+   :states '(normal)
+   :keymaps '(flyspell-mode-map)
+   "f" 'hydra-flyspell/body)
   (defhydra hydra-apropos (:color blue)
     "Apropos"
     ("a" apropos "apropos")
@@ -1710,8 +1737,9 @@ current line of code.  Why is that so hard to understand?
     ("f" customize-apropos-faces "faces")
     ("g" customize-apropos-groups "groups")
     ("o" customize-apropos-options "options"))
-  (evil-define-key 'normal global-map
-    " ?" 'hydra-apropos/body)
+  (general-define-key
+   :states '(normal)
+   " f" 'hydra-apropos/body)
   (defhydra hydra-windows (:hint nil)
    "
 Movement^^	^Resize^	^Split^         ^Dedicate^
@@ -1737,8 +1765,9 @@ _q_uit		_=_ equalise
    ("d" purpose-toggle-window-purpose-dedicated)
    ("D" purpose-toggle-window-buffer-dedicated)
    ("q" nil))
-  (evil-define-key 'normal global-map
-    " w" 'hydra-windows/body))
+  (general-define-key
+   :states '(normal)
+   " w" 'hydra-windows/body))
 #+END_SRC
 *** hydra-ivy
 
