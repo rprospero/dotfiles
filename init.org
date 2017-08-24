@@ -1513,6 +1513,11 @@ bindings
    "i" 'counsel-org-goto)
 
   (general-define-key
+   :keymaps 'with-editor-mode-map
+   "cc" 'with-editor-finish
+   "ck" 'with-editor-cancel)
+
+  (general-define-key
    :keymaps '(org-mode-map)
    :infix "c"
    "'" 'org-edit-special
