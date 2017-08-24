@@ -1941,6 +1941,7 @@ from time to time and see if anything has improved.
 	      ""
 	    (format " {%s}" (projectile-project-name)))))
   :config
+  (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
  #+END_SRC
 
