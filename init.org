@@ -1509,6 +1509,7 @@ bindings
   (general-define-key
    :states '(normal)
    :keymaps 'org-mode-map
+   "cc" 'org-ctrl-c-ctrl-c
    "i" 'counsel-org-goto)
 
   (general-define-key
