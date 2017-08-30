@@ -4,7 +4,7 @@ Before anything else, we need to bootstrap up a working implementation
 of use-package so that we can install all the other packages that we
 desire
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq package-archives
  (quote
   (("gnu" . "http://elpa.gnu.org/packages/")
@@ -22,7 +22,7 @@ desire
 
 Load the string package.  We need this for a lot of the other code.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package s
   :ensure t)
 
@@ -35,7 +35,7 @@ computer that it is running on.  To this end, the functions below
 identify computers and operating systems.  This should simplify much
 of the code.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (defun insert-system-name ()
   "Get current system's name."
   (interactive)
@@ -78,7 +78,7 @@ of the code.
 
 ** Handle system paths
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (let
     ((mypaths
@@ -137,7 +137,7 @@ of the code.
 
 Next, let's get rid of the window chrome.  It's just so ugly.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
@@ -146,14 +146,14 @@ Next, let's get rid of the window chrome.  It's just so ugly.
 
 Similarly, get rid of the awful startup screen.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq inhibit-startup-screen t)
 
 #+END_SRC
 
 Let's set the default font and size
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 12 :name "DejaVu Sans"))
 
@@ -164,7 +164,7 @@ Let's set the default font and size
 
 Make everything pretty!
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (global-prettify-symbols-mode t)
 
 #+END_SRC
@@ -173,7 +173,7 @@ Make everything pretty!
 
 Use diminish to stop minor modes from taking over the entire taskbar.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (diminish 'auto-revert-mode "")
 (diminish 'auto-fill-mode "")
 (diminish 'visual-line-mode "")
@@ -187,7 +187,7 @@ Use diminish to stop minor modes from taking over the entire taskbar.
 Always use spaces instead of tabs to avoid complaints from bored
 people on the internet.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
  '(indent-tabs-mode nil)
 
@@ -195,7 +195,7 @@ people on the internet.
 
 Use the TeX input method to get those glorious unicode characters.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq default-input-method "TeX")
 (toggle-input-method)
@@ -206,7 +206,7 @@ Emacs gives us line numbers by default, but not column numbers.  I
 think that that's a legacy decision left over from the terminal days?
 Either way, I disagree with it, so we'll put the column numbers in.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq column-number-mode t)
 
@@ -217,7 +217,7 @@ security hole, but I only install themes from trusted sources and I'm
 not auditing them as it currently is.  Plus, this gets the terrible
 custom-safe-themes variable out of customize
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq custom-safe-themes t)
 
@@ -225,7 +225,7 @@ custom-safe-themes variable out of customize
 
 Give a default e-mail address.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq user-mail-address "adam.washington@stfc.ac.uk")
 
@@ -235,7 +235,7 @@ I don't like emacs backup files.  They're coarse and rough and
 irritating, and the get everywhere.  I'm going to confine them to a
 single directory.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq backup-by-copying t)
 (setq backup-directory-alist (quote (("." . "~/.saves"))))
@@ -254,7 +254,7 @@ Dired is a wonderful way of handling directories.
 Setting dired-dwim-target causes dired to default to sending files to
 the directory in the other dired window, making copying files between
 two directories far more reasonable.
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq dired-dwim-target t)
 
@@ -263,14 +263,14 @@ two directories far more reasonable.
 Adding the =h= switch onto dired listing gives file sizes in a human
 readable format, instead of just a raw byte counts
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq dired-listing-switches "-alh")
 
 #+END_SRC
 
 Get dired to intergate with imenu, since that just makes sense.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package dired-imenu
   :ensure t)
 
@@ -278,7 +278,7 @@ Get dired to intergate with imenu, since that just makes sense.
 
 Direct Quick Sort offers more sorting optins than just name and time
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package dired-quick-sort
   :ensure t
@@ -288,7 +288,7 @@ Direct Quick Sort offers more sorting optins than just name and time
 
 Dired-collapse gets rid of annoying chains of single file directories
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package dired-collapse
   :ensure t)
@@ -299,7 +299,7 @@ Dired-collapse gets rid of annoying chains of single file directories
 Dired imenu makes dired navigation so much more consistent with the
 rest of evil.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package dired-imenu
 :ensure t)
 
@@ -309,7 +309,7 @@ rest of evil.
 
 Load images as images, instead of as bye arrays
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq auto-image-file-mode t)
 
@@ -317,14 +317,14 @@ Load images as images, instead of as bye arrays
 
 Always revert images files without asking.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq revert-without-query '(".png"))
 
 #+END_SRC
 ** magit
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
   :ensure t
   :init
@@ -339,7 +339,7 @@ Always revert images files without asking.
 
 ** ledger-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ledger-mode
   :ensure t)
  #+END_SRC
@@ -347,7 +347,7 @@ Always revert images files without asking.
 
 ** pass
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package pass
   :ensure t)
  #+END_SRC
@@ -362,7 +362,7 @@ Which-function mode helps me when I'm stuck in some giant routine and
 lose track of where I am in the program.  There's the function, right
 there on the modeline.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (which-function-mode 't)
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 
@@ -371,16 +371,16 @@ there on the modeline.
 
 Set the C♯ compiler for linux
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq csharp-make-tool "mcs")
 
 #+END_SRC
-** elisp
+** emacs-lisp
 
 Let's try and make elisp symbols pretty!
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (push '("<=" . ?≤) prettify-symbols-alist)
@@ -390,7 +390,7 @@ Let's try and make elisp symbols pretty!
 #+END_SRC
 ** haskell-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package haskell-mode
   :ensure t
   :config
@@ -430,7 +430,7 @@ Let's try and make elisp symbols pretty!
  I've added command line completion for cabal and stack, since I'm too
  lazy to type out my executable names on my own.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (defconst pcmpl-cabal-commands
   '("update" "install" "help" "info" "list" "fetch" "user" "get" "init" "configure" "build"
   "clean" "run" "repl" "test" "bench" "check" "sdist" "upload" "report" "freeze" "gen"
@@ -473,7 +473,7 @@ Let's try and make elisp symbols pretty!
 #+END_SRC
 *** intero
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package intero
   :ensure t
   ;:config
@@ -483,7 +483,7 @@ Let's try and make elisp symbols pretty!
 
 ** flymake-jshint
 
- #+BEGIN_SRC elisp :tangle no
+ #+BEGIN_SRC emacs-lisp :tangle no
 (use-package flymake-jshint
   :ensure t
   :config
@@ -496,7 +496,7 @@ Let's try and make elisp symbols pretty!
 
 Let's make our python prettier, too!
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'python-mode-hook
           (lambda ()
             (push '("<=" . ?≤) prettify-symbols-alist)
@@ -515,7 +515,7 @@ Let's make our python prettier, too!
 
 Add support to python mode for finding errors
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'python-mode-hook 'flymake-keys)
 #+END_SRC
 
@@ -525,7 +525,7 @@ With any luck, auto-virtualenv will take care of the virtualenv issues
 that I never quite understand.
 
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package auto-virtualenv
   :ensure t
   :config
@@ -538,7 +538,7 @@ that I never quite understand.
 
 ** rainbow-delimiters
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
              :ensure t
              :config
@@ -548,7 +548,7 @@ that I never quite understand.
 
 I need to be able to edit systemd service files.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package systemd
   :ensure t)
 
@@ -558,7 +558,7 @@ I need to be able to edit systemd service files.
 
   We need spell checking in generic Mail mode.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'mail-mode-hook 'flyspell-mode)
 
 #+END_SRC
@@ -566,7 +566,7 @@ I need to be able to edit systemd service files.
 Also, there are some generic message mode settings that I need to
 review again so that I can remember exactly how they work.  FIXME
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 
 (setq message-send-mail-function 'message-send-mail-with-sendmail)
@@ -581,7 +581,7 @@ review again so that I can remember exactly how they work.  FIXME
  We will use =eww= as our default browser, with the option to escape
  to firefox if things get bad.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq browse-url-browser-function 'eww-browse-url)
 #+END_SRC
 
@@ -589,7 +589,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
 ** jabber
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package jabber
   :ensure t
   :defer t
@@ -631,7 +631,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
 ** twittering-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package twittering-mode
              :bind (("C-c t" . twit))
 	     :ensure t
@@ -644,7 +644,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
 ** sx
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package sx
   :ensure t)
  #+END_SRC
@@ -653,7 +653,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
 ** gnus
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package gnus
   :config
   (progn
@@ -698,7 +698,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
 notmuch is a wonderful little utility for managing my mail
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package notmuch
   :ensure t
@@ -721,7 +721,7 @@ notmuch is a wonderful little utility for managing my mail
 #+END_SRC
 ** elfeed
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package elfeed
   :ensure t
   :config
@@ -749,7 +749,7 @@ notmuch is a wonderful little utility for managing my mail
 
 ** Slack
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package slack
   :commands (slack-start)
   :init
@@ -792,7 +792,7 @@ notmuch is a wonderful little utility for managing my mail
 
 ** Tramp
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq my-tramp-ssh-completions
       '((tramp-parse-sconfig "~/.ssh/config")
 	(tramp-parse-sknownhosts "~/.ssh/known_hosts")))
@@ -809,7 +809,7 @@ notmuch is a wonderful little utility for managing my mail
 EUDC is the LDAP client for emacs.  It should allow me to query the
 directory of STFC.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook
  'eudc-mode-hook
  (lambda ()
@@ -832,7 +832,7 @@ Excorporate pulls calendar data from an exchange server.  I've then
 written *way* too much code to allow this to interface with the
 org-mode agenda, allowing me to insert my outlook agenda directly into org.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package excorporate
   :ensure t
@@ -946,7 +946,7 @@ At some point, I need to turn this into a proper package.
 
 * org
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
@@ -1071,7 +1071,7 @@ At some point, I need to turn this into a proper package.
 Display appointment reminders in X when available.  I stole this code
 from somewhere and should give proper credit.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (defun kdialog-popup (title msg)
   "Show a popup if we're on X, or echo it otherwise; TITLE is the title
@@ -1097,7 +1097,7 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 
 We need the org-contrib package for some lesser known libraries
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org-plus-contrib
   :ensure t)
 
@@ -1110,7 +1110,7 @@ We need the org-contrib package for some lesser known libraries
  exported documentation.  As long as I've installed the library, I
  should never need to think about it again.
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package htmlize
   :ensure t)
 
@@ -1120,7 +1120,7 @@ We need the org-contrib package for some lesser known libraries
 
 We need to load the contrib package to get notmuch links into org
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (require 'org-notmuch)
 
@@ -1133,7 +1133,7 @@ We need to load the contrib package to get notmuch links into org
 
 Include useful mode hooks when moving into latex mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -1154,7 +1154,7 @@ Include useful mode hooks when moving into latex mode
  the version control, instead of the entire paragraph.  This code
  tries to alleviate the problem.  I'm not sure how well it work.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
   "Start each sentence on a new line."
   (let ((from (ad-get-arg 0))
@@ -1178,7 +1178,7 @@ Include useful mode hooks when moving into latex mode
 #+END_SRC
 ** Text Mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'text-mode-hook 'visual-line-mode)
 
@@ -1188,7 +1188,7 @@ Include useful mode hooks when moving into latex mode
  There didn't used to be a built in word count function.  I believe
  that there is now, so I may not need this any longer.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (defun count-words (&optional begin end)
   "count words between BEGIN and END (region); if no region defined, count words in buffer"
   (interactive "r")
@@ -1201,7 +1201,7 @@ Include useful mode hooks when moving into latex mode
 #+END_SRC
 ** langtool
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package langtool
   :ensure t
   :config
@@ -1211,7 +1211,7 @@ Include useful mode hooks when moving into latex mode
 
 ** writegood-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package writegood-mode
   :diminish writegood-mode
   :ensure t
@@ -1227,7 +1227,7 @@ Include useful mode hooks when moving into latex mode
 
 ** solarized-theme
 
- #+BEGIN_SRC elisp :tangle no
+ #+BEGIN_SRC emacs-lisp :tangle no
 (use-package solarized-theme
   :ensure t
   :config
@@ -1236,7 +1236,7 @@ Include useful mode hooks when moving into latex mode
 
 ** base16-theme
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package base16-theme
   :ensure t
   :config
@@ -1272,7 +1272,7 @@ Include useful mode hooks when moving into latex mode
 * Toys
 ** encourage-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package encourage-mode
   :diminish encourage-mode
   :ensure t
@@ -1283,7 +1283,7 @@ Include useful mode hooks when moving into latex mode
 
 ** selectric-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package selectric-mode
   :ensure t)
 
@@ -1293,7 +1293,7 @@ Include useful mode hooks when moving into latex mode
 
 ** Tidal 
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (if
     (file-exists-p "~/Code/tidal")
     (progn
@@ -1302,7 +1302,7 @@ Include useful mode hooks when moving into latex mode
 #+END_SRC
 ** emojify
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package emojify
   :ensure t
   :init
@@ -1317,7 +1317,7 @@ Include useful mode hooks when moving into latex mode
 
 ** ace-window
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-window
   :ensure t
   :bind
@@ -1332,7 +1332,7 @@ A basic emacs customication system.  Slack uses this to handle system
 messages and other parts of emacs could probably benefit from it.  I
 really need to tweak the customisation.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package alert
   :commands (alert)
   :init
@@ -1344,14 +1344,14 @@ really need to tweak the customisation.
 
 Use the all-the-icons package to get icon fonts.
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package all-the-icons
   :ensure t)
  #+END_SRC
 
 Automatically display file icons in dired.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package all-the-icons-dired
   :ensure t
@@ -1362,7 +1362,7 @@ Automatically display file icons in dired.
 
 Display icons when switching buffers
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package all-the-icons-ivy
   :ensure t
   :config
@@ -1373,7 +1373,7 @@ Display icons when switching buffers
 
 ** company
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company
   :ensure t
   :config
@@ -1389,7 +1389,7 @@ Display icons when switching buffers
 
 This should allow me to more easily type emoji.  Because that's what my life has been missing.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-emoji
   :ensure t
   :config
@@ -1404,7 +1404,7 @@ This should allow me to more easily type emoji.  Because that's what my life has
 
 Let's use company-math mode so that we don't have to keep using the TeX input method
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-math
   :ensure t
   :config
@@ -1417,7 +1417,7 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 *** company-qml
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-qml
   :ensure t
   :config
@@ -1428,7 +1428,7 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 ** evil
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil
   :ensure t
   :config
@@ -1475,7 +1475,7 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 The general package is a set of convenience scripts for defining key
 bindings
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package general
   :ensure t
   :config
@@ -1541,7 +1541,7 @@ bindings
 
 
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package which-key
   :diminish which-key-mode
   :ensure t
@@ -1553,7 +1553,7 @@ bindings
 
 *** evil-escape
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-escape
   :ensure t
   :diminish evil-escape-mode
@@ -1565,14 +1565,14 @@ bindings
 
 *** evil-magit
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-magit
   :ensure t)
   #+END_SRC
 
 *** evil org mode
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-org
   :diminish evil-org-mode
   :ensure t
@@ -1590,7 +1590,7 @@ bindings
 Evil indent plus does a great job at handling Python and Haskell
 source code
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-indent-plus
   :ensure t
   :config
@@ -1604,7 +1604,7 @@ source code
 easymotion helps with the fact that I don't instantly know how many
 lines or characters I'm looking at 90% of the time when using evil.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-easymotion
   :ensure t
@@ -1622,7 +1622,7 @@ cursor to identify the best options for using the f/t/F/T keys for
 navigation.  If there is no best single character, it uses a blue
 highlight to indicate that a 2f/2F will still find the correct word.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-quickscope
   :ensure t
@@ -1638,7 +1638,7 @@ python statements, instead of just looking at things on a line by line
 basis.  Due to Python's whitespace sensitive setup, this might be
 necessary.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-text-object-python
   :ensure t
@@ -1654,7 +1654,7 @@ what I mean.  Seriously, I have never hit =M-;= and wanted to put a
 comment at the end of the line.  I always want to comment out the
 current line of code.  Why is that so hard to understand?
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-nerd-commenter
   :ensure t
   :config
@@ -1665,7 +1665,7 @@ current line of code.  Why is that so hard to understand?
 
 ** flycheck
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flycheck
   :diminish flycheck-mode
   :config
@@ -1685,7 +1685,7 @@ current line of code.  Why is that so hard to understand?
 
    Hydra is a useful little utility for making custom keyboard DSLs.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package hydra
   :ensure t
@@ -1768,7 +1768,7 @@ _q_uit		_=_ equalise
 
     Add hydra bindings to ivy
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package ivy-hydra
   :ensure t)
@@ -1779,7 +1779,7 @@ _q_uit		_=_ equalise
 
 This is a place for my own personal key bindings.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (bind-key "M-/" 'hippie-expand)
 (bind-key "M-d" 'avy-goto-char-timer)
@@ -1797,7 +1797,7 @@ I hate when emacs asks me which buffer to kill, because it's my
 current buffer 99% of the time.  Just change the key binding and be
 done with it.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (bind-key "C-x k" 'kill-this-buffer)
 
 #+END_SRC
@@ -1807,7 +1807,7 @@ done with it.
 Refreshing buffers is a constant chore that really should have it's
 own hotkey.  Why not steal F5 from the browser?
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
  (global-set-key
   (kbd "<f5>")
@@ -1825,7 +1825,7 @@ own hotkey.  Why not steal F5 from the browser?
 #+END_SRC
 ** keyfreq
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package keyfreq
   :ensure t
   :config
@@ -1836,7 +1836,7 @@ own hotkey.  Why not steal F5 from the browser?
 
 ** ivy
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ivy
   :ensure t
   :diminish ivy-mode)
@@ -1845,7 +1845,7 @@ own hotkey.  Why not steal F5 from the browser?
 
 *** counsel
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel
   :bind   (("C-s" . swiper)
            ("C-c C-r" . ivy-resume)
@@ -1881,7 +1881,7 @@ subsequently relies on Helm.  I may be able to get rid of the helm
 dependency in the future if this changes.  I need to check on this
 from time to time and see if anything has improved.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-dash 
   :ensure t
   :config
@@ -1904,7 +1904,7 @@ from time to time and see if anything has improved.
 
 *** flyspell-correct-ivy
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flyspell-correct-ivy
   :ensure t
   :config
@@ -1914,7 +1914,7 @@ from time to time and see if anything has improved.
 
 ** link-hint
 
- #+BEGIN_SRC elisp :tangle no
+ #+BEGIN_SRC emacs-lisp :tangle no
 (use-package link-hint
   :ensure t
   :bind
@@ -1924,7 +1924,7 @@ from time to time and see if anything has improved.
  
 ** ace-link
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-link
   :ensure t
   :config
@@ -1935,7 +1935,7 @@ from time to time and see if anything has improved.
 
 ** projectile
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
   :ensure t
   :init
@@ -1954,7 +1954,7 @@ from time to time and see if anything has improved.
 
 *** counsel-projectile
 
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
   :ensure t)
  #+END_SRC
@@ -1965,14 +1965,14 @@ from time to time and see if anything has improved.
 
    Recentf keeps track of recently edited files.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (require 'recentf)
 (recentf-mode)
 
 #+END_SRC
 ** smart-mode-line
 
- #+BEGIN_SRC elisp :tangle no
+ #+BEGIN_SRC emacs-lisp :tangle no
 (use-package smart-mode-line
   :ensure t
   :init
@@ -1982,7 +1982,7 @@ from time to time and see if anything has improved.
  #+END_SRC
 ** space-line 
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
   :ensure t
   :config
@@ -2003,7 +2003,7 @@ from time to time and see if anything has improved.
 
 ** unbound
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package unbound
   :ensure t)
  #+END_SRC
@@ -2011,7 +2011,7 @@ from time to time and see if anything has improved.
 
 ** whitespace-cleanup-mode
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package whitespace-cleanup-mode
   :ensure t
   :diminish whitespace-cleanup-mode
@@ -2022,7 +2022,7 @@ from time to time and see if anything has improved.
 
 ** window-purpose
 
- #+BEGIN_SRC elisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package window-purpose
   :ensure t
   :bind
@@ -2058,6 +2058,6 @@ from time to time and see if anything has improved.
    for focusing on a single window, then returning to my previous,
    more complex layout with a single C-c ←
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (winner-mode)
 #+END_SRC
