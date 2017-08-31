@@ -1647,22 +1647,6 @@ necessary.
 
 #+END_SRC
 
-*** evil-nerd-commenter
-
-Add the evil nerd commenter, as =comment-dwim= never actually does
-what I mean.  Seriously, I have never hit =M-;= and wanted to put a
-comment at the end of the line.  I always want to comment out the
-current line of code.  Why is that so hard to understand?
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package evil-nerd-commenter
-  :ensure t
-  :config
-  (evilnc-default-hotkeys)
-  :bind
-  ("C-c c" . org-capture))
-#+END_SRC
-
 *** Evil Goggles
 
 Evil google should make learning evil slightly easier, as it shows the
@@ -1676,6 +1660,17 @@ exact regions chosen.
 
 #+END_SRC
 
+*** evil commentary
+
+Evil commentary should hopefully give me the commenting options that
+evil-nerd-commenter sould never get working right
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode))
+#+END_SRC
 ** flycheck
 
  #+BEGIN_SRC emacs-lisp :tangle yes
