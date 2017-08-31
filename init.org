@@ -1491,6 +1491,8 @@ bindings
    "xt" 'projectile-run-term
    "f" 'counsel-projectile
    "b" 'counsel-projectile-switch-to-buffer
+   "d" 'projectile-find-dir
+   "D" 'projectile-dired
    "p" 'counsel-projectile-switch-project
    "g" 'counsel-projectile-rg
    "s" 'projectile-save-project-buffers
