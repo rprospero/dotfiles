@@ -1663,6 +1663,19 @@ current line of code.  Why is that so hard to understand?
   ("C-c c" . org-capture))
 #+END_SRC
 
+*** Evil Goggles
+
+Evil google should make learning evil slightly easier, as it shows the
+exact regions chosen.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-goggles
+  :ensure t
+  :config
+  (evil-goggles-mode))
+
+#+END_SRC
+
 ** flycheck
 
  #+BEGIN_SRC emacs-lisp :tangle yes
