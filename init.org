@@ -1506,15 +1506,21 @@ bindings
    :keymaps '(prog-mode-map dired-mode-map)
     "i" 'counsel-imenu)
 
+  (general-simulate-keys
+   "C-c C-c" 't
+   "Run whatever the native mode's C-c C-c command would be"
+   general-simulate-C-c_C-c-in-emacs-state)
+
+  (general-define-key
+   "cc" #'general-simulate-C-c_C-c-in-emacs-state)
+
   (general-define-key
    :states '(normal)
    :keymaps 'org-mode-map
-   "cc" 'org-ctrl-c-ctrl-c
    "i" 'counsel-org-goto)
 
   (general-define-key
    :keymaps 'with-editor-mode-map
-   "cc" 'with-editor-finish
    "ck" 'with-editor-cancel)
 
   (general-define-key
