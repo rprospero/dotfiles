@@ -1426,6 +1426,19 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 #+END_SRC
 
+** imenu-anywhere
+
+This package allows me to do the imenu jump to any buffer with the
+same major mode.  This should be a big boon when working on multi-file
+projects (and not require greping my way around all of the time)
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package imenu-anywhere
+  :ensure t)
+
+#+END_SRC
+
 ** evil
 
  #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1506,7 +1519,7 @@ bindings
   (general-define-key
    :states '(normal)
    :keymaps '(prog-mode-map dired-mode-map)
-    "i" 'counsel-imenu)
+    "i" #'ivy-imenu-anywhere)
 
   (general-simulate-keys
    "C-c C-c" 't
