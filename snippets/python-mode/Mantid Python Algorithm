@@ -1,0 +1,23 @@
+# key: mpa
+# name: Mantid Python Algorithm
+# --
+# -*- coding: utf-8 -*-
+from mantid.kernel import *
+from mantid.api import *
+from mantid.simpleapi import *
+
+
+class ${1:`(file-name-nondirectory( file-name-sans-extension (buffer-file-name)))`}(PythonAlgorithm):
+    def category(self):
+	return "${2:SESANS}"
+
+    def PyInit(self):
+	# ${3:param}
+	${3:$(mapconcat (lambda (x) (format "self.declareProperty(\\"%s\\", defaultValue=0)" x)) (split-string yas-text " " t "[ \t]") "\n\t")}
+
+    def PyExec(self):
+	${3:$(mapconcat (lambda (x) (format "%s = self.getProperty(\\"%s\\").value" x x))
+			(split-string yas-text " " t "[ \t]") "\n\t")}
+	$0
+
+AlgorithmFactory.subscribe($1)

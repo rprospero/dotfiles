@@ -2067,6 +2067,44 @@ from time to time and see if anything has improved.
  #+END_SRC
 
 
+** yasnippets
+
+Yasnippets provide programmable skeletons for filling out boilerplate
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-indent-line 'fixed)
+  (yas-global-mode)
+  (general-define-key
+   :states '(normal)
+   :keymaps 'yas-minor-mode-map
+   "yv" 'yas-visit-snippet-file
+   "yn" 'yas-new-snippet
+   "ys" 'yas-insert-snippet))
+#+END_SRC
+
+*** yasnippets-mpa
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun mpa-parse-param (param)
+  (pcase-let
+      ((`(,name . ,value) (split-string param "=")))
+    (cond
+     ((eq value '())
+      (format "self.declareProperty(\"%s\", defaultValue=0)" name))
+     ((string-match "[0-9]+" (car value))
+      (format "self.declareProperty(\"%s\", defaultValue=%s)"
+	      name
+	      (string-to-number (car value))))
+     ((string-equal (car value) "wksp")
+      (format "self.declareProperty(\n\tFileProperty(name=\"%s\",\n\tdefaultValue=\"\",\n\taction=FileAction.%s))" name (cadr value)))
+     ((string-equal (car value) "file")
+      (format "self.declareProperty(\n\tWorkspaceProperty(name=\"%s\",\n\tdefaultValue=\"\",\n\tdirection=Direction.%s))" name (cadr value)))
+     (t (format "self.declareProperty(\"%s\", defaultValue=\"%s\")" name value)))))
+#+END_SRC
+
 ** whitespace-cleanup-mode
 
  #+BEGIN_SRC emacs-lisp :tangle yes
