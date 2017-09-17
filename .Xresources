@@ -1,7 +1,9 @@
 #ifdef SRVR_NDLT969a
   #define FIXED_FONT xft:iosevka:pixelsize=14:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
   #define EMACS_FIXED_FONT Iosevka-14
-#else
+#endif
+
+#ifndef EMACS_FIXED_FONT
   #define FIXED_FONT xft:iosevka:pixelsize=10:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
   #define EMACS_FIXED_FONT Iosevka-10
 #endif
