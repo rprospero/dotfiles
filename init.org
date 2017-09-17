@@ -2092,17 +2092,27 @@ Yasnippets provide programmable skeletons for filling out boilerplate
   (pcase-let
       ((`(,name . ,value) (split-string param "=")))
     (cond
+    ((string-equal name "OutputWorkspace")
+    "self.declareProperty(\n            WorkspaceProperty(name=\"OutputWorkspace\",\n                defaultValue=\"\",\n                direction=Direction.Output))")
      ((eq value '())
       (format "self.declareProperty(\"%s\", defaultValue=0)" name))
      ((string-match "[0-9]+" (car value))
       (format "self.declareProperty(\"%s\", defaultValue=%s)"
 	      name
 	      (string-to-number (car value))))
-     ((string-equal (car value) "wksp")
-      (format "self.declareProperty(\n\tFileProperty(name=\"%s\",\n\tdefaultValue=\"\",\n\taction=FileAction.%s))" name (cadr value)))
      ((string-equal (car value) "file")
-      (format "self.declareProperty(\n\tWorkspaceProperty(name=\"%s\",\n\tdefaultValue=\"\",\n\tdirection=Direction.%s))" name (cadr value)))
-     (t (format "self.declareProperty(\"%s\", defaultValue=\"%s\")" name value)))))
+      (format "self.declareProperty(\n            FileProperty(name=\"%s\",\n                defaultValue=\"\",\n                action=FileAction.%s))" name (cadr value)))
+     ((string-equal (car value) "wksp")
+      (format "self.declareProperty(\n            WorkspaceProperty(name=\"%s\",\n                defaultValue=\"\",\n                direction=Direction.%s))" name (cadr value)))
+     (t (format "self.declareProperty(\"%s\", defaultValue=\"%s\")" name (car value))))))
+
+(defun mpa-get-param (param)
+  (pcase-let
+      ((`(,name . ,value) (split-string param "=")))
+    (cond
+     ((string-equal name "OutputWorkspace") "")
+     ('t (format "%s = self.getProperty(\"%s\").value" name name)))))
+
 #+END_SRC
 
 ** whitespace-cleanup-mode

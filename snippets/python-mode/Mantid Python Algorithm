@@ -8,16 +8,20 @@ from mantid.simpleapi import *
 
 
 class ${1:`(file-name-nondirectory( file-name-sans-extension (buffer-file-name)))`}(PythonAlgorithm):
+    """A Mantid implementation of the $1 algorithm"""
     def category(self):
-	return "${2:SESANS}"
+    	"""What categories to file $1 under in the GUI menu."""
+        return "${2:SESANS}"
 
     def PyInit(self):
-	# ${3:param}
-	${3:$(mapconcat (lambda (x) (format "self.declareProperty(\\"%s\\", defaultValue=0)" x)) (split-string yas-text " " t "[ \t]") "\n\t")}
+    	"""The initial setup of the algorithm"""
+        # ${3:param}
+        ${3:$(mapconcat (lambda (x) (mpa-parse-param x)) (split-string yas-text " " t "[ \t]") "\n\t")}
 
     def PyExec(self):
-	${3:$(mapconcat (lambda (x) (format "%s = self.getProperty(\\"%s\\").value" x x))
-			(split-string yas-text " " t "[ \t]") "\n\t")}
-	$0
+    	"""The actual running of the algorithm"""
+        ${3:$(mapconcat (lambda (x) (mpa-get-param x))
+                        (split-string yas-text " " t "[ \t]") "\n\t")}
+        $0
 
 AlgorithmFactory.subscribe($1)
