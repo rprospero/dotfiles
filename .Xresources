@@ -1,5 +1,10 @@
-#define FIXED_FONT xft:iosevka:pixelsize=10:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
-#define EMACS_FIXED_FONT Iosevka-10
+#ifdef SRVR_NDLT969a
+  #define FIXED_FONT xft:iosevka:pixelsize=14:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
+  #define EMACS_FIXED_FONT Iosevka-14
+#else
+  #define FIXED_FONT xft:iosevka:pixelsize=10:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
+  #define EMACS_FIXED_FONT Iosevka-10
+#endif
 
 URxvt*skipScroll: true
 URxvt.font: FIXED_FONT
