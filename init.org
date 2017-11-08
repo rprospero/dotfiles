@@ -740,6 +740,7 @@ notmuch is a wonderful little utility for managing my mail
      ("http://pragmaticemacs.com/feed/" sw emacs)
      ("https://www.reddit.com/r/emacs/.rss" sw emacs)
      ("https://hnrss.org/newest?points=300" sw)
+     ("https://yager.io/feed/" sw haskell)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
 
  #+END_SRC
