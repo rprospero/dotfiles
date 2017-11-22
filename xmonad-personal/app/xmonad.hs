@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 import           Control.Monad                (liftM2, filterM,msum)
 import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
 import           Data.Maybe (fromMaybe)
@@ -9,10 +10,12 @@ import           System.Taffybar.Hooks.PagerHints (pagerHints)
 import           XMonad
 import           XMonad.Actions.DynamicWorkspaces
 import           XMonad.Actions.Search
+import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.FadeInactive
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.UrgencyHook
+import           XMonad.Layout.LayoutModifier
 import           XMonad.Layout.HintedGrid
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.Tabbed
@@ -50,12 +53,19 @@ myManageHook = composeAll . concat $
     myClassMediaShifts = ["Gimp"]
     role = stringProperty "WM_WINDOW_ROLE"
 
+myDzen :: LayoutClass l Window => XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
+myDzen = statusBar "dzen2 -e onstart=lower -dock -ta l -xs 1" dzenPP toggleStrutsKey
+  where
+    toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
+    toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
+
 main :: IO ()
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "systemctl --user start xmonad.target"
-  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook myConfig
+  cfg <- myDzen myConfig
+  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook cfg
 
 data NameSegment = Prefix String | Suffix String | Subst String String
 
