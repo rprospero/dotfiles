@@ -2173,6 +2173,9 @@ Yasnippets provide programmable skeletons for filling out boilerplate
   (add-to-list 'purpose-user-mode-purposes '(org-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(ein:notebook-multilang-mode . edit))
   (add-to-list 'purpose-user-mode-purposes '(systemd-mode . edit))
+  (add-to-list 'purpose-user-mode-purposes '(help-mode . help))
+  (add-to-list 'purpose-user-mode-purposes '(Info-mode . help))
+  (add-to-list 'purpose-user-mode-purposes '(Custom-mode . custom))
   (purpose-compile-user-configuration))
  #+END_SRC
 
