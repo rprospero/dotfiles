@@ -54,7 +54,7 @@ myManageHook = composeAll . concat $
     role = stringProperty "WM_WINDOW_ROLE"
 
 myDzen :: LayoutClass l Window => XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
-myDzen = statusBar "dzen2 -e onstart=lower -dock -ta l -xs 1" dzenPP toggleStrutsKey
+myDzen = statusBar "/home/adam/Code/dzenBar/.stack-work/dist/x86_64-linux-ncurses6-nopie/Cabal-1.24.2.0/build/dzenBar-exe/dzenBar-exe | dzen2 -e onstart=lower -dock -ta l -xs 1 -l 4" dzenPP toggleStrutsKey
   where
     toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
     toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
