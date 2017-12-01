@@ -1508,6 +1508,7 @@ bindings
    "d" 'projectile-find-dir
    "D" 'projectile-dired
    "p" 'counsel-projectile-switch-project
+   "t" 'projectile-test-project
    "g" 'counsel-projectile-rg
    "s" 'projectile-save-project-buffers
    "B" 'projectile-ibuffer
