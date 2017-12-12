@@ -1508,13 +1508,15 @@ bindings
    "d" 'projectile-find-dir
    "D" 'projectile-dired
    "p" 'counsel-projectile-switch-project
-   "t" 'projectile-test-project
+   "P" 'projectile-test-project
    "g" 'counsel-projectile-rg
    "s" 'projectile-save-project-buffers
    "B" 'projectile-ibuffer
    "k" 'projectile-kill-buffers
    "c" 'projectile-compile-project
    "v" 'projectile-vc
+   "t" 'projectile-find-tag
+   "T" 'projectile-regenerate-tags
    "R" 'projectile-replace-regexp
    "r" 'projectile-run-project)
 
@@ -1557,6 +1559,8 @@ bindings
    "s" 'save-buffer
    "f" 'counsel-find-file
    "b" 'ivy-switch-buffer
+   "rp" 'ivy-purpose-switch-buffer-with-some-purpose
+   "rP" 'ivy-purpose-switch-buffer-with-purpose
    "B" 'ibuffer
    "k" 'kill-this-buffer
    "e" 'eval-last-sexp))
