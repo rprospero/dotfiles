@@ -707,6 +707,10 @@ notmuch is a wonderful little utility for managing my mail
   (setq notmuch-archive-tags (quote ("-inbox" "-unread")))
   (set-face-attribute 'notmuch-search-unread-face nil
 	:foreground "#859900")
+  (setq notmuch-fcc-dirs
+   (quote
+    (("rprospero@gmail.com" . "Personal/[Gmail].Sent Mail")
+     ("adam.washington@stfc.ac.uk" . "Work/Sent -inbox -unread +sent"))))
   (setq notmuch-hello-thousands-separator ",")
   (setq notmuch-saved-searches
         (quote
