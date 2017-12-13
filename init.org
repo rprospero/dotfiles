@@ -332,8 +332,9 @@ Always revert images files without asking.
       (system-is-macbook)
       (setq magit-git-executable "/usr/bin/git"))
   :config
-  (setq diff-switches "-u"))
-  (setq magit-bury-buffer-function 'magit-mode-quit-window)
+  (setq diff-switches "-u")
+  (setq magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
+  (setq magit-bury-buffer-function 'magit-mode-quit-window))
  #+END_SRC
 
 
