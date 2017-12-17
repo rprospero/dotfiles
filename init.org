@@ -555,6 +555,19 @@ I need to be able to edit systemd service files.
 
 #+END_SRC
 
+
+
+
+** nix
+
+Add nix-mode for editting nix files
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package nix-mode
+  :ensure t)
+
+#+END_SRC
 * Communication Tools
 
   We need spell checking in generic Mail mode.
