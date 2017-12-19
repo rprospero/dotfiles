@@ -64,7 +64,7 @@ liveCount action value = do
 
 myMail :: IO Int
 myMail = do
-  read <$> readProcess "/usr/bin/notmuch" ["count","tag:unread"] ""
+  read <$> readProcess "/usr/bin/notmuch" ["count","query:important"] ""
 
 mailWidget :: Double -> IO Widget
 mailWidget update = do
