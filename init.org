@@ -1148,6 +1148,21 @@ We need to load the contrib package to get notmuch links into org
 
 #+END_SRC
 
+** org-edna
+
+This package allow much finer control over the triggers and blocking
+in our org-mode files.  The manual can be found at
+[[http://www.nongnu.org/org-edna-el/]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package org-edna
+  :ensure t
+  :config
+  (org-edna-load))
+
+#+END_SRC
+
 * Prose
 
 
