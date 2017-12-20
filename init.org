@@ -1587,6 +1587,11 @@ bindings
    "vt" 'org-babel-tangle)
 
   (general-define-key
+   :keymaps 'org-mode-map
+   :prefix "<return>"
+   "<return>" 'org-agenda-open-link)
+
+  (general-define-key
    "/" 'swiper
    "?" 'swiper-all)
 
@@ -1600,7 +1605,19 @@ bindings
    "B" 'ibuffer
    "k" 'kill-this-buffer
    "e" 'eval-last-sexp))
+
+(defun avy-jump-link ()
+   (interactive)
+   (avy--generic-jump "https://" nil 'pre))
+
+(general-define-key
+ :prefix 'nil
+ :infix 'nil
+ "M-o" 'avy-jump-link)
+
 #+END_SRC
+
+#+RESULTS:
 
 *** which-key
 
@@ -2031,7 +2048,11 @@ from time to time and see if anything has improved.
   :ensure t
   :config
   (ace-link-setup-default)
-  (define-key org-mode-map (kbd "M-o") 'ace-link-org))
+  (general-define-key
+   :prefix nil
+   :infix nil
+   :keymaps 'org-mode-map
+   "M-o" 'ace-link-org))
 #+END_SRC
 
 
