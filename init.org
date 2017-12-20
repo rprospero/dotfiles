@@ -1754,6 +1754,17 @@ evil-nerd-commenter sould never get working right
   (evil-commentary-mode))
 #+END_SRC
 
+
+*** evil matichit
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package evil-matchit
+  :ensure t
+  :config
+  (global-evil-matchit-mode 1))
+
+#+END_SRC
 ** eyebrowse
 
 #+BEGIN_SRC emacs-lisp :tangle yes
