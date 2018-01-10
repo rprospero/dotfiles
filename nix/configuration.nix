@@ -88,7 +88,12 @@
     extraGroups = ["wheel" "vboxusers" "vboxsf"];
     isNormalUser = true;
     uid = 1000;
-    packages = [pkgs.thunderbird pkgs.gnupg];
+    packages = [pkgs.firefox pkgs.gnupg pkgs.graphviz
+      pkgs.libreoffice
+      pkgs.python
+      pkgs.python27Packages.numpy pkgs.python27Packages.scipy
+      pkgs.python27Packages.matplotlib
+      pkgs.zathura];
   };
 
   fonts.fonts = with pkgs; [
