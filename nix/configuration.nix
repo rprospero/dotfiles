@@ -90,9 +90,11 @@
     uid = 1000;
     packages = [pkgs.firefox pkgs.gnupg pkgs.graphviz
       pkgs.libreoffice
+      pkgs.notmuch
       pkgs.python
       pkgs.python27Packages.numpy pkgs.python27Packages.scipy
       pkgs.python27Packages.matplotlib
+      pkgs.tmux
       pkgs.zathura];
   };
 
@@ -112,6 +114,25 @@
 
   virtualisation.virtualbox.guest.enable = true;
     
+
+  systemd.user.services.offlineimap = {
+    description = "Offline Imap Daemon";
+      serviceConfig = {
+        ExecStart="${pkgs.offlineimap}/bin/offlineimap -o";
+    };
+    path = [pkgs.offlineimap pkgs.notmuch pkgs.gnupg];
+    enable = true;
+    requires = ["gpg-agent.service" "davmail.service"];
+  };
+
+  systemd.user.services.davmail = {
+    description = "Davmail Daemon";
+      serviceConfig = {
+        ExecStart="${pkgs.davmail}/bin/davmail";
+    };
+    path = [pkgs.davmail];
+    enable = true;
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
