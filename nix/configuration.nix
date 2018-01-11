@@ -4,6 +4,12 @@
 
 { config, pkgs, ... }:
 
+let
+  myTaffyBar = (pkgs.taffybar.override {
+    packages=x: with pkgs.haskellPackages; [aeson download hostname icon-fonts xmonad xmonad-contrib];
+  });
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -88,14 +94,19 @@
     extraGroups = ["wheel" "vboxusers" "vboxsf"];
     isNormalUser = true;
     uid = 1000;
-    packages = [pkgs.firefox pkgs.gnupg pkgs.graphviz
-      pkgs.libreoffice
-      pkgs.notmuch
-      pkgs.python
-      pkgs.python27Packages.numpy pkgs.python27Packages.scipy
-      pkgs.python27Packages.matplotlib
-      pkgs.tmux
-      pkgs.zathura];
+    packages = with pkgs; [firefox gnupg graphviz
+      davmail
+      dzen2
+      ghc
+      libreoffice
+      myTaffyBar
+      notmuch
+      (python27Full.buildEnv.override {
+        extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
+        ignoreCollisions = true;
+      })
+      tmux
+      zathura];
   };
 
   fonts.fonts = with pkgs; [
