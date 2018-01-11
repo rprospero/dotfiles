@@ -9,7 +9,6 @@ import Data.ByteString (ByteString)
 import Data.ByteString.Lazy (fromStrict)
 import Data.List (isSuffixOf, isPrefixOf)
 import Data.Monoid ((<>))
-import Data.String.Utils (join)
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
 import Graphics.Icons.FontAwesome hiding (terminalCode)
@@ -45,6 +44,11 @@ import Data.IORef
 import System.Process ( readProcess, callProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
+join :: String -> [String] -> String
+join _ [] = ""
+join _ [x] = x
+join s (x:xs) = x ++ s ++ join s xs
+
 myPollingBar :: Double -> IO Double -> IO Widget
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
                                                            barPadding = 0,
@@ -64,7 +68,7 @@ liveCount action value = do
 
 myMail :: IO Int
 myMail = do
-  read <$> readProcess "/usr/bin/notmuch" ["count","query:important"] ""
+  read <$> readProcess "notmuch" ["count","query:important"] ""
 
 mailWidget :: Double -> IO Widget
 mailWidget update = do
