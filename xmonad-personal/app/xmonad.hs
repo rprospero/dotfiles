@@ -53,19 +53,12 @@ myManageHook = composeAll . concat $
     myClassMediaShifts = ["Gimp"]
     role = stringProperty "WM_WINDOW_ROLE"
 
-myDzen :: LayoutClass l Window => XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
-myDzen = statusBar "/home/adam/Code/dzenBar/.stack-work/dist/x86_64-linux-ncurses6-nopie/Cabal-1.24.2.0/build/dzenBar-exe/dzenBar-exe | dzen2 -e onstart=lower -dock -ta l -xs 1 -l 4" dzenPP toggleStrutsKey
-  where
-    toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
-    toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
-
 main :: IO ()
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
-  spawn "systemctl --user start xmonad.target"
-  cfg <- myDzen myConfig
-  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook cfg
+  spawn "taffybar"
+  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook myConfig
 
 data NameSegment = Prefix String | Suffix String | Subst String String
 
