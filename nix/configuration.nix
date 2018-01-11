@@ -134,6 +134,7 @@ in
     path = [pkgs.offlineimap pkgs.notmuch pkgs.gnupg];
     enable = true;
     requires = ["gpg-agent.service" "davmail.service"];
+    startAt = "*:0/5";
   };
 
   systemd.user.services.davmail = {
