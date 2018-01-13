@@ -8,17 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+      /etc/nixos/local.nix
     ];
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
-  boot.initrd.checkJournalingFS = false;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -85,10 +77,8 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.adam = {
-    extraGroups = ["wheel" "vboxusers" "vboxsf"];
     isNormalUser = true;
-    uid = 1000;
-    packages = [pkgs.firefox pkgs.gnupg pkgs.graphviz
+    packages = [pkgs.firefox pkgs.ghc pkgs.git pkgs.gnupg pkgs.graphviz
       pkgs.libreoffice
       pkgs.python
       pkgs.python27Packages.numpy pkgs.python27Packages.scipy
@@ -103,15 +93,6 @@
   ];
 
   users.defaultUserShell = pkgs.fish;
-
-  fileSystems."/Documents" = {
-    fsType = "vboxsf";
-    device = "Documents";
-    options = ["rw"];
-  };
-
-  virtualisation.virtualbox.guest.enable = true;
-    
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
