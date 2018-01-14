@@ -64,6 +64,7 @@ main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "systemctl --user start xmonad.target"
+  spawn "taffybar"
   cfg <- myDzen myConfig
   xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook cfg
 
