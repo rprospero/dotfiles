@@ -6,7 +6,7 @@ card dotfiles {
      .Xresources
      .xprofile
      .zshrc
-     .zathurarc
+     zathurarc -> .config/zathura/zathurarc
 
      xmonad-personal/app/xmonad.hs -> .xmonad/xmonad.hs
      vimfx -> .config/vimfx
