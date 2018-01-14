@@ -90,6 +90,7 @@ in
       pkgs.python
       pkgs.python27Packages.numpy pkgs.python27Packages.scipy
       pkgs.python27Packages.matplotlib
+      pkgs.super-user-spark
       myTaffybar
       pkgs.zathura];
   };
