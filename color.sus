@@ -1,0 +1,9 @@
+# colour pop
+
+card color {
+     outof /nix/store/7m29ngpkbwqny76dhkn5dpv15y7x6lsq-base16-2015-09-29_rev9b2459
+     into ~
+
+     zathura/base16-pop.zathurarc-dark -> .config/zathura/zathurarc
+     xresources/base16-pop.dark.256.xresources -> .Xresources
+}

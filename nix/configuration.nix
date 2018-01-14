@@ -85,7 +85,13 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.adam = {
     isNormalUser = true;
-    packages = [pkgs.firefox pkgs.ghc pkgs.git pkgs.gnupg pkgs.graphviz
+    packages = [
+      pkgs.base16
+      pkgs.firefox
+      pkgs.ghc
+      pkgs.git
+      pkgs.gnupg
+      pkgs.graphviz
       pkgs.libreoffice
       pkgs.python
       pkgs.python27Packages.numpy pkgs.python27Packages.scipy
