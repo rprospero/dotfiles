@@ -92,6 +92,7 @@ in
       pkgs.python27Packages.matplotlib
       pkgs.super-user-spark
       myTaffybar
+      pkgs.xfce.thunar
       pkgs.zathura];
   };
 
