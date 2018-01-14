@@ -9,7 +9,6 @@ import Data.ByteString (ByteString)
 import Data.ByteString.Lazy (fromStrict)
 import Data.List (isSuffixOf, isPrefixOf)
 import Data.Monoid ((<>))
-import Data.String.Utils (join)
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
 import Graphics.Icons.FontAwesome hiding (terminalCode)
@@ -44,6 +43,11 @@ import Graphics.UI.Gtk
 import Data.IORef
 import System.Process ( readProcess, callProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
+
+join :: Monoid a => a -> [a] -> a
+join _ [] = mempty
+join _ [x] = x
+join connect (x:xs) = x <> connect <> join connect xs
 
 myPollingBar :: Double -> IO Double -> IO Widget
 myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.169,0.212),
