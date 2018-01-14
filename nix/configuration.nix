@@ -4,6 +4,13 @@
 
 { config, pkgs, ... }:
 
+let
+  myTaffybar = pkgs.taffybar.override {
+    packages = x: with pkgs.haskellPackages; [
+    aeson download hostname icon-fonts];
+  };
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -83,6 +90,7 @@
       pkgs.python
       pkgs.python27Packages.numpy pkgs.python27Packages.scipy
       pkgs.python27Packages.matplotlib
+      myTaffybar
       pkgs.zathura];
   };
 
