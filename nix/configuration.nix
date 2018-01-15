@@ -136,9 +136,9 @@ in
   systemd.user.services.taffybar = {
     description = "Taffybar Status Bar";
       serviceConfig = {
-        ExecStart="${myTaffyBar}/bin/taffybar";
+        ExecStart="${myTaffybar}/bin/taffybar";
     };
-    path = [myTaffyBar];
+    path = [myTaffybar];
   };
 
   systemd.user.services.davmail = {
