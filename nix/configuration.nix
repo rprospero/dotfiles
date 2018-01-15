@@ -127,7 +127,7 @@ in
   fileSystems."/Documents" = {
     fsType = "vboxsf";
     device = "Documents";
-    options = ["rw"];
+    options = ["rw" "gid=100"];
   };
 
   virtualisation.virtualbox.guest.enable = true;
