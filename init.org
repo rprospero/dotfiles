@@ -1299,11 +1299,11 @@ Include useful mode hooks when moving into latex mode
 (use-package base16-theme
   :ensure t
   :config
-  (load-theme 'base16-solarized-dark)
-  (defvar my/base16-colors base16-solarized-dark-colors)
+  (load-theme 'base16-pop)
+  (defvar my/base16-colors base16-pop-colors)
   (base16-set-faces
-   'base16-solarized-dark
-   base16-solarized-dark-colors
+   'base16-pop
+   base16-pop-colors
    '((fringe :background base00)
      (notmuch-hello-logo-background :background base00)
      (notmuch-message-summary-face :foreground base05 :background base01)
