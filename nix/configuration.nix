@@ -67,6 +67,8 @@ in
 
   services.emacs.enable = true;
   services.gnome3.at-spi2-core.enable = true;
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
