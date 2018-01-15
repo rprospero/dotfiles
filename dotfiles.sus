@@ -1,0 +1,20 @@
+card dotfiles {
+     into ~
+
+     .xinitrc
+     .zshrc
+     .Xresources
+     .xprofile
+     .zshrc
+     zathurarc -> .config/zathura/zathurarc
+
+     xmonad-personal/app/xmonad.hs -> .xmonad/xmonad.hs
+     vimfx -> .config/vimfx
+}
+
+card taffybar {
+     into ~/.config/taffybar
+
+     taffybar.hs
+     taffybar.rc
+}

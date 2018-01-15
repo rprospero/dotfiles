@@ -106,7 +106,7 @@ instance Shrinker MyShrinker where
 myLayoutHook = tabbedBottom MyShrinker myTheme ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
 
 myConfig = def {
-               focusedBorderColor = pFg subTheme,
+               focusedBorderColor = pBC subTheme,
                normalBorderColor = pBg subTheme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
@@ -203,7 +203,7 @@ myTheme :: Theme
 myTheme = tabTheme subTheme $ theme kavonForestTheme
 
 subTheme :: PromptTheme
-subTheme = solarizedTheme
+subTheme = popTheme
 
 data PromptTheme = PromptTheme {
   pFg :: String,
@@ -301,4 +301,12 @@ solarizedTheme = PromptTheme {
   pFgH = "#93a1a1",
   pBgH = "073642",
   pBC = "#859900",
+
+popTheme :: PromptTheme
+popTheme = PromptTheme {
+  pFg = "#FFFFFF",
+  pBg = "#000000",
+  pFgH = "#E0E0E0",
+  pBgH = "#202020",
+  pBC = "#505050",
   pFont = fontName def}

@@ -5,26 +5,19 @@
 { config, pkgs, ... }:
 
 let
-  myTaffyBar = (pkgs.taffybar.override {
-    packages=x: with pkgs.haskellPackages; [aeson download hostname icon-fonts xmonad xmonad-contrib];
-  });
+  myTaffybar = pkgs.taffybar.override {
+    packages = x: with pkgs.haskellPackages; [
+    aeson download hostname icon-fonts];
+  };
 in
 
 {
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+      /etc/nixos/local.nix
     ];
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
-  boot.initrd.checkJournalingFS = false;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -95,24 +88,29 @@ in
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.adam = {
-    extraGroups = ["wheel" "vboxusers" "vboxsf"];
     isNormalUser = true;
-    uid = 1000;
-    packages = with pkgs; [firefox gnupg graphviz
+    packages = with pkgs; [
+      base16
       davmail
       dropbox
+      firefox
       ghc
+      git
+      gnupg
+      graphviz
       hunspell
       hunspellDicts.en-gb-ise
       libreoffice
-      myTaffyBar
+      myTaffybar
       notmuch
       (python27Full.buildEnv.override {
         extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
         ignoreCollisions = true;
       })
+      super-user-spark
       tmux
       unzip
+      xfce.thunar
       zathura];
   };
 
@@ -123,23 +121,6 @@ in
   ];
 
   users.defaultUserShell = pkgs.fish;
-
-  fileSystems."/Documents" = {
-    fsType = "vboxsf";
-    device = "Documents";
-    options = ["rw" "gid=100"];
-  };
-
-  virtualisation.virtualbox.guest.enable = true;
-    
-  systemd.services.duckdns = {
-    description = "DuckDNS Update Daemon";
-    serviceConfig = {
-      ExecStart = "${pkgs.curl}/bin/curl \"https://www.duckdns.org/update?domains=rprosperowork&token=0a47cecd-b4fb-49bb-9b5f-10a92f8bc230&ip=\"";
-    };
-    startAt = "hourly";
-    enable = true;
-  };
 
   systemd.user.services.offlineimap = {
     description = "Offline Imap Daemon";
