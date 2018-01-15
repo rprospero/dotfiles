@@ -100,8 +100,10 @@ in
     uid = 1000;
     packages = with pkgs; [firefox gnupg graphviz
       davmail
-      dzen2
+      dropbox
       ghc
+      hunspell
+      hunspellDicts.en-gb-ise
       libreoffice
       myTaffyBar
       notmuch
@@ -110,6 +112,7 @@ in
         ignoreCollisions = true;
       })
       tmux
+      unzip
       zathura];
   };
 
