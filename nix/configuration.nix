@@ -152,12 +152,21 @@ in
     startAt = "*:0/5";
   };
 
+  systemd.user.services.taffybar = {
+    description = "Taffybar Status Bar";
+      serviceConfig = {
+        ExecStart="${myTaffyBar}/bin/taffybar";
+    };
+    path = [myTaffyBar];
+  };
+
   systemd.user.services.davmail = {
     description = "Davmail Daemon";
       serviceConfig = {
         ExecStart="${pkgs.davmail}/bin/davmail";
     };
     path = [pkgs.davmail];
+    requires = ["taffybar.service"];
     enable = true;
   };
 
