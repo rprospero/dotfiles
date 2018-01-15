@@ -974,120 +974,142 @@ At some point, I need to turn this into a proper package.
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb))
   :config
-  (progn
-    (setq holiday-other-holidays
-     (quote
-      ((holiday-float 5 1 -1 "Spring Bank Holiday")
-       (holiday-float 5 1 1 "May Day Brank Holiday")
-       (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
-    (setq org-agenda-files
-          (quote
-           ("~/org/sync.org"
-	    "~/org/appointments.org"
-	    "~/org/personal-notes.org")))
-    (setq calendar-latitude 53.3836)
-    (setq calendar-longitude 1.4669)
+  (setq holiday-other-holidays
+	(quote
+	 ((holiday-float 5 1 -1 "Spring Bank Holiday")
+	  (holiday-float 5 1 1 "May Day Brank Holiday")
+	  (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
+  (setq org-agenda-files
+	(quote
+	 ("~/org/sync.org"
+	  "~/org/appointments.org"
+	  "~/org/personal-notes.org")))
+  (setq calendar-latitude 53.3836)
+  (setq calendar-longitude 1.4669)
 
-    (setq org-agenda-window-setup 'current-window)
-    (setq org-agenda-start-on-weekday nil)
-    (setq org-return-follows-link t)
-    (add-hook 'org-mode-hook
-              (lambda ()
-                (variable-pitch-mode t)
-                (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
-                (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
+  (setq org-agenda-window-setup 'current-window)
+  (setq org-agenda-start-on-weekday nil)
+  (setq org-return-follows-link t)
+  (add-hook 'org-mode-hook
+	    (lambda ()
+	      (variable-pitch-mode t)
+	      (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+	      (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+	      (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+	      (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
 
-    (defun adam-org-sunrise ()
-      (concat
-       (nth 1 (split-string (diary-sunrise-sunset)))
-       " Sunrise for "
-       (string-remove-prefix "(" (nth 9 (split-string (diary-sunrise-sunset))))))
-    (defun adam-org-sunset ()
-      (concat
-       (nth 4 (split-string (diary-sunrise-sunset)))
-       " Sunset"))
+  (defun adam-org-sunrise ()
+    (concat
+     (nth 1 (split-string (diary-sunrise-sunset)))
+     " Sunrise for "
+     (string-remove-prefix "(" (nth 9 (split-string (diary-sunrise-sunset))))))
+  (defun adam-org-sunset ()
+    (concat
+     (nth 4 (split-string (diary-sunrise-sunset)))
+     " Sunset"))
 
-    (setq org-imenu-depth 4)
-    (setq org-agenda-start-on-weekday nil)
-    (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-    (setq org-confirm-babel-evaluate nil)
-    (setq org-src-fontify-natively t)
-    (setq org-agenda-include-diary nil)
-    (setq org-src-preserve-indentation t)
-    (setq org-table-convert-region-max-lines 99999)
-    (setq org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
-    (setq org-file-apps
-    (quote
-     ((auto-mode . emacs)
-      ("\\.mm\\'" . default)
-      ("\\.x?html?\\'" . default)
-      ("\\.pdf\\'" . system))))
+  (setq org-imenu-depth 4)
+  (setq org-agenda-start-on-weekday nil)
+  (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-src-fontify-natively t)
+  (setq org-agenda-include-diary nil)
+  (setq org-src-preserve-indentation t)
+  (setq org-table-convert-region-max-lines 99999)
+  (setq org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
+  (setq org-file-apps
+	(quote
+	 ((auto-mode . emacs)
+	  ("\\.mm\\'" . default)
+	  ("\\.x?html?\\'" . default)
+	  ("\\.pdf\\'" . system))))
 
-   (setq org-capture-templates
-	 (quote
-	  (("m" "Unsorted Mail Tasks" entry
-	    (file+headline "~/org/appointments.org" "Unsorted Mail")
-	    "** TODO%?\n    SCHEDULED:%T\n\n    %a")
-	   ("v" "Vocab" entry
-	    (file+headline "~/org/appointments.org" "Vocab")
-	    "** TODO %a\n    SCHEDULED:%T%?\n\n    %a"))))
-
-
-    (setq org-latex-listings (quote minted))
-    (setq org-latex-packages-alist (quote (("" "minted" nil))))
-    (setq org-latex-pdf-process
-          (quote
-           ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
-
-    (setq
-     holiday-other-holidays
-     (quote
-      (
-       (holiday-float 5 1 -1 "Spring Bank Holiday")
-       (holiday-float 5 1 1 "May Day Brank Holiday")
-       (holiday-float 8 1 -1 "Late Summer Bank Holidays")
-       )))
-
-    ;;http://lists.gnu.org/archive/html/emacs-orgmode/2010-11/msg00542.html
-    (defun my-org-agenda-day-face-holidays-function (date)
-      "Compute DATE face for holidays."
-      (unless (org-agenda-todayp date)
-        (dolist (file (org-agenda-files nil 'ifmode))
-          (let ((face
-                 (dolist (entry (org-agenda-get-day-entries file date))
-                   (let ((category (with-temp-buffer
-                                     (insert entry)
-                                     (org-get-category (point-min)))))
-                     (when (or (string= "Holidays" category)
-                               (string= "Vacation" category))
-                       (return 'org-agenda-date-weekend))))))
-            (when face (return face))))))
-
-    (setq
-     org-agenda-day-face-function
-     (function
-      my-org-agenda-day-face-holidays-function))
-    ; (require 'org-notify)
-    (setq org-agenda-custom-commands
-          '(("c" . "My Custom Agendas")
-            ("cu" "Unscheduled TODO"
-             ((todo ""
-                    ((org-agenda-overriding-header "\nUnscheduled TODO")
-                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
-             nil
-             nil)))
+  (setq org-capture-templates
+	(quote
+	 (("m" "Unsorted Mail Tasks" entry
+	   (file+headline "~/org/appointments.org" "Unsorted Mail")
+	   "** TODO%?\n    SCHEDULED:%T\n\n    %a")
+	  ("v" "Vocab" entry
+	   (file+headline "~/org/appointments.org" "Vocab")
+	   "** TODO %a\n    SCHEDULED:%T%?\n\n    %a"))))
 
 
-    (require 'org-agenda)
-    (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
-    (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
-    (add-hook 'org-mode-hook 'auto-fill-mode)
-    (add-hook 'org-mode-hook 'flyspell-mode)))
+  (setq org-latex-listings (quote minted))
+  (setq org-latex-packages-alist (quote (("" "minted" nil))))
+  (setq org-latex-pdf-process
+	(quote
+	 ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+
+  (setq
+   holiday-other-holidays
+   (quote
+    (
+     (holiday-float 5 1 -1 "Spring Bank Holiday")
+     (holiday-float 5 1 1 "May Day Brank Holiday")
+     (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+     )))
+
+  (defface org-agenda-date-beam
+    `((t  :foreground ,(face-attribute 'org-priority :foreground)
+	  :inherit 'org-agenda-date))
+    "Face used for agenda entries on days when the ISIS beam is on"
+    :group 'org-faces)
+
+  (defface org-agenda-date-beam-weekend
+    `((t  :foreground ,(face-attribute 'org-priority :foreground)
+	  :inherit 'org-agenda-date-weekend))
+    "Face used for agenda entries on days when the ISIS beam is on"
+    :group 'org-faces)
+
+  (defun my-org-agenda-day-face-holidays-function (date)
+    "Compute DATE face for holidays."
+    (unless (org-agenda-todayp date)
+      (letrec
+	  ((day-of-week (calendar-day-of-week date))
+	   (weekend (or (= day-of-week 0)
+			(= day-of-week 6)))
+	   (files (org-agenda-files nil 'ifmode))
+	   (entries (-flatten
+		     (-map
+		      (lambda (file) (org-agenda-get-day-entries file date))
+		      files)))
+	   (categories (-flatten (-map (lambda (entry)
+					 (with-temp-buffer
+					   (insert entry)
+					   (org-get-category (point-min))))
+				       entries))))
+	(cond
+	 ((and (-contains? categories "BeamOn")
+	       (or weekend
+		   (-contains? categories "Vacation")))
+	  'warning)
+	 ((-contains? categories "BeamOn")
+	  'org-agenda-date-beam)
+	 ((or weekend
+	     (-contains? categories "Vacation"))
+	  'org-agenda-date-weekend)
+	 (t 'org-agenda-date)))))
+
+  (setq
+   org-agenda-day-face-function
+   (function
+    my-org-agenda-day-face-holidays-function))
+					; (require 'org-notify)
+  (setq org-agenda-custom-commands
+	'(("c" . "My Custom Agendas")
+	  ("cu" "Unscheduled TODO"
+	   ((todo ""
+		  ((org-agenda-overriding-header "\nUnscheduled TODO")
+		   (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
+	   nil
+	   nil)))
 
 
-
+  (require 'org-agenda)
+  (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
+  (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+  (add-hook 'org-mode-hook 'flyspell-mode))
 #+END_SRC
 
 Display appointment reminders in X when available.  I stole this code
