@@ -301,6 +301,7 @@ solarizedTheme = PromptTheme {
   pFgH = "#93a1a1",
   pBgH = "073642",
   pBC = "#859900",
+  pFont = fontName def}
 
 popTheme :: PromptTheme
 popTheme = PromptTheme {
