@@ -132,6 +132,14 @@ in
 
   virtualisation.virtualbox.guest.enable = true;
     
+  systemd.services.duckdns = {
+    description = "DuckDNS Update Daemon";
+    serviceConfig = {
+      ExecStart = "${pkgs.curl}/bin/curl \"https://www.duckdns.org/update?domains=rprosperowork&token=0a47cecd-b4fb-49bb-9b5f-10a92f8bc230&ip=\"";
+    };
+    startAt = "hourly";
+    enable = true;
+  };
 
   systemd.user.services.offlineimap = {
     description = "Offline Imap Daemon";
