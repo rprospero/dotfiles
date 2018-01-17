@@ -1,7 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 import           Control.Monad                (liftM2, filterM,msum)
 import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
-import           Data.Maybe (fromMaybe)
+import           Data.Map.Strict as M (fromList, lookup)
+import           Data.Maybe (fromMaybe, fromJust)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -29,6 +30,74 @@ import           XMonad.Prompt.Window
 import           XMonad.Prompt.XMonad
 import           XMonad.Util.EZConfig         (additionalKeys)
 import           XMonad.Util.Themes
+
+data Base16 = Base16 {
+  scheme :: String
+  , author :: String
+  , base00 :: String
+  , base01 :: String
+  , base02 :: String
+  , base03 :: String
+  , base04 :: String
+  , base05 :: String
+  , base06 :: String
+  , base07 :: String
+  , base08 :: String
+  , base09 :: String
+  , base0A :: String
+  , base0B :: String
+  , base0C :: String
+  , base0D :: String
+  , base0E :: String
+  , base0F :: String
+  }
+
+defaultBase16 :: Base16
+defaultBase16 = Base16 {
+  scheme = "000000"
+  , author = "000000"
+  , base00 = "000000"
+  , base01 = "000000"
+  , base02 = "000000"
+  , base03 = "000000"
+  , base04 = "000000"
+  , base05 = "000000"
+  , base06 = "F00000"
+  , base07 = "F0F000"
+  , base08 = "F0F0F0"
+  , base09 = "00F0F0"
+  , base0A = "000000"
+  , base0B = "000000"
+  , base0C = "000000"
+  , base0D = "000000"
+  , base0E = "000000"
+  , base0F = "000000"
+  }
+readBase16Line :: String -> (String, String)
+readBase16Line line = (take 6 line, ("#"++) . read . drop 8 $ line)
+
+readBase16 :: FilePath -> IO (Maybe Base16)
+readBase16 path = do
+  ls <- readFile path
+  let terms = fromList [readBase16Line l | l <- lines ls]
+  return $ Base16 <$> M.lookup "scheme" terms
+    <*> M.lookup "author" terms
+    <*> M.lookup "base00" terms
+    <*> M.lookup "base01" terms
+    <*> M.lookup "base02" terms
+    <*> M.lookup "base03" terms
+    <*> M.lookup "base04" terms
+    <*> M.lookup "base05" terms
+    <*> M.lookup "base06" terms
+    <*> M.lookup "base07" terms
+    <*> M.lookup "base08" terms
+    <*> M.lookup "base09" terms
+    <*> M.lookup "base0A" terms
+    <*> M.lookup "base0B" terms
+    <*> M.lookup "base0C" terms
+    <*> M.lookup "base0D" terms
+    <*> M.lookup "base0E" terms
+    <*> M.lookup "base0F" terms
 
 myWorkspaces :: [String]
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
@@ -58,7 +127,8 @@ main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "systemctl --user start taffybar"
-  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook myConfig
+  theme <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/pop.yml"
+  xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook (myConfig theme)
 
 data NameSegment = Prefix String | Suffix String | Subst String String
 
@@ -103,14 +173,14 @@ instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
 instance Shrinker MyShrinker where
   shrinkIt = myShrinkText
 
-myLayoutHook = tabbedBottom MyShrinker myTheme ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
+myLayoutHook theme = tabbedBottom MyShrinker (myTheme theme) ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
 
-myConfig = def {
-               focusedBorderColor = pBC subTheme,
-               normalBorderColor = pBg subTheme,
+myConfig theme = def {
+               focusedBorderColor = base03 theme,
+               normalBorderColor = base00 theme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
-               layoutHook = avoidStruts myLayoutHook,
+               layoutHook = avoidStruts $ myLayoutHook theme,
                logHook = logHook def <+> ewmhDesktopsLogHook <+> fadeInactiveCurrentWSLogHook 0.5,
                modMask = mod4Mask,
                terminal = "urxvt +sb",
@@ -123,23 +193,23 @@ myConfig = def {
              , ((mod4Mask, xK_f), spawn "firefox")
              , ((mod4Mask .|. mod1Mask, xK_e), spawn "emacsclient -c")
              , ((mod4Mask, xK_t), spawn "thunar")
-             , ((mod4Mask .|. mod1Mask, xK_t), themePrompt mySearchPrompt)
-             , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt)
+             , ((mod4Mask .|. mod1Mask, xK_t), themePrompt $ mySearchPrompt theme)
+             , ((mod4Mask .|. shiftMask, xK_t), thunarPrompt theme)
              , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2%-")
              , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2%+")
              , ((0, xF86XK_AudioMute          ), spawn "amixer set Master toggle")
-             , ((mod4Mask, xK_v), selectWorkspace mySearchPrompt)
-             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace mySearchPrompt (windows . W.shift))
-             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt defPrompt)
+             , ((mod4Mask, xK_v), selectWorkspace $ mySearchPrompt theme)
+             , ((mod4Mask .|. shiftMask, xK_v), withWorkspace (mySearchPrompt theme) (windows . W.shift))
+             , ((mod4Mask .|. shiftMask, xK_m), addWorkspacePrompt $ defPrompt theme)
              , ((mod4Mask, xK_BackSpace), removeEmptyWorkspace)
-             , ((mod4Mask, xK_s), sshPrompt mySearchPrompt)
-             , ((mod4Mask, xK_p), runOrRaisePrompt defPrompt)
-             , ((mod4Mask .|. shiftMask, xK_p), shellPrompt defPrompt)
-             , ((mod4Mask, xK_g), windowPromptGoto mySearchPrompt)
-             , ((mod4Mask .|. shiftMask, xK_g), windowPromptBring mySearchPrompt)
-             , ((mod4Mask, xK_x), xmonadPrompt mySearchPrompt)
+             , ((mod4Mask, xK_s), sshPrompt $ mySearchPrompt theme)
+             , ((mod4Mask, xK_p), runOrRaisePrompt $ defPrompt theme)
+             , ((mod4Mask .|. shiftMask, xK_p), shellPrompt $ defPrompt theme)
+             , ((mod4Mask, xK_g), windowPromptGoto $ mySearchPrompt theme)
+             , ((mod4Mask .|. shiftMask, xK_g), windowPromptBring $ mySearchPrompt theme)
+             , ((mod4Mask, xK_x), xmonadPrompt $ mySearchPrompt theme)
              , ((mod4Mask, xK_i),
-                promptSearch defPrompt
+                promptSearch (defPrompt theme)
                 (moreIntelligent $
                   searchEngine "DuckDuckGo" "https://duckduckgo.com/?q="))
              , ((mod4Mask .|. shiftMask , xK_n), withFocused $ windows . W.sink)
@@ -155,8 +225,8 @@ moreIntelligent (SearchEngine name site) = searchEngineF name f
           then s
           else site s
 
-thunarPrompt :: X ()
-thunarPrompt = mkXPrompt Thunar defPrompt directoryComplete (spawn . ("thunar "++))
+thunarPrompt :: Base16 -> X ()
+thunarPrompt theme = mkXPrompt Thunar (defPrompt theme) directoryComplete (spawn . ("thunar "++))
 
 directoryComplete :: String -> IO [String]
 directoryComplete x = do
@@ -169,145 +239,34 @@ data Thunar = Thunar
 instance XPrompt Thunar where
   showXPrompt Thunar = "Directory:  "
 
-mySearchPrompt :: XPConfig
-mySearchPrompt = defPrompt {searchPredicate = mySearchPredicate,
+mySearchPrompt :: Base16 -> XPConfig
+mySearchPrompt theme = (defPrompt theme){searchPredicate = mySearchPredicate,
                             autoComplete = Just 1}
 
 
 mySearchPredicate :: String -> String -> Bool
 mySearchPredicate query item = all (`isInfixOf` item) . words $ query
 
-defPrompt :: XPConfig
-defPrompt = promptTheme subTheme def {historyFilter = nub}
+defPrompt :: Base16 -> XPConfig
+defPrompt theme = promptTheme theme def {historyFilter = nub}
 
-promptTheme :: PromptTheme -> XPConfig -> XPConfig
-promptTheme t x = x {fgColor = pFg t,
-                     bgColor = pBg t,
-                     fgHLight = pFgH t,
-                     bgHLight = pBgH t,
-                     borderColor = pBC t,
-                     font = pFont t}
+promptTheme :: Base16 -> XPConfig -> XPConfig
+promptTheme t x = x {fgColor = base07 t,
+                     bgColor = base00 t,
+                     fgHLight = base06 t,
+                     bgHLight = base01 t,
+                     borderColor = base04 t}
 
-tabTheme :: PromptTheme -> Theme -> Theme
-tabTheme p x = x {inactiveTextColor = pFg p,
-                  inactiveColor = pBg p,
-                  inactiveBorderColor = pBg p,
-                  urgentColor = pFg p,
-                  urgentTextColor = pBg p,
-                  urgentBorderColor = pBg p,
-                  activeTextColor = pFgH p,
-                  activeColor = pBgH p,
-                  activeBorderColor = pBg p}
+tabTheme :: Base16 -> Theme -> Theme
+tabTheme p x = x {inactiveTextColor = base05 p,
+                  inactiveColor = base02 p,
+                  inactiveBorderColor = base03 p,
+                  urgentColor = base08 p,
+                  urgentTextColor = base09 p,
+                  urgentBorderColor = base0A p,
+                  activeTextColor = base07 p,
+                  activeColor = base00 p,
+                  activeBorderColor = base01 p}
 
-myTheme :: Theme
-myTheme = tabTheme subTheme $ theme kavonForestTheme
-
-subTheme :: PromptTheme
-subTheme = popTheme
-
-data PromptTheme = PromptTheme {
-  pFg :: String,
-  pBg :: String,
-  pFgH :: String,
-  pBgH :: String,
-  pBC :: String,
-  pFont :: String}
-
-moeTheme :: PromptTheme
-moeTheme = PromptTheme {
-  pFg = "#c6c6c6",
-  pBg = "#303030",
-  pFgH = "#4e4e4e",
-  pBgH = "#d7ff5f",
-  pBC = "#c6c6c6",
-  pFont = fontName def}
-
-grandShellTheme :: PromptTheme
-grandShellTheme = PromptTheme {
-  pBg = "black",
-  pFg = "gray",
-  pFgH = "gray",
-  pBgH = "#34004A",
-  pBC = "gray",
-  pFont = fontName def}
-
-monokaiTheme :: PromptTheme
-monokaiTheme = PromptTheme {
-  pFg = "#F8F8F2",
-  pBg = "#272822",
-  pFgH = "#F8F8F2",
-  pBgH = "#49483E",
-  pBC = "#F8F8F2",
-  pFont = fontName def}
-
-sanityBrightTheme :: PromptTheme
-sanityBrightTheme = PromptTheme {
-  pFg = "#eaeaea",
-  pBg = "#000000",
-  pFgH = "#eaeaea",
-  pBgH = "#424242",
-  pBC = "#eaeaea",
-  pFont = fontName def}
-
-sanityEightiesTheme :: PromptTheme
-sanityEightiesTheme = PromptTheme {
-  pFg = "#cccccc",
-  pBg = "#2d2d2d",
-  pFgH = "#cccccc",
-  pBgH = "#515151",
-  pBC = "#cccccc",
-  pFont = fontName def}
-
-cyberPunkTheme :: PromptTheme
-cyberPunkTheme = PromptTheme {
-  pFg = "#d3d3d3",
-  pBg = "#000000",
-  pFgH = "#d3d3d3",
-  pBgH = "#7F073F",
-  pBC = "#d3d3d3",
-  pFont = fontName def}
-
-darkToothTheme :: PromptTheme
-darkToothTheme = PromptTheme {
-  pFg = "#FDF4C1",
-  pBg = "#282828",
-  pFgH = "#FDF4C1",
-  pBgH = "#30434C",
-  pBC = "#FDF4C1",
-  pFont = fontName def}
-
-materialTheme :: PromptTheme
-materialTheme = PromptTheme {
-  pFg = "#ffffff",
-  pBg = "#263238",
-  pFgH = "white",
-  pBgH = "#555555",
-  pBC = "#ffffff",
-  pFont = fontName def}
-
-tronTheme :: PromptTheme
-tronTheme = PromptTheme {
-  pFg = "#d3f9ee",
-  pBg = "#081724",
-  pFgH = "#d3f9ee",
-  pBgH = "#1d5483",
-  pBC = "#d3f9ee",
-  pFont = fontName def}
-
-solarizedTheme :: PromptTheme
-solarizedTheme = PromptTheme {
-  pFg = "#839496",
-  pBg = "#002b36",
-  pFgH = "#93a1a1",
-  pBgH = "073642",
-  pBC = "#859900",
-  pFont = fontName def}
-
-popTheme :: PromptTheme
-popTheme = PromptTheme {
-  pFg = "#FFFFFF",
-  pBg = "#000000",
-  pFgH = "#E0E0E0",
-  pBgH = "#202020",
-  pBC = "#505050",
-  pFont = fontName def}
+myTheme :: Base16 -> Theme
+myTheme th = tabTheme th $ theme kavonForestTheme
