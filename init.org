@@ -1148,6 +1148,61 @@ We need the org-contrib package for some lesser known libraries
 
 #+END_SRC
 
+** Calculate Local Contacting
+
+The code below calculates uses the org-calendar to calculate the
+expected local contacting payment.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(defun get-timestamps (tags)
+  (-map
+   (lambda (x) (cdr (assoc "TIMESTAMP" x)))
+   (-filter (lambda (x) (assoc "TIMESTAMP" x))
+	    (org-map-entries
+	     (lambda ()
+	       (org-entry-properties))
+	     tags
+	     'agenda))))
+
+(defun timestamp-to-dates (stamp)
+  (-map
+   #'calendar-gregorian-from-absolute
+   (apply
+    #'number-sequence
+    (-map
+     #'org-time-string-to-absolute
+     (split-string
+      stamp
+      "--")))))
+
+(defun local-contacting (dates)
+  (apply
+   '+
+   (-map
+    (lambda (x)
+      (pcase x
+	(`(,month ,day, year)
+	 (pcase (org-day-of-week day month year)
+	   (6 40.40)
+	   (0 40.40)
+	   (_ 20.20)
+	   ))))
+   dates)))
+
+(defun calculate-local-contacting ()
+  "Calculate expected local contacting fees."
+  (interactive)
+  (print
+   (apply
+    '+
+    (-map
+     (lambda (x)
+       (local-contacting
+	(timestamp-to-dates x)))
+     (get-timestamps "+LocalContact+TODO=\"TODO\"")))))
+#+END_SRC
+
 ** htmlize
 
  Org-mode uses the htmlize library to highlight the code in the
