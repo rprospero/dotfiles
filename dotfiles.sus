@@ -1,6 +1,8 @@
 card dotfiles {
      into ~
 
+     .offlineimaprc
+     .offlineimap.py
      .msmtprc
      .xinitrc
      .zshrc
