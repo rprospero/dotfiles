@@ -9,6 +9,10 @@ let
     packages = x: with pkgs.haskellPackages; [
     aeson download hostname icon-fonts];
   };
+  myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
+    haskellPackages: with haskellPackages; [
+    aeson hlint lens recursion-schemes stack
+  ]);
 in
 
 {
@@ -94,12 +98,14 @@ in
       davmail
       dropbox
       firefox
-      ghc
       git
       gnupg
       graphviz
+      myHaskellEnv
       hunspell
       hunspellDicts.en-gb-ise
+      jre
+      ledger
       libreoffice
       myTaffybar
       nixops
@@ -112,8 +118,10 @@ in
       tmux
       unzip
       xfce.thunar
-      zathura];
+      zathura
+      zip];
   };
+  environment.variables.DICPATH = "${pkgs.hunspell}/share/hunspell";
 
   fonts.fonts = with pkgs; [
     dejavu_fonts
