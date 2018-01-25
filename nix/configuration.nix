@@ -150,7 +150,7 @@ in
       serviceConfig = {
         ExecStart="${myTaffybar}/bin/taffybar";
     };
-    path = [myTaffybar];
+    path = [myTaffybar pkgs.notmuch];
   };
 
   systemd.user.services.davmail = {
