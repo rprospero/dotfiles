@@ -1098,14 +1098,14 @@ At some point, I need to turn this into a proper package.
      )))
 
   (defface org-agenda-date-beam
-    `((t  :foreground ,(face-attribute 'org-priority :foreground)
-	  :inherit 'org-agenda-date))
+    `((t  :foreground ,(face-attribute 'font-lock-keyword-face :foreground)
+	  :inherit org-agenda-date))
     "Face used for agenda entries on days when the ISIS beam is on"
     :group 'org-faces)
 
   (defface org-agenda-date-beam-weekend
-    `((t  :foreground ,(face-attribute 'org-priority :foreground)
-	  :inherit 'org-agenda-date-weekend))
+    `((t  :foreground ,(face-attribute 'font-lock-keyword-face :foreground)
+	  :inherit org-agenda-date-weekend))
     "Face used for agenda entries on days when the ISIS beam is on"
     :group 'org-faces)
 
@@ -1130,7 +1130,7 @@ At some point, I need to turn this into a proper package.
 	 ((and (-contains? categories "BeamOn")
 	       (or weekend
 		   (-contains? categories "Vacation")))
-	  'warning)
+	  'org-agenda-date-beam-weekend)
 	 ((-contains? categories "BeamOn")
 	  'org-agenda-date-beam)
 	 ((or weekend
