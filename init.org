@@ -384,7 +384,17 @@ Always revert images files without asking.
   (setq magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
   (setq magit-bury-buffer-function 'magit-mode-quit-window))
  #+END_SRC
+** magithub
 
+   This package let's me interface with github through magit.
+   Anything to stay out of the browser.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package magithub
+  :ensure t
+  :after magit
+  :config (magithub-feature-autoinfect t))
+#+END_SRC
 
 ** ledger-mode
 
