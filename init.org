@@ -246,6 +246,54 @@ single directory.
 
 #+END_SRC
 
+
+* Themes
+
+
+** solarized-theme
+
+ #+BEGIN_SRC emacs-lisp :tangle no
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark))
+ #+END_SRC
+
+** base16-theme
+
+ #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package base16-theme
+  :ensure t
+  :config
+  (load-theme 'base16-pop)
+  (defvar my/base16-colors base16-pop-colors)
+  (base16-set-faces
+   'base16-pop
+   base16-pop-colors
+   '((fringe :background base00)
+     (notmuch-hello-logo-background :background base00)
+     (notmuch-message-summary-face :foreground base05 :background base01)
+     (notmuch-search-subject :foreground base05)
+     (notmuch-search-date :foreground base05)
+     (notmuch-search-flagged-face :foreground base0F)
+     (notmuch-search-matching-authors :foreground base05)
+     (notmuch-search-non-matching-authors :foreground base03)
+     (notmuch-search-unread-face :foreground base06)
+     (notmuch-tag-added :underline base0B)
+     (notmuch-tag-deleted :strike-through base08)
+     (notmuch-tag-face :foreground base0B)
+     (notmuch-tag-flaged :foreground base0F)
+     (notmuch-tag-unread :foreground base06)
+     (mode-line-inactive :background base02)
+     (mode-line :background base01)))
+  (setq evil-emacs-state-cursor   `(,(plist-get my/base16-colors :base0D) box)
+	evil-insert-state-cursor  `(,(plist-get my/base16-colors :base0D) bar)
+	evil-motion-state-cursor  `(,(plist-get my/base16-colors :base0E) box)
+	evil-normal-state-cursor  `(,(plist-get my/base16-colors :base0B) box)
+	evil-replace-state-cursor `(,(plist-get my/base16-colors :base08) bar)
+	evil-visual-state-cursor  `(,(plist-get my/base16-colors :base09) box)))
+#+END_SRC
+
 * Apps
 ** Dired
 
@@ -1334,54 +1382,6 @@ Include useful mode hooks when moving into latex mode
   (add-hook 'latex-mode-hook 'writegood-mode)
   (add-hook 'org-mode-hook 'writegood-mode))
  #+END_SRC
-
-
-* Themes
-
-
-** solarized-theme
-
- #+BEGIN_SRC emacs-lisp :tangle no
-(use-package solarized-theme
-  :ensure t
-  :config
-  (load-theme 'solarized-dark))
- #+END_SRC
-
-** base16-theme
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package base16-theme
-  :ensure t
-  :config
-  (load-theme 'base16-pop)
-  (defvar my/base16-colors base16-pop-colors)
-  (base16-set-faces
-   'base16-pop
-   base16-pop-colors
-   '((fringe :background base00)
-     (notmuch-hello-logo-background :background base00)
-     (notmuch-message-summary-face :foreground base05 :background base01)
-     (notmuch-search-subject :foreground base05)
-     (notmuch-search-date :foreground base05)
-     (notmuch-search-flagged-face :foreground base0F)
-     (notmuch-search-matching-authors :foreground base05)
-     (notmuch-search-non-matching-authors :foreground base03)
-     (notmuch-search-unread-face :foreground base06)
-     (notmuch-tag-added :underline base0B)
-     (notmuch-tag-deleted :strike-through base08)
-     (notmuch-tag-face :foreground base0B)
-     (notmuch-tag-flaged :foreground base0F)
-     (notmuch-tag-unread :foreground base06)
-     (mode-line-inactive :background base02)
-     (mode-line :background base01)))
-  (setq evil-emacs-state-cursor   `(,(plist-get my/base16-colors :base0D) box)
-	evil-insert-state-cursor  `(,(plist-get my/base16-colors :base0D) bar)
-	evil-motion-state-cursor  `(,(plist-get my/base16-colors :base0E) box)
-	evil-normal-state-cursor  `(,(plist-get my/base16-colors :base0B) box)
-	evil-replace-state-cursor `(,(plist-get my/base16-colors :base08) bar)
-	evil-visual-state-cursor  `(,(plist-get my/base16-colors :base09) box)))
-#+END_SRC
 
 * Toys
 ** encourage-mode
