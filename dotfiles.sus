@@ -1,6 +1,7 @@
 card dotfiles {
      into ~
 
+     .msmtprc
      .xinitrc
      .zshrc
      .Xresources
