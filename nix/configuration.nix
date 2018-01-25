@@ -117,6 +117,7 @@ in
         ignoreCollisions = true;
       })
       super-user-spark
+      texlive.combined.scheme-small
       tmux
       unzip
       xfce.thunar
