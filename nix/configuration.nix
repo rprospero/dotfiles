@@ -143,13 +143,14 @@ in
 
   systemd.user.services.offlineimap = {
     description = "Offline Imap Daemon";
-      serviceConfig = {
-        ExecStart="${pkgs.offlineimap}/bin/offlineimap -o";
+    serviceConfig = {
+      ExecStart="${pkgs.offlineimap}/bin/offlineimap";
+      Restart="on-failure";
+      RestartSec=3;
     };
     path = [pkgs.offlineimap pkgs.notmuch pkgs.gnupg];
     enable = true;
     requires = ["gpg-agent.service" "davmail.service"];
-    startAt = "*:0/5";
   };
 
   systemd.user.services.taffybar = {
