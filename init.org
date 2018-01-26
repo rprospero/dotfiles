@@ -393,7 +393,7 @@ Always revert images files without asking.
 (use-package magithub
   :ensure t
   :after magit
-  :config (magithub-feature-autoinfect t))
+  :config (magithub-feature-autoinject t))
 #+END_SRC
 
 ** ledger-mode
