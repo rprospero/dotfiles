@@ -104,11 +104,13 @@ in
     packages = with pkgs; [
       baobab
       base16
+      binutils
       davmail
       dropbox
       firefox
       git
       gitAndTools.hub
+      glibc.static
       gnupg
       graphviz
       myHaskellEnv
