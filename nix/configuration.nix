@@ -6,13 +6,20 @@
 
 let
   myTaffybar = pkgs.taffybar.override {
-    packages = x: with pkgs.haskellPackages; [
+  packages = x: with pkgs.haskellPackages; [
     aeson download hostname icon-fonts];
-  };
-  myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
-    haskellPackages: with haskellPackages; [
-    aeson hlint lens recursion-schemes stack
-  ]);
+};
+myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
+  haskellPackages: with haskellPackages; [
+  aeson hlint lens recursion-schemes stack
+]);
+myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
+  preFixup = ''
+    ln -sv $out/share/hunspell/en_GB-ise.aff $out/share/hunspell/en_GB.aff
+    ln -sv $out/share/hunspell/en_GB-ise.dic $out/share/hunspell/en_GB.dic
+  '';
+  phases = "unpackPhase installPhase fixupPhase";
+});
 in
 
 {
@@ -104,7 +111,7 @@ in
       graphviz
       myHaskellEnv
       hunspell
-      hunspellDicts.en-gb-ise
+      myDict
       jre
       ledger
       libreoffice
@@ -124,7 +131,7 @@ in
       zathura
       zip];
   };
-  environment.variables.DICPATH = "${pkgs.hunspell}/share/hunspell";
+  environment.variables.DICPATH = "${myDict}/share/hunspell";
 
   fonts.fonts = with pkgs; [
     dejavu_fonts
@@ -147,8 +154,8 @@ in
 
   systemd.user.services.taffybar = {
     description = "Taffybar Status Bar";
-      serviceConfig = {
-        ExecStart="${myTaffybar}/bin/taffybar";
+    serviceConfig = {
+      ExecStart="${myTaffybar}/bin/taffybar";
     };
     path = [myTaffybar pkgs.notmuch];
   };
