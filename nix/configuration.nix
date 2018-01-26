@@ -102,11 +102,13 @@ in
   users.extraUsers.adam = {
     isNormalUser = true;
     packages = with pkgs; [
+      baobab
       base16
       davmail
       dropbox
       firefox
       git
+      gitAndTools.hub
       gnupg
       graphviz
       myHaskellEnv
@@ -119,6 +121,7 @@ in
       nixops
       notmuch
       offlineimap
+      pass
       (python27Full.buildEnv.override {
         extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
         ignoreCollisions = true;
