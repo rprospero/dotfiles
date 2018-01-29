@@ -128,6 +128,7 @@ in
         extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
         ignoreCollisions = true;
       })
+      ripgrep
       super-user-spark
       texlive.combined.scheme-full
       tmux
