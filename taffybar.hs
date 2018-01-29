@@ -76,7 +76,7 @@ mailWidget update = do
   mvarWidget mvar (\count ->
                       if count == 0
                       then ""
-                      else colorize "#FFFFFF" "" $ iconPango mailCode <> " " <> show count)
+                      else iconPango mailCode <> " " <> show count)
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
@@ -150,7 +150,7 @@ wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> rea
 
 wifiIcon :: Bool -> String
 wifiIcon True = iconPango wifiCode
-wifiIcon False = colorize "#7a2d00" "" $ iconPango wifiCode
+wifiIcon False = colorize "red" "" $ iconPango wifiCode
 
 wifiWidget :: IO Widget
 wifiWidget =
@@ -313,9 +313,9 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
 
 appropriateBattery :: BatteryInfo -> String
 appropriateBattery x
-  | batteryPercentage x < 20.0 = colorize "#7a2d00" "" $ iconPango batteryEmptyCode
-  | batteryPercentage x < 40.0 = colorize "#f8ca12" "" $ iconPango batteryQuarterCode
-  | batteryPercentage x < 60.0 = colorize "#37b349" "" $ iconPango batteryHalfCode
+  | batteryPercentage x < 20.0 = colorize "red" "" $ iconPango batteryEmptyCode
+  | batteryPercentage x < 40.0 = colorize "yellow" "" $ iconPango batteryQuarterCode
+  | batteryPercentage x < 60.0 = colorize "green" "" $ iconPango batteryHalfCode
   | batteryPercentage x < 80.0 = iconPango batteryThreeQuartersCode
   | otherwise = iconPango batteryFullCode
 
@@ -423,7 +423,7 @@ weatherWidget location update = do
   genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
 
 redErr :: Either String String -> String
-redErr (Left err) = colorize "#7a2d00" "" err
+redErr (Left err) = colorize "red" "" err
 redErr (Right value) = value
 
 --  Widget Utilities
@@ -597,10 +597,10 @@ main = do
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
         activeWindow = windowMangler 80 . escape,
-        activeWorkspace = colorize "#37b349" "" . workspaceMangler,
-        hiddenWorkspace = colorize "#505050" "" . workspaceMangler,
-        urgentWorkspace = colorize "#000000" "#FFFFFF" . workspaceMangler,
-        visibleWorkspace = colorize "#00aabb" "" . workspaceMangler,
+        activeWorkspace = colorize "green" "" . workspaceMangler,
+        hiddenWorkspace = colorize "blue" "" . workspaceMangler,
+        urgentWorkspace = colorize "bg" "fg" . workspaceMangler,
+        visibleWorkspace = colorize "cyan" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
       mem = myPollingBar 5 memCallback
