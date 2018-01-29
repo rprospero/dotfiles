@@ -17,6 +17,7 @@ import Graphics.Icons.Types
 import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
+import Numeric (readHex)
 import Text.Parsec (Parsec, anyChar, choice, eof, many1, parse, skipMany1, string, try)
 import Text.Parsec.Char (noneOf, char)
 import Text.Printf
@@ -159,9 +160,25 @@ wifiWidget =
 
 barColour :: Double -> (Double, Double, Double)
 barColour x
-  | x < 1.0/3.0 = (0,3.0*x,0)
-  | x < 2.0/3.0 = (3*x-1,1,0)
-  | otherwise = (1,abs (3-3*x),0)
+  | x < 1.0/3.0 = interpColor (colorParse "000000") (colorParse "37b349") $ 3*x
+  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x
+  | otherwise = interpColor (colorParse "f8ca12") (colorParse "eb008a") $ 3*x
+
+interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double -> (Double, Double, Double)
+interpColor (rl, gl, bl) (rh, gh, bh) x =
+  (go rl rh x, go gl gh x, go bl bh x)
+  where
+    go l h x = l*x+(1-x)*h
+
+colorParse :: String -> (Double, Double, Double)
+colorParse x = (red, green, blue)
+  where
+    red = parse . take 2 $ x
+    green = parse . take 2 . drop 2 $ x
+    blue = parse . take 2 . drop 4 $ x
+    parse :: String -> Double
+    parse = (/ 256) . fst . head . readHex
+
 
 -- Insert image icons
 rawWeatherIcon :: Int -> Bool -> String
