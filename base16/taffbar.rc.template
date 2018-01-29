@@ -1,14 +1,14 @@
 style "taffybar-default" {
-  color["black"] =  "#000000"
-  color["white"] =  "#ffffff"
+  color["black"] =  "#{{base01}}"
+  color["white"] =  "#{{base06}}"
   color["yellow"] =  "#f8ca12"
-  color["orange"] =  "#f29333"
-  color["red"] =  "#7a2d00"
-  color["magenta"] =  "#b31e8d"
-  color["violet"] =  "#eb008a"
-  color["blue"] =  "#0e5a94"
-  color["cyan"] =  "#00aabb"
-  color["green"] =  "#37b349"
+  color["orange"] =  "#{{base0A}}"
+  color["red"] =  "#{{base09}}"
+  color["magenta"] =  "#{{base0E}}"
+  color["violet"] =  "#{{base08}}"
+  color["blue"] =  "#{{base0D}}"
+  color["cyan"] =  "#{{base0C}}"
+  color["green"] =  "#{{base0B}}"
   bg[NORMAL]   = @black
   fg[NORMAL]   = @white
   text[NORMAL] = @white
