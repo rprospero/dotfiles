@@ -11,7 +11,7 @@ let
 };
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens recursion-schemes stack
+  aeson hlint lens mustache recursion-schemes stack
 ]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
