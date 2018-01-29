@@ -1,0 +1,6 @@
+# Base16 {{scheme-name}} for gtk2 (https://github.com/dawikur/base16-gtk2)
+# By {{scheme-author}}
+# {{scheme-slug}} (https://github.com/dawikur/base16-gruvbox-scheme)
+
+gtk-color-scheme = "bg_color:#{{base00}}\nfg_color:#{{base05}}\nbase_color:#{{base00}}\ntext_color:#{{base05}}\nselected_bg_color:#{{base02}}\nselected_fg_color:#{{base05}}\ntooltip_bg_color:#{{base00}}\ntooltip_fg_color:#{{base04}}\ntitlebar_bg_color:#{{base00}}\ntitlebar_fg_color:#{{base0D}}\nmenubar_bg_color:#{{base00}}\nmenubar_fg_color:#{{base0D}}\ntoolbar_bg_color:#{{base00}}\ntoolbar_fg_color:#{{base0A}}\nmenu_bg_color:#{{base00}}\nmenu_fg_color:#{{base05}}\npanel_bg_color:#{{base00}}\npanel_fg_color:#{{base0B}}\nlink_color:#{{base09}}"
+
