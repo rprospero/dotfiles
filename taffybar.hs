@@ -168,7 +168,7 @@ interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double ->
 interpColor (rl, gl, bl) (rh, gh, bh) x =
   (go rl rh x, go gl gh x, go bl bh x)
   where
-    go l h x = l*x+(1-x)*h
+    go l h x = h + (l-h)*x
 
 colorParse :: String -> (Double, Double, Double)
 colorParse x = (red, green, blue)
