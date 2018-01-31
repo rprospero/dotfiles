@@ -54,34 +54,34 @@ data Base16 = Base16 {
 
 defaultBase16 :: Base16
 defaultBase16 = Base16 {
-  scheme = "000000"
-  , author = "000000"
-  , base00 = "000000"
-  , base01 = "000000"
-  , base02 = "000000"
-  , base03 = "000000"
-  , base04 = "000000"
-  , base05 = "000000"
-  , base06 = "F00000"
-  , base07 = "F0F000"
-  , base08 = "F0F0F0"
-  , base09 = "00F0F0"
-  , base0A = "000000"
-  , base0B = "000000"
-  , base0C = "000000"
-  , base0D = "000000"
-  , base0E = "000000"
-  , base0F = "000000"
+  scheme = "#Default"
+  , author = "#No one"
+  , base00 = "#F0F000"
+  , base01 = "#F00000"
+  , base02 = "#00F000"
+  , base03 = "#0000F0"
+  , base04 = "#000000"
+  , base05 = "#000000"
+  , base06 = "#F00000"
+  , base07 = "#F0F000"
+  , base08 = "#F0F0F0"
+  , base09 = "#00F0F0"
+  , base0A = "#000000"
+  , base0B = "#000000"
+  , base0C = "#000000"
+  , base0D = "#000000"
+  , base0E = "#000000"
+  , base0F = "#000000"
   }
 readBase16Line :: String -> (String, String)
-readBase16Line line = (take 6 line, ("#"++) . read . drop 8 $ line)
+readBase16Line line = (takeWhile (/= ':')  line, ("#"++) . read . drop 1 . dropWhile (/= ':') $ line)
 
 readBase16 :: FilePath -> IO (Maybe Base16)
 readBase16 path = do
   ls <- readFile path
   let terms = fromList [readBase16Line l | l <- lines ls]
-  return $ Base16 <$> M.lookup "scheme" terms
-    <*> M.lookup "author" terms
+  return $ Base16 <$> M.lookup "scheme-name" terms
+    <*> M.lookup "scheme-author" terms
     <*> M.lookup "base00" terms
     <*> M.lookup "base01" terms
     <*> M.lookup "base02" terms
