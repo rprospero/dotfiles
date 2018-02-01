@@ -11,7 +11,7 @@ let
 };
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens recursion-schemes stack
+  aeson hlint lens mustache recursion-schemes stack
 ]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
@@ -132,6 +132,7 @@ in
         extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
         ignoreCollisions = true;
       })
+      ripgrep
       super-user-spark
       texlive.combined.scheme-full
       tmux

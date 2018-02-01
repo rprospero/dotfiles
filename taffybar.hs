@@ -17,6 +17,7 @@ import Graphics.Icons.Types
 import Graphics.Icons.Weather hiding (trainCode)
 import Network.Download (openURI)
 import Network.HostName
+import Numeric (readHex)
 import Text.Parsec (Parsec, anyChar, choice, eof, many1, parse, skipMany1, string, try)
 import Text.Parsec.Char (noneOf, char)
 import Text.Printf
@@ -76,7 +77,7 @@ mailWidget update = do
   mvarWidget mvar (\count ->
                       if count == 0
                       then ""
-                      else colorize "#FFFFFF" "" $ iconPango mailCode <> " " <> show count)
+                      else iconPango mailCode <> " " <> show count)
 
 myFSInfo :: String -> IO Double
 myFSInfo fs = do
@@ -150,7 +151,7 @@ wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> rea
 
 wifiIcon :: Bool -> String
 wifiIcon True = iconPango wifiCode
-wifiIcon False = colorize "#7a2d00" "" $ iconPango wifiCode
+wifiIcon False = colorize "red" "" $ iconPango wifiCode
 
 wifiWidget :: IO Widget
 wifiWidget =
@@ -159,9 +160,25 @@ wifiWidget =
 
 barColour :: Double -> (Double, Double, Double)
 barColour x
-  | x < 1.0/3.0 = (0,3.0*x,0)
-  | x < 2.0/3.0 = (3*x-1,1,0)
-  | otherwise = (1,abs (3-3*x),0)
+  | x < 1.0/3.0 = interpColor (colorParse "000000") (colorParse "37b349") $ 3*x
+  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x
+  | otherwise = interpColor (colorParse "f8ca12") (colorParse "eb008a") $ 3*x
+
+interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double -> (Double, Double, Double)
+interpColor (rl, gl, bl) (rh, gh, bh) x =
+  (go rl rh x, go gl gh x, go bl bh x)
+  where
+    go l h x = h + (l-h)*x
+
+colorParse :: String -> (Double, Double, Double)
+colorParse x = (red, green, blue)
+  where
+    red = parse . take 2 $ x
+    green = parse . take 2 . drop 2 $ x
+    blue = parse . take 2 . drop 4 $ x
+    parse :: String -> Double
+    parse = (/ 256) . fst . head . readHex
+
 
 -- Insert image icons
 rawWeatherIcon :: Int -> Bool -> String
@@ -313,9 +330,9 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
 
 appropriateBattery :: BatteryInfo -> String
 appropriateBattery x
-  | batteryPercentage x < 20.0 = colorize "#7a2d00" "" $ iconPango batteryEmptyCode
-  | batteryPercentage x < 40.0 = colorize "#f8ca12" "" $ iconPango batteryQuarterCode
-  | batteryPercentage x < 60.0 = colorize "#37b349" "" $ iconPango batteryHalfCode
+  | batteryPercentage x < 20.0 = colorize "red" "" $ iconPango batteryEmptyCode
+  | batteryPercentage x < 40.0 = colorize "yellow" "" $ iconPango batteryQuarterCode
+  | batteryPercentage x < 60.0 = colorize "green" "" $ iconPango batteryHalfCode
   | batteryPercentage x < 80.0 = iconPango batteryThreeQuartersCode
   | otherwise = iconPango batteryFullCode
 
@@ -423,7 +440,7 @@ weatherWidget location update = do
   genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
 
 redErr :: Either String String -> String
-redErr (Left err) = colorize "#7a2d00" "" err
+redErr (Left err) = colorize "red" "" err
 redErr (Right value) = value
 
 --  Widget Utilities
@@ -597,10 +614,10 @@ main = do
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
         activeWindow = windowMangler 80 . escape,
-        activeWorkspace = colorize "#37b349" "" . workspaceMangler,
-        hiddenWorkspace = colorize "#505050" "" . workspaceMangler,
-        urgentWorkspace = colorize "#000000" "#FFFFFF" . workspaceMangler,
-        visibleWorkspace = colorize "#00aabb" "" . workspaceMangler,
+        activeWorkspace = colorize "green" "" . workspaceMangler,
+        hiddenWorkspace = colorize "blue" "" . workspaceMangler,
+        urgentWorkspace = colorize "bg" "fg" . workspaceMangler,
+        visibleWorkspace = colorize "cyan" "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
       mem = myPollingBar 5 memCallback
