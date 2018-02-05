@@ -6,10 +6,8 @@ card dotfiles {
      .msmtprc
      .xinitrc
      .zshrc
-     .Xresources
      .xprofile
      .zshrc
-     zathurarc -> .config/zathura/zathurarc
 
      xmonad-personal/app/xmonad.hs -> .xmonad/xmonad.hs
      vimfx -> .config/vimfx
