@@ -1674,11 +1674,6 @@ bindings
    "vt" 'org-babel-tangle)
 
   (general-define-key
-   :keymaps 'org-mode-map
-   :prefix "<return>"
-   "<return>" 'org-agenda-open-link)
-
-  (general-define-key
    "/" 'swiper
    "?" 'swiper-all)
 
