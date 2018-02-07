@@ -161,14 +161,14 @@ wifiWidget =
 barColour :: Double -> (Double, Double, Double)
 barColour x
   | x < 1.0/3.0 = interpColor (colorParse "000000") (colorParse "37b349") $ 3*x
-  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x
-  | otherwise = interpColor (colorParse "f8ca12") (colorParse "eb008a") $ 3*x
+  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x-1
+  | otherwise = interpColor (colorParse "f8ca12") (colorParse "7a2d00") $ 3*x-2
 
 interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double -> (Double, Double, Double)
 interpColor (rl, gl, bl) (rh, gh, bh) x =
   (go rl rh x, go gl gh x, go bl bh x)
   where
-    go l h x = h + (l-h)*x
+    go l h x = l + (h-l)*x
 
 colorParse :: String -> (Double, Double, Double)
 colorParse x = (red, green, blue)
@@ -320,7 +320,7 @@ batteryValue = do
 
 batteryWidget :: Double -> IO Widget
 batteryWidget update =
-  genericErrorWidget update batteryValue batteryIcon batteryTime
+  genericErrorWidget "" update batteryValue batteryIcon batteryTime
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
@@ -437,7 +437,7 @@ weatherDesc w =
 
 weatherWidget :: String -> Double -> IO Widget
 weatherWidget location update = do
-  genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
+  genericErrorWidget "Not Loaded" update (localWeather "Didcot") weatherIcon weatherDesc
 
 redErr :: Either String String -> String
 redErr (Left err) = colorize "red" "" err
@@ -452,9 +452,9 @@ genericWidget update action def render fullRender = do
   child <- mvarWidget m fullRender
   clickWidget base child
 
-genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
-genericErrorWidget update action render fullRender =
-  genericWidget update action (Left "Not Loaded") (redErr . fmap render) (redErr . fmap fullRender)
+genericErrorWidget :: String -> Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
+genericErrorWidget def update action render fullRender =
+  genericWidget update action (Left def) (redErr . fmap render) (redErr . fmap fullRender)
 
 genericWidgetSpawn update action def render command = do
   m <- mvarThread update def action

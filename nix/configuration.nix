@@ -29,6 +29,8 @@ in
       /etc/nixos/local.nix
     ];
 
+  # nix.binaryCaches = [ "https://cache.nixos.org/" "https://nixcache.reflex-frp.org" ];
+  # nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -107,6 +109,7 @@ in
       binutils
       davmail
       dropbox
+      feh
       firefox
       git
       gitAndTools.hub
@@ -121,6 +124,8 @@ in
       libreoffice
       myTaffybar
       nixops
+      # nodePackages.bower
+      # nodePackages.jshint
       notmuch
       offlineimap
       pass
