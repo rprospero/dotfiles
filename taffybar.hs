@@ -320,7 +320,7 @@ batteryValue = do
 
 batteryWidget :: Double -> IO Widget
 batteryWidget update =
-  genericErrorWidget update batteryValue batteryIcon batteryTime
+  genericErrorWidget "" update batteryValue batteryIcon batteryTime
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
@@ -437,7 +437,7 @@ weatherDesc w =
 
 weatherWidget :: String -> Double -> IO Widget
 weatherWidget location update = do
-  genericErrorWidget update (localWeather "Didcot") weatherIcon weatherDesc
+  genericErrorWidget "Not Loaded" update (localWeather "Didcot") weatherIcon weatherDesc
 
 redErr :: Either String String -> String
 redErr (Left err) = colorize "red" "" err
@@ -452,9 +452,9 @@ genericWidget update action def render fullRender = do
   child <- mvarWidget m fullRender
   clickWidget base child
 
-genericErrorWidget :: Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
-genericErrorWidget update action render fullRender =
-  genericWidget update action (Left "Not Loaded") (redErr . fmap render) (redErr . fmap fullRender)
+genericErrorWidget :: String -> Double -> IO (Either String a) -> (a -> String) -> (a -> String) -> IO Widget
+genericErrorWidget def update action render fullRender =
+  genericWidget update action (Left def) (redErr . fmap render) (redErr . fmap fullRender)
 
 genericWidgetSpawn update action def render command = do
   m <- mvarThread update def action
