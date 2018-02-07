@@ -109,6 +109,7 @@ in
       binutils
       davmail
       dropbox
+      feh
       firefox
       git
       gitAndTools.hub
