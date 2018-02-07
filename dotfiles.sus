@@ -5,14 +5,13 @@ card dotfiles {
      .offlineimap.py
      .msmtprc
      .xinitrc
-     .zshrc
-     .Xresources
      .xprofile
      .zshrc
-     zathurarc -> .config/zathura/zathurarc
 
      xmonad-personal/app/xmonad.hs -> .xmonad/xmonad.hs
      vimfx -> .config/vimfx
+
+     gtk-3.0 -> .config/gtk-3.0
 }
 
 card taffybar {
