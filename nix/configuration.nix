@@ -7,11 +7,15 @@
 let
   myTaffybar = pkgs.taffybar.override {
   packages = x: with pkgs.haskellPackages; [
-    aeson download hostname icon-fonts];
+    aeson download hostname icon-fonts reactive-banana];
 };
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens mustache recursion-schemes stack
+  aeson hlint lens mustache recursion-schemes stack taffybar reactive-banana
+]);
+myWebHaskellEnv = pkgs.haskell.packages.ghcjsHEAD.ghcWithPackages (
+  haskellPackages: with haskellPackages; [
+  aeson lens
 ]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
@@ -117,6 +121,7 @@ in
       gnupg
       graphviz
       myHaskellEnv
+      myWebHaskellEnv
       hunspell
       myDict
       jre
