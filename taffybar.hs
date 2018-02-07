@@ -161,14 +161,14 @@ wifiWidget =
 barColour :: Double -> (Double, Double, Double)
 barColour x
   | x < 1.0/3.0 = interpColor (colorParse "000000") (colorParse "37b349") $ 3*x
-  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x
-  | otherwise = interpColor (colorParse "f8ca12") (colorParse "eb008a") $ 3*x
+  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x-1
+  | otherwise = interpColor (colorParse "f8ca12") (colorParse "7a2d00") $ 3*x-2
 
 interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double -> (Double, Double, Double)
 interpColor (rl, gl, bl) (rh, gh, bh) x =
   (go rl rh x, go gl gh x, go bl bh x)
   where
-    go l h x = h + (l-h)*x
+    go l h x = l + (h-l)*x
 
 colorParse :: String -> (Double, Double, Double)
 colorParse x = (red, green, blue)
