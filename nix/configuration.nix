@@ -141,6 +141,7 @@ in
       ripgrep
       super-user-spark
       texlive.combined.scheme-full
+      tightvnc
       tmux
       unzip
       xfce.thunar
