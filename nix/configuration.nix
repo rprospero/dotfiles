@@ -131,6 +131,7 @@ in
       nixops
       # nodePackages.bower
       # nodePackages.jshint
+      muchsync
       notmuch
       offlineimap
       pass
