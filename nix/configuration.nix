@@ -121,10 +121,11 @@ in
       gnupg
       graphviz
       myHaskellEnv
-      myWebHaskellEnv
+      # myWebHaskellEnv
       hunspell
       myDict
       jre
+      julia
       ledger
       libreoffice
       myTaffybar
