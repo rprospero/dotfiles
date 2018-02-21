@@ -132,16 +132,18 @@ in
       nixops
       # nodePackages.bower
       # nodePackages.jshint
+      muchsync
       notmuch
       offlineimap
       pass
       (python27Full.buildEnv.override {
-        extraLibs = with python27Packages; [ ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython];
+        extraLibs = with python27Packages; [ flake8 ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython pyqt5];
         ignoreCollisions = true;
       })
       ripgrep
       super-user-spark
       texlive.combined.scheme-full
+      tightvnc
       tmux
       unzip
       xfce.thunar
