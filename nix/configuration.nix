@@ -11,11 +11,11 @@ let
 };
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens mustache recursion-schemes stack taffybar reactive-banana
+  aeson ghcjs-dom hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana miso xml
 ]);
-myWebHaskellEnv = pkgs.haskell.packages.ghcjsHEAD.ghcWithPackages (
+myWebHaskellEnv = pkgs.haskell.packages.ghcjs.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson lens
+  aeson blaze-html blaze-svg ghcjs-dom lens recursion-schemes reactive-banana miso
 ]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
