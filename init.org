@@ -389,7 +389,7 @@ Always revert images files without asking.
    This package let's me interface with github through magit.
    Anything to stay out of the browser.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package magithub
   :ensure t
   :after magit
