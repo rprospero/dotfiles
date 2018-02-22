@@ -176,14 +176,16 @@ in
     description = "Taffybar Status Bar";
     serviceConfig = {
       ExecStart="${myTaffybar}/bin/taffybar";
+      Restart = "on-failure";
     };
     path = [myTaffybar pkgs.notmuch];
   };
 
   systemd.user.services.davmail = {
     description = "Davmail Daemon";
-      serviceConfig = {
-        ExecStart="${pkgs.davmail}/bin/davmail";
+    serviceConfig = {
+      ExecStart="${pkgs.davmail}/bin/davmail";
+      Restart = "on-failure";
     };
     path = [pkgs.davmail];
     requires = ["taffybar.service"];
