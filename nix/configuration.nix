@@ -131,7 +131,8 @@ in
       myTaffybar
       nixops
       # nodePackages.bower
-      # nodePackages.jshint
+      nodePackages.eslint
+      nodePackages.jshint
       muchsync
       notmuch
       offlineimap
