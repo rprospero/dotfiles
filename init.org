@@ -1584,20 +1584,6 @@ projects (and not require greping my way around all of the time)
  #+END_SRC
 
 
-*** evil collection
-
-A set of evil bindings for multiple modes.  This should make life less
-frustrating
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-#+END_SRC
-
 *** general
 
 The general package is a set of convenience scripts for defining key
@@ -1691,6 +1677,20 @@ bindings
 #+END_SRC
 
 #+RESULTS:
+
+*** evil collection
+
+A set of evil bindings for multiple modes.  This should make life less
+frustrating
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+#+END_SRC
 
 *** which-key
 
