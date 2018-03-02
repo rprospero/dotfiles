@@ -134,6 +134,7 @@ in
       muchsync
       notmuch
       offlineimap
+      openssl
       pass
       (python27Full.buildEnv.override {
         extraLibs = with python27Packages; [ flake8 ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython pyqt5];
