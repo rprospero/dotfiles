@@ -11,11 +11,11 @@ let
 };
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens mustache recursion-schemes stack taffybar reactive-banana
+  aeson ghcjs-dom hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana miso xml
 ]);
-myWebHaskellEnv = pkgs.haskell.packages.ghcjsHEAD.ghcWithPackages (
+myWebHaskellEnv = pkgs.haskell.packages.ghcjs.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson lens
+  aeson blaze-html blaze-svg ghcjs-dom lens recursion-schemes reactive-banana miso
 ]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
@@ -121,10 +121,11 @@ in
       gnupg
       graphviz
       myHaskellEnv
-      myWebHaskellEnv
+      # myWebHaskellEnv
       hunspell
       myDict
       jre
+      julia
       ledger
       libreoffice
       myTaffybar
@@ -176,14 +177,16 @@ in
     description = "Taffybar Status Bar";
     serviceConfig = {
       ExecStart="${myTaffybar}/bin/taffybar";
+      Restart = "on-failure";
     };
     path = [myTaffybar pkgs.notmuch];
   };
 
   systemd.user.services.davmail = {
     description = "Davmail Daemon";
-      serviceConfig = {
-        ExecStart="${pkgs.davmail}/bin/davmail";
+    serviceConfig = {
+      ExecStart="${pkgs.davmail}/bin/davmail";
+      Restart = "on-failure";
     };
     path = [pkgs.davmail];
     requires = ["taffybar.service"];

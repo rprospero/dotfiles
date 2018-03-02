@@ -389,7 +389,7 @@ Always revert images files without asking.
    This package let's me interface with github through magit.
    Anything to stay out of the browser.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package magithub
   :ensure t
   :after magit
@@ -818,6 +818,7 @@ notmuch is a wonderful little utility for managing my mail
      ("http://pragmaticemacs.com/feed/" sw emacs)
      ("https://www.reddit.com/r/emacs/.rss" sw emacs)
      ("https://www.reddit.com/r/haskell/.rss" sw haskell)
+     ("https://www.reddit.com/r/julia/.rss" sw julia)
      ("https://hnrss.org/newest?points=300" sw tech)
      ("https://yager.io/feed/" sw haskell)
      "http://us10.campaign-archive1.com/feed?u=49a6a2e17b12be2c5c4dcb232&id=ffbbbbd930")))
@@ -1583,20 +1584,6 @@ projects (and not require greping my way around all of the time)
  #+END_SRC
 
 
-*** evil collection
-
-A set of evil bindings for multiple modes.  This should make life less
-frustrating
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-#+END_SRC
-
 *** general
 
 The general package is a set of convenience scripts for defining key
@@ -1690,6 +1677,20 @@ bindings
 #+END_SRC
 
 #+RESULTS:
+
+*** evil collection
+
+A set of evil bindings for multiple modes.  This should make life less
+frustrating
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+#+END_SRC
 
 *** which-key
 
