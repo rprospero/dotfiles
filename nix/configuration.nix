@@ -50,7 +50,15 @@ in
   # Set your time zone.
   time.timeZone = "Europe/London";
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: with pkgs; {
+      pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
+        plugins = [ pidginotr pidgin-skypeweb telegram-purple purple-matrix];
+      };
+    };
+  };
+
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -138,6 +146,7 @@ in
       notmuch
       offlineimap
       pass
+      pidgin-with-plugins
       (python27Full.buildEnv.override {
         extraLibs = with python27Packages; [ flake8 ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython pyqt5];
         ignoreCollisions = true;
