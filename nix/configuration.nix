@@ -143,6 +143,7 @@ in
       nodePackages.eslint
       nodePackages.jshint
       muchsync
+      nix-prefetch-git
       notmuch
       offlineimap
       pass
