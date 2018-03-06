@@ -114,6 +114,7 @@ in
       davmail
       dropbox
       feh
+      file
       firefox
       git
       gitAndTools.hub
