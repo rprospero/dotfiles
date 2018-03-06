@@ -5,18 +5,10 @@
 { config, pkgs, ... }:
 
 let
-  myTaffybar = pkgs.taffybar.override {
+myTaffybar = pkgs.taffybar.override {
   packages = x: with pkgs.haskellPackages; [
     aeson download hostname icon-fonts reactive-banana];
 };
-myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
-  haskellPackages: with haskellPackages; [
-  aeson ghcjs-dom hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana miso xml
-]);
-myWebHaskellEnv = pkgs.haskell.packages.ghcjs.ghcWithPackages (
-  haskellPackages: with haskellPackages; [
-  aeson blaze-html blaze-svg ghcjs-dom lens recursion-schemes reactive-banana miso
-]);
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''
     ln -sv $out/share/hunspell/en_GB-ise.aff $out/share/hunspell/en_GB.aff
@@ -113,57 +105,7 @@ in
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.adam = {
-    isNormalUser = true;
-    packages = with pkgs; [
-      baobab
-      base16
-      binutils
-      davmail
-      dropbox
-      feh
-      file
-      firefox
-      git
-      gitAndTools.hub
-      glibc.static
-      gnupg
-      graphviz
-      myHaskellEnv
-      # myWebHaskellEnv
-      hunspell
-      myDict
-      jre
-      julia
-      ledger
-      libreoffice
-      myTaffybar
-      nixops
-      # nodePackages.bower
-      nodePackages.eslint
-      nodePackages.jshint
-      muchsync
-      nix-prefetch-git
-      notmuch
-      offlineimap
-      openssl
-      pass
-      pidgin-with-plugins
-      (python27Full.buildEnv.override {
-        extraLibs = with python27Packages; [ flake8 ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython pyqt5];
-        ignoreCollisions = true;
-      })
-      proselint
-      ripgrep
-      super-user-spark
-      texlive.combined.scheme-full
-      tightvnc
-      tmux
-      unzip
-      xfce.thunar
-      zathura
-      zip];
-  };
+  users.extraUsers.adam = (import /home/adam/Code/dotfiles/nix/adam.nix) {inherit config pkgs myDict myTaffybar;};
   environment.variables.DICPATH = "${myDict}/share/hunspell";
 
   fonts.fonts = with pkgs; [
