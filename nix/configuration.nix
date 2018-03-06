@@ -146,6 +146,7 @@ in
       nix-prefetch-git
       notmuch
       offlineimap
+      openssl
       pass
       pidgin-with-plugins
       (python27Full.buildEnv.override {
