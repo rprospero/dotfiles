@@ -1135,11 +1135,13 @@ At some point, I need to turn this into a proper package.
 	(cond
 	 ((and (-contains? categories "BeamOn")
 	       (or weekend
+		   (-contains? categories "Holidays")
 		   (-contains? categories "Vacation")))
 	  'org-agenda-date-beam-weekend)
 	 ((-contains? categories "BeamOn")
 	  'org-agenda-date-beam)
 	 ((or weekend
+	      (-contains? categories "Holidays")
 	     (-contains? categories "Vacation"))
 	  'org-agenda-date-weekend)
 	 (t 'org-agenda-date)))))
