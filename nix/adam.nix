@@ -22,6 +22,7 @@ in
       feh
       file
       firefox
+      gimp
       git
       gitAndTools.hub
       glibc.static
