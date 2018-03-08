@@ -3,11 +3,7 @@
 let
 myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
   haskellPackages: with haskellPackages; [
-  aeson ghcjs-dom hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana miso xml
-]);
-myWebHaskellEnv = pkgs.haskell.packages.ghcjs.ghcWithPackages (
-  haskellPackages: with haskellPackages; [
-  aeson blaze-html blaze-svg ghcjs-dom lens recursion-schemes reactive-banana miso
+  aeson hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana xml
 ]);
 in
 
