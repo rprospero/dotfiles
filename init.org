@@ -1036,8 +1036,8 @@ At some point, I need to turn this into a proper package.
   (setq holiday-other-holidays
 	(quote
 	 ((holiday-float 5 1 -1 "Spring Bank Holiday")
-	  (holiday-float 5 1 1 "May Day Brank Holiday")
-	  (holiday-float 8 1 -1 "Late Summer Bank Holidays"))))
+	  (holiday-float 5 1 1 "May Day Bank Holiday")
+	  (holiday-float 8 1 -1 "Late Summer Bank Holiday"))))
   (setq org-agenda-files
 	(quote
 	 ("~/org/sync.org"
@@ -1104,8 +1104,8 @@ At some point, I need to turn this into a proper package.
    (quote
     (
      (holiday-float 5 1 -1 "Spring Bank Holiday")
-     (holiday-float 5 1 1 "May Day Brank Holiday")
-     (holiday-float 8 1 -1 "Late Summer Bank Holidays")
+     (holiday-float 5 1 1 "May Day Bank Holiday")
+     (holiday-float 8 1 -1 "Late Summer Bank Holiday")
      )))
 
   (defface org-agenda-date-beam
