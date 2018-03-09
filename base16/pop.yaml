@@ -1,5 +1,5 @@
-scheme-name: "Pop"
-scheme-author: "Chris Kempson (http://chriskempson.com)"
+scheme: "Pop"
+author: "Chris Kempson (http://chriskempson.com)"
 base00: "000000"
 base01: "202020"
 base02: "303030"
