@@ -7,6 +7,8 @@
 # Generated
 #  by base16-builder - https://github.com/base16-builder/base16-builder
 
+gtk-icon-theme-name = "Faba"
+
 style "default"
 {
   engine "hcengine" {

@@ -16,6 +16,7 @@ in
       binutils
       davmail
       dropbox
+      faba-icon-theme
       feh
       file
       firefox

@@ -39,3 +39,6 @@
 }
 
 @import url("resource:///org/gnome/HighContrastInverse/a11y.css");
+
+[Settings]
+gtk-icon-theme-name=Faba
