@@ -1,14 +1,14 @@
 style "taffybar-default" {
-  color["black"] =  "#{{base01}}"
-  color["white"] =  "#{{base06}}"
-  color["yellow"] =  "#f8ca12"
-  color["orange"] =  "#{{base0A}}"
-  color["red"] =  "#{{base09}}"
-  color["magenta"] =  "#{{base0E}}"
-  color["violet"] =  "#{{base08}}"
-  color["blue"] =  "#{{base0D}}"
-  color["cyan"] =  "#{{base0C}}"
-  color["green"] =  "#{{base0B}}"
+  color["black"] =  "#<%- base["01"]["hex"] %>}}"
+  color["white"] =  "#<%- base["06"]["hex"] %>}}"
+  color["yellow"] =  "#<%- base["0A"]["hex"] %>"
+  color["orange"] =  "#<%- base["09"]["hex"] %>}}"
+  color["red"] =  "#<%- base["08"]["hex"] %>}}"
+  color["magenta"] =  "#<%- base["0E"]["hex"] %>}}"
+  color["violet"] =  "#<%- base["08"]["hex"] %>}}"
+  color["blue"] =  "#<%- base["0D"]["hex"] %>}}"
+  color["cyan"] =  "#<%- base["0C"]["hex"] %>}}"
+  color["green"] =  "#<%- base["0B"]["hex"] %>}}"
   bg[NORMAL]   = @black
   fg[NORMAL]   = @white
   text[NORMAL] = @white
