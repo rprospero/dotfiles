@@ -80,8 +80,8 @@ readBase16 :: FilePath -> IO (Maybe Base16)
 readBase16 path = do
   ls <- readFile path
   let terms = fromList [readBase16Line l | l <- lines ls]
-  return $ Base16 <$> M.lookup "scheme-name" terms
-    <*> M.lookup "scheme-author" terms
+  return $ Base16 <$> M.lookup "scheme" terms
+    <*> M.lookup "author" terms
     <*> M.lookup "base00" terms
     <*> M.lookup "base01" terms
     <*> M.lookup "base02" terms

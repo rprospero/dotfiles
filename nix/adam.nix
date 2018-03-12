@@ -1,9 +1,10 @@
 { config, pkgs, myDict, myTaffybar, ... }:
 
 let
-myHaskellEnv = pkgs.haskell.packages.ghc802.ghcWithPackages (
+icon-fonts-personal = pkgs.haskellPackages.callPackage ./icon-fonts.nix {};
+myHaskellEnv = pkgs.haskellPackages.ghcWithHoogle (
   haskellPackages: with haskellPackages; [
-  aeson hlint lens lens-xml mustache recursion-schemes taffybar reactive-banana xml
+  aeson hlint icon-fonts-personal lens lens-xml mustache recursion-schemes reactive-banana xml
 ]);
 in
 
@@ -11,7 +12,7 @@ in
     isNormalUser = true;
     packages = with pkgs; [
       baobab
-      base16
+      base16-builder
       binutils
       davmail
       dropbox
@@ -50,7 +51,7 @@ in
       })
       proselint
       ripgrep
-      # sasview
+      sasview
       super-user-spark
       texlive.combined.scheme-full
       tightvnc
