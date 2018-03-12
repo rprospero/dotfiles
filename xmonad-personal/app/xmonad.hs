@@ -126,8 +126,9 @@ main :: IO ()
 main = do
   putEnv "_JAVA_AWT_WM_NONREPARENTING=1"
   putEnv "SAL_USE_VCLPLUGIN=gen"
+  spawn "sh ~/setroot.sh"
   spawn "systemctl --user start taffybar"
-  theme <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/base16/apathy.yaml"
+  theme <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/base16/oliveira.yaml"
   xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook (myConfig theme)
 
 data NameSegment = Prefix String | Suffix String | Subst String String

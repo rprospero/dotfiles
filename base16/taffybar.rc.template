@@ -1,30 +1,30 @@
 style "taffybar-default" {
-  color["black"] =  "#<%- base["01"]["hex"] %>}}"
-  color["white"] =  "#<%- base["06"]["hex"] %>}}"
+  color["black"] =  "#<%- base["00"]["hex"] %>"
+  color["white"] =  "#<%- base["07"]["hex"] %>"
   color["yellow"] =  "#<%- base["0A"]["hex"] %>"
-  color["orange"] =  "#<%- base["09"]["hex"] %>}}"
-  color["red"] =  "#<%- base["08"]["hex"] %>}}"
-  color["magenta"] =  "#<%- base["0E"]["hex"] %>}}"
-  color["violet"] =  "#<%- base["08"]["hex"] %>}}"
-  color["blue"] =  "#<%- base["0D"]["hex"] %>}}"
-  color["cyan"] =  "#<%- base["0C"]["hex"] %>}}"
-  color["green"] =  "#<%- base["0B"]["hex"] %>}}"
+  color["orange"] =  "#<%- base["09"]["hex"] %>"
+  color["red"] =  "#<%- base["08"]["hex"] %>"
+  color["magenta"] =  "#<%- base["0E"]["hex"] %>"
+  color["violet"] =  "#<%- base["08"]["hex"] %>"
+  color["blue"] =  "#<%- base["0D"]["hex"] %>"
+  color["cyan"] =  "#<%- base["0C"]["hex"] %>"
+  color["green"] =  "#<%- base["0B"]["hex"] %>"
   bg[NORMAL]   = @black
   fg[NORMAL]   = @white
-  text[NORMAL] = @white
+  text[NORMAL] = @blue
   fg[PRELIGHT] = @green
   bg[PRELIGHT] = @black
   font_name = "Monospace 8.0"
 }
 
 style "taffybar-active-window" = "taffybar-default" {
-  fg[NORMAL] = @green
+  fg[NORMAL] = @blue
   font = "-misc-fixed-medium-r-*-*-10-*-*-*-*-*-*-*"
 }
 
 style "taffybar-notification-button" = "taffybar-default" {
-  text[NORMAL] = @red
-  fg[NORMAL]   = @red
+  text[NORMAL] = @blue
+  fg[NORMAL]   = @blue
   font = "-misc-fixed-medium-r-*-*-10-*-*-*-*-*-*-*"
 }
 

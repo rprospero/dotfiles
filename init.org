@@ -261,7 +261,7 @@ single directory.
 
 ** base16-theme
 
- #+BEGIN_SRC emacs-lisp :tangle yes
+ #+BEGIN_SRC emacs-lisp :tangle no
 (use-package base16-theme
   :ensure t
   :config
@@ -294,6 +294,16 @@ single directory.
 	evil-visual-state-cursor  `(,(plist-get my/base16-colors :base09) box)))
 #+END_SRC
 
+
+** Custom Theme
+
+   Load a theme based on my base16 configurations
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(load-file "~/Code/dotfiles/base16/emacs")
+
+#+END_SRC
 * Apps
 ** Dired
 

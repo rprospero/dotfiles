@@ -8,6 +8,8 @@ import Data.Aeson
 import Data.ByteString (ByteString)
 import Data.ByteString.Lazy (fromStrict)
 import Data.List (isSuffixOf, isPrefixOf)
+import Data.Map.Strict as M (fromList, lookup)
+import Data.Maybe (fromMaybe)
 import Data.Monoid ((<>))
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
@@ -45,15 +47,84 @@ import Data.IORef
 import System.Process ( readProcess, callProcess )
 import System.Taffybar.Widgets.PollingLabel ( pollingLabelNew )
 
+data Base16 = Base16 {
+  scheme :: String
+  , author :: String
+  , base00 :: String
+  , base01 :: String
+  , base02 :: String
+  , base03 :: String
+  , base04 :: String
+  , base05 :: String
+  , base06 :: String
+  , base07 :: String
+  , base08 :: String
+  , base09 :: String
+  , base0A :: String
+  , base0B :: String
+  , base0C :: String
+  , base0D :: String
+  , base0E :: String
+  , base0F :: String
+  } deriving (Show)
+
+defaultBase16 :: Base16
+defaultBase16 = Base16 {
+  scheme = "#Default"
+  , author = "#No one"
+  , base00 = "#F0F000"
+  , base01 = "#F00000"
+  , base02 = "#00F000"
+  , base03 = "#0000F0"
+  , base04 = "#000000"
+  , base05 = "#000000"
+  , base06 = "#F00000"
+  , base07 = "#F0F000"
+  , base08 = "#F0F0F0"
+  , base09 = "#00F0F0"
+  , base0A = "#000000"
+  , base0B = "#000000"
+  , base0C = "#000000"
+  , base0D = "#000000"
+  , base0E = "#000000"
+  , base0F = "#000000"
+  }
+readBase16Line :: String -> (String, String)
+readBase16Line line = (takeWhile (/= ':')  line, ("#"++) . read . drop 1 . dropWhile (/= ':') $ line)
+
+readBase16 :: FilePath -> IO (Maybe Base16)
+readBase16 path = do
+  ls <- readFile path
+  let terms = fromList [readBase16Line l | l <- lines ls]
+  return $ Base16 <$> M.lookup "scheme" terms
+    <*> M.lookup "author" terms
+    <*> M.lookup "base00" terms
+    <*> M.lookup "base01" terms
+    <*> M.lookup "base02" terms
+    <*> M.lookup "base03" terms
+    <*> M.lookup "base04" terms
+    <*> M.lookup "base05" terms
+    <*> M.lookup "base06" terms
+    <*> M.lookup "base07" terms
+    <*> M.lookup "base08" terms
+    <*> M.lookup "base09" terms
+    <*> M.lookup "base0A" terms
+    <*> M.lookup "base0B" terms
+    <*> M.lookup "base0C" terms
+    <*> M.lookup "base0D" terms
+    <*> M.lookup "base0E" terms
+    <*> M.lookup "base0F" terms
+
 join :: Monoid a => a -> [a] -> a
 join _ [] = mempty
 join _ [x] = x
 join connect (x:xs) = x <> connect <> join connect xs
 
-myPollingBar :: Double -> IO Double -> IO Widget
-myPollingBar = pollingBarNew ((defaultBarConfig barColour){barBackgroundColor = const (0,0.0,0.0),
-                                                           barPadding = 0,
-                                                           barWidth = 9})
+myPollingBar :: Base16 -> Double -> IO Double -> IO Widget
+myPollingBar color = pollingBarNew ((defaultBarConfig $ barColour color){
+                                       barBackgroundColor = const . colorParse . drop 1 $ base00 color,
+                                       barPadding = 0,
+                                       barWidth = 9})
 
 showAndReturn :: WidgetClass w => w -> IO Widget
 showAndReturn l = do
@@ -85,8 +156,8 @@ myFSInfo fs = do
   let x = (/100) . fromIntegral . read . init . (!! 1) . reverse . words . last . lines $ fsOut
   return x
 
-myFSMonitor :: String -> IO Widget
-myFSMonitor fs = myPollingBar 6 $ myFSInfo fs
+myFSMonitor :: Base16 -> String -> IO Widget
+myFSMonitor colors fs = myPollingBar colors 6 $ myFSInfo fs
 
 memCallback :: IO Double
 memCallback = do
@@ -95,12 +166,12 @@ memCallback = do
 
 -- CPU Charts
 
-cpuCharts :: Int -> [IO Widget]
-cpuCharts count = map makeCpuChart [0..count-1]
+cpuCharts :: Base16 -> Int -> [IO Widget]
+cpuCharts colors count = map (makeCpuChart colors) [0..count-1]
 
-makeCpuChart :: Int -> IO Widget
-makeCpuChart cpu =
-  myPollingBar 5 $ sum <$> getCPULoad ("cpu" ++ show cpu)
+makeCpuChart :: Base16 -> Int -> IO Widget
+makeCpuChart colors cpu =
+  myPollingBar colors 5 $ sum <$> getCPULoad ("cpu" ++ show cpu)
 
 cpuCount :: String -> Int
 cpuCount host
@@ -110,8 +181,8 @@ cpuCount host
 
 -- CPU Widget
 
-cpuWidget :: String -> Double -> [IO Widget]
-cpuWidget host update = map go $ cpuCharts (cpuCount host)
+cpuWidget :: Base16 -> String -> Double -> [IO Widget]
+cpuWidget colors host update = map go $ cpuCharts colors (cpuCount host)
   where
     go chart = do
       -- base <- pollingLabelNew "" update batteryIcon
@@ -147,22 +218,23 @@ netCallback ref idx = do
       return $ fromIntegral (xs !! idx - old !! idx) / 30000000
 
 wifiConnected :: IO Bool
-wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
+-- wifiConnected = (/= "disconnected") . head . words . head . tail . lines <$> readProcess "/usr/bin/nmcli" ["general"] ""
+wifiConnected = return False
 
-wifiIcon :: Bool -> String
-wifiIcon True = iconPango wifiCode
-wifiIcon False = colorize "red" "" $ iconPango wifiCode
+wifiIcon :: Base16 -> Bool -> String
+wifiIcon _ True = iconPango wifiCode
+wifiIcon color False = colorize (base08 color) "" $ iconPango wifiCode
 
-wifiWidget :: IO Widget
-wifiWidget =
-  genericWidgetSpawn 5 wifiConnected False wifiIcon $
+wifiWidget :: Base16 -> IO Widget
+wifiWidget color =
+  genericWidgetSpawn 5 wifiConnected False (wifiIcon color) $
   callProcess "/usr/bin/urxvt" ["-e", "/usr/bin/nmtui"]
 
-barColour :: Double -> (Double, Double, Double)
-barColour x
-  | x < 1.0/3.0 = interpColor (colorParse "000000") (colorParse "37b349") $ 3*x
-  | x < 2.0/3.0 = interpColor (colorParse "37b349") (colorParse "f8ca12") $ 3*x-1
-  | otherwise = interpColor (colorParse "f8ca12") (colorParse "f29333") $ 3*x-2
+barColour :: Base16 -> Double -> (Double, Double, Double)
+barColour colors x
+  | x < 1.0/3.0 = interpColor (colorParse . drop 1$ base00 colors) (colorParse . drop 1 $ base0B colors) $ 3*x
+  | x < 2.0/3.0 = interpColor (colorParse . drop 1$ base0B colors) (colorParse . drop 1 $ base0A colors ) $ 3*x-1
+  | otherwise = interpColor (colorParse . drop 1 $ base0A colors) (colorParse . drop 1 $ base07 colors) $ 3*x-2
 
 interpColor :: (Double, Double, Double) -> (Double, Double, Double) -> Double -> (Double, Double, Double)
 interpColor (rl, gl, bl) (rh, gh, bh) x =
@@ -295,12 +367,12 @@ myBatteryInfo = do
     Nothing -> return Nothing
     Just c -> getBatteryInfo c
 
-batteryIcon :: BatteryInfo -> String
-batteryIcon info =
+batteryIcon :: Base16 -> BatteryInfo -> String
+batteryIcon color info =
   case batteryState info of
     BatteryStateCharging -> iconPango batteryChargingCode
     BatteryStateFullyCharged -> iconPango batteryChargingCode
-    BatteryStateDischarging -> appropriateBattery info
+    BatteryStateDischarging -> appropriateBattery color info
     _ -> iconPango batteryEmptyCode
 
 batteryTime :: BatteryInfo -> String
@@ -318,9 +390,9 @@ batteryValue = do
     Nothing -> return $ Left "Battery Not Found"
     Just info -> return $ Right info
 
-batteryWidget :: Double -> IO Widget
-batteryWidget update =
-  genericErrorWidget "" update batteryValue batteryIcon batteryTime
+batteryWidget :: Base16 -> Double -> IO Widget
+batteryWidget color update =
+  genericErrorWidget "" update batteryValue (batteryIcon color) batteryTime
 
 secondsToTime :: (Integral a, Show a, PrintfArg a) => a -> String
 secondsToTime x = show hours <> ":" <> printf "%02d" minutes
@@ -328,11 +400,11 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
     hours = x `div` 3600
     minutes = (x `mod` 3600) `div` 60
 
-appropriateBattery :: BatteryInfo -> String
-appropriateBattery x
-  | batteryPercentage x < 20.0 = colorize "red" "" $ iconPango batteryEmptyCode
-  | batteryPercentage x < 40.0 = colorize "yellow" "" $ iconPango batteryQuarterCode
-  | batteryPercentage x < 60.0 = colorize "green" "" $ iconPango batteryHalfCode
+appropriateBattery :: Base16 -> BatteryInfo -> String
+appropriateBattery color x
+  | batteryPercentage x < 20.0 = colorize (base08 color) "" $ iconPango batteryEmptyCode
+  | batteryPercentage x < 40.0 = colorize (base0A color) "" $ iconPango batteryQuarterCode
+  | batteryPercentage x < 60.0 = colorize (base0B color) "" $ iconPango batteryHalfCode
   | batteryPercentage x < 80.0 = iconPango batteryThreeQuartersCode
   | otherwise = iconPango batteryFullCode
 
@@ -610,44 +682,45 @@ windowMangler cnt w =
 
 main = do
   netref <- newIORef [0, 0]
+  colors <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/base16/oliveira.yaml"
   let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
         activeWindow = windowMangler 80 . escape,
-        activeWorkspace = colorize "green" "" . workspaceMangler,
-        hiddenWorkspace = colorize "blue" "" . workspaceMangler,
+        activeWorkspace = colorize (base0B colors) "" . workspaceMangler,
+        hiddenWorkspace = colorize (base0D colors) "" . workspaceMangler,
         urgentWorkspace = colorize "bg" "fg" . workspaceMangler,
-        visibleWorkspace = colorize "cyan" "" . workspaceMangler,
+        visibleWorkspace = colorize (base0C colors) "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
-      mem = myPollingBar 5 memCallback
-      net = myPollingBar 1 $ netCallback netref 0
-      netup = myPollingBar 1 $ netCallback netref 1
+      mem = myPollingBar colors 5 memCallback
+      net = myPollingBar colors 1 $ netCallback netref 0
+      netup = myPollingBar colors 1 $ netCallback netref 1
       tray = systrayNew
   host <- getHostName
-  let fsList = myFSList host
+  let fsList = myFSList colors host
   defaultTaffybar defaultTaffybarConfig {
     startWidgets = [ pager ]
     , barHeight = 20
     , barPosition = Bottom
-    , endWidgets = [ tray, wifiWidget,
+    , endWidgets = [ tray, wifiWidget colors,
                      weatherWidget "Didcot" 300.0,
-                     batteryWidget 300.0,
+                     batteryWidget colors 300.0,
                      clock, staticIcon calendarCode,
                      mem, memIcon] ++
-                   cpuWidget host 5.0 ++
+                   cpuWidget colors host 5.0 ++
                    [cpuIcon,
                      netup, net,
                      staticIcon globeCode] ++
                    fsList ++
-                   [staticIcon hddOCode,
+                   [ staticIcon hddOCode,
                      mailWidget 10,
                      note]
     }
-myFSList :: String -> [IO Widget]
-myFSList host
-  | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor "/",
-                                       myFSMonitor "/data",
-                                       myFSMonitor "/home",
-                                       myFSMonitor "/mnt/NAS"]
-  | otherwise = [myFSMonitor "/"]
+myFSList :: Base16 -> String -> [IO Widget]
+myFSList colors host
+  | ".shef.ac.uk" `isSuffixOf` host = [myFSMonitor colors "/",
+                                       myFSMonitor colors "/data",
+                                       myFSMonitor colors "/home",
+                                       myFSMonitor colors "/mnt/NAS"]
+  | otherwise = [myFSMonitor colors "/"]
