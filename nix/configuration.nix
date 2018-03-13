@@ -8,7 +8,7 @@ let
 icon-fonts-personal = pkgs.haskellPackages.callPackage ./icon-fonts.nix {};
 myTaffybar = pkgs.taffybar.override {
   packages = x: with pkgs.haskellPackages; [
-    aeson download hostname icon-fonts-personal];
+    aeson download hostname icon-fonts-personal yaml];
 };
 myDict = pkgs.hunspellDicts.en-gb-ise.overrideAttrs (old: rec {
   preFixup = ''

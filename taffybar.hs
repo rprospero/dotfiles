@@ -1,16 +1,18 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
 import Control.Applicative (empty)
 import Control.Concurrent
 import Control.Monad (forever)
 import Control.Monad.Trans (liftIO)
-import Data.Aeson
+import Data.Aeson as Aeson
 import Data.ByteString (ByteString)
 import Data.ByteString.Lazy (fromStrict)
 import Data.List (isSuffixOf, isPrefixOf)
 import Data.Map.Strict as M (fromList, lookup)
 import Data.Maybe (fromMaybe)
 import Data.Monoid ((<>))
+import Data.Yaml as Yaml
+import GHC.Generics
 import Graphics.Icons.AllTheIcons
 import Graphics.Icons.FileIcon hiding (appleCode)
 import Graphics.Icons.FontAwesome hiding (terminalCode)
@@ -66,7 +68,9 @@ data Base16 = Base16 {
   , base0D :: String
   , base0E :: String
   , base0F :: String
-  } deriving (Show)
+  } deriving (Show, Generic)
+
+instance FromJSON Base16
 
 defaultBase16 :: Base16
 defaultBase16 = Base16 {
@@ -89,31 +93,6 @@ defaultBase16 = Base16 {
   , base0E = "#000000"
   , base0F = "#000000"
   }
-readBase16Line :: String -> (String, String)
-readBase16Line line = (takeWhile (/= ':')  line, ("#"++) . read . drop 1 . dropWhile (/= ':') $ line)
-
-readBase16 :: FilePath -> IO (Maybe Base16)
-readBase16 path = do
-  ls <- readFile path
-  let terms = fromList [readBase16Line l | l <- lines ls]
-  return $ Base16 <$> M.lookup "scheme" terms
-    <*> M.lookup "author" terms
-    <*> M.lookup "base00" terms
-    <*> M.lookup "base01" terms
-    <*> M.lookup "base02" terms
-    <*> M.lookup "base03" terms
-    <*> M.lookup "base04" terms
-    <*> M.lookup "base05" terms
-    <*> M.lookup "base06" terms
-    <*> M.lookup "base07" terms
-    <*> M.lookup "base08" terms
-    <*> M.lookup "base09" terms
-    <*> M.lookup "base0A" terms
-    <*> M.lookup "base0B" terms
-    <*> M.lookup "base0C" terms
-    <*> M.lookup "base0D" terms
-    <*> M.lookup "base0E" terms
-    <*> M.lookup "base0F" terms
 
 join :: Monoid a => a -> [a] -> a
 join _ [] = mempty
@@ -122,7 +101,7 @@ join connect (x:xs) = x <> connect <> join connect xs
 
 myPollingBar :: Base16 -> Double -> IO Double -> IO Widget
 myPollingBar color = pollingBarNew ((defaultBarConfig $ barColour color){
-                                       barBackgroundColor = const . colorParse . drop 1 $ base00 color,
+                                       barBackgroundColor = const . colorParse $ base00 color,
                                        barPadding = 0,
                                        barWidth = 9})
 
@@ -223,7 +202,7 @@ wifiConnected = return False
 
 wifiIcon :: Base16 -> Bool -> String
 wifiIcon _ True = iconPango wifiCode
-wifiIcon color False = colorize (base08 color) "" $ iconPango wifiCode
+wifiIcon color False = colorize ("#" <> base08 color) "" $ iconPango wifiCode
 
 wifiWidget :: Base16 -> IO Widget
 wifiWidget color =
@@ -402,9 +381,9 @@ secondsToTime x = show hours <> ":" <> printf "%02d" minutes
 
 appropriateBattery :: Base16 -> BatteryInfo -> String
 appropriateBattery color x
-  | batteryPercentage x < 20.0 = colorize (base08 color) "" $ iconPango batteryEmptyCode
-  | batteryPercentage x < 40.0 = colorize (base0A color) "" $ iconPango batteryQuarterCode
-  | batteryPercentage x < 60.0 = colorize (base0B color) "" $ iconPango batteryHalfCode
+  | batteryPercentage x < 20.0 = colorize ("#" <> base08 color) "" $ iconPango batteryEmptyCode
+  | batteryPercentage x < 40.0 = colorize ("#" <> base0A color) "" $ iconPango batteryQuarterCode
+  | batteryPercentage x < 60.0 = colorize ("#" <> base0B color) "" $ iconPango batteryHalfCode
   | batteryPercentage x < 80.0 = iconPango batteryThreeQuartersCode
   | otherwise = iconPango batteryFullCode
 
@@ -480,7 +459,7 @@ instance FromJSON Coord where
   parseJSON _ = empty
 
 getWeather :: ByteString -> Maybe Weather
-getWeather = decode . fromStrict
+getWeather = Aeson.decode . fromStrict
 
 localWeather :: String -> IO (Either String Weather)
 localWeather city = do
@@ -682,15 +661,15 @@ windowMangler cnt w =
 
 main = do
   netref <- newIORef [0, 0]
-  colors <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/base16/oliveira.yaml"
-  let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
+  colors <- fromMaybe defaultBase16 <$> Yaml.decodeFile "/home/adam/Code/dotfiles/base16/oliveira.yaml"
+  let clock = textClockNew Nothing (colorize ("#" <> base0A colors) "" "%a %b %_d %H:%M") 1
       pager = taffyPagerNew defaultPagerConfig {
         activeLayout = layoutMangler,
         activeWindow = windowMangler 80 . escape,
-        activeWorkspace = colorize (base0B colors) "" . workspaceMangler,
-        hiddenWorkspace = colorize (base0D colors) "" . workspaceMangler,
+        activeWorkspace = colorize ("#" <> base0B colors) "" . workspaceMangler,
+        hiddenWorkspace = colorize ("#" <> base0D colors) "" . workspaceMangler,
         urgentWorkspace = colorize "bg" "fg" . workspaceMangler,
-        visibleWorkspace = colorize (base0C colors) "" . workspaceMangler,
+        visibleWorkspace = colorize ("#" <> base0C colors) "" . workspaceMangler,
         widgetSep = " | "}
       note = notifyAreaNew defaultNotificationConfig
       mem = myPollingBar colors 5 memCallback

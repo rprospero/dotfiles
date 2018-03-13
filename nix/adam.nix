@@ -4,7 +4,7 @@ let
 icon-fonts-personal = pkgs.haskellPackages.callPackage ./icon-fonts.nix {};
 myHaskellEnv = pkgs.haskellPackages.ghcWithHoogle (
   haskellPackages: with haskellPackages; [
-  aeson hlint icon-fonts-personal lens lens-xml mustache recursion-schemes reactive-banana xml
+  aeson hlint icon-fonts-personal lens lens-xml mustache recursion-schemes reactive-banana xml yaml
 ]);
 in
 
