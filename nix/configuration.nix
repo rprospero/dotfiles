@@ -101,7 +101,7 @@ in
     enable = true;
     enableContribAndExtras = true;
     extraPackages = haskellPackages: [
-      haskellPackages.taffybar
+      haskellPackages.taffybar haskellPackages.yaml
     ];
   };
 
