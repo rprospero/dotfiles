@@ -1,8 +1,10 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts, DeriveGeneric #-}
 import           Control.Monad                (liftM2, filterM,msum)
 import           Data.List (isSuffixOf, isInfixOf, isPrefixOf,nub,stripPrefix)
 import           Data.Map.Strict as M (fromList, lookup)
 import           Data.Maybe (fromMaybe, fromJust)
+import           Data.Yaml
+import           GHC.Generics
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -50,7 +52,9 @@ data Base16 = Base16 {
   , base0D :: String
   , base0E :: String
   , base0F :: String
-  }
+  } deriving (Generic)
+
+instance FromJSON Base16
 
 defaultBase16 :: Base16
 defaultBase16 = Base16 {
@@ -73,31 +77,6 @@ defaultBase16 = Base16 {
   , base0E = "#000000"
   , base0F = "#000000"
   }
-readBase16Line :: String -> (String, String)
-readBase16Line line = (takeWhile (/= ':')  line, ("#"++) . read . drop 1 . dropWhile (/= ':') $ line)
-
-readBase16 :: FilePath -> IO (Maybe Base16)
-readBase16 path = do
-  ls <- readFile path
-  let terms = fromList [readBase16Line l | l <- lines ls]
-  return $ Base16 <$> M.lookup "scheme" terms
-    <*> M.lookup "author" terms
-    <*> M.lookup "base00" terms
-    <*> M.lookup "base01" terms
-    <*> M.lookup "base02" terms
-    <*> M.lookup "base03" terms
-    <*> M.lookup "base04" terms
-    <*> M.lookup "base05" terms
-    <*> M.lookup "base06" terms
-    <*> M.lookup "base07" terms
-    <*> M.lookup "base08" terms
-    <*> M.lookup "base09" terms
-    <*> M.lookup "base0A" terms
-    <*> M.lookup "base0B" terms
-    <*> M.lookup "base0C" terms
-    <*> M.lookup "base0D" terms
-    <*> M.lookup "base0E" terms
-    <*> M.lookup "base0F" terms
 
 myWorkspaces :: [String]
 myWorkspaces = ["main","web","emacs","documents","chat","media","7","8","9"]
@@ -128,7 +107,7 @@ main = do
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "sh ~/setroot.sh"
   spawn "systemctl --user start taffybar"
-  theme <- fromMaybe defaultBase16 <$> readBase16 "/home/adam/Code/dotfiles/base16/oliveira.yaml"
+  theme <- fromMaybe defaultBase16 <$> decodeFile "/home/adam/Code/dotfiles/base16/oliveira.yaml"
   xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook (myConfig theme)
 
 data NameSegment = Prefix String | Suffix String | Subst String String
@@ -142,7 +121,7 @@ replace s old new =
   else head s:replace (tail s) old new
 
 shrinkSegment :: String -> NameSegment -> Maybe String
-shrinkSegment s (Prefix prefix) = stripPrefix prefix s
+shrinkSegment s (Main.Prefix prefix) = stripPrefix prefix s
 shrinkSegment s (Suffix suffix)
   | suffix `isSuffixOf` s = Just $ reverse $ drop (length suffix) $ reverse s
   | otherwise = Nothing
@@ -155,7 +134,7 @@ mySegments = [
   -- Subst "=>" "⇒",
   Suffix " - Mozilla Firefox",
   Suffix " - GIMP",
-  Prefix "adam@dyn006107",
+  Main.Prefix "adam@dyn006107",
   Suffix " - Google Search",
   Suffix " - Hoogle"]
 
@@ -174,11 +153,11 @@ instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
 instance Shrinker MyShrinker where
   shrinkIt = myShrinkText
 
-myLayoutHook theme = tabbedBottom MyShrinker (myTheme theme) ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
+myLayoutHook theme = tabbedBottom MyShrinker myTabConfig ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
 
 myConfig theme = def {
-               focusedBorderColor = base03 theme,
-               normalBorderColor = base00 theme,
+               focusedBorderColor = "#" ++ base03 theme,
+               normalBorderColor = "#" ++ base00 theme,
                handleEventHook = handleEventHook def <+> fullscreenEventHook <+> ewmhDesktopsEventHook,
                manageHook = manageDocks <+> myManageHook,
                layoutHook = avoidStruts $ myLayoutHook theme,
@@ -252,22 +231,37 @@ defPrompt :: Base16 -> XPConfig
 defPrompt theme = promptTheme theme def {historyFilter = nub}
 
 promptTheme :: Base16 -> XPConfig -> XPConfig
-promptTheme t x = x {fgColor = base07 t,
-                     bgColor = base00 t,
-                     fgHLight = base06 t,
-                     bgHLight = base01 t,
-                     borderColor = base04 t}
+promptTheme t x = x {fgColor = "#" ++ base07 t,
+                     bgColor = "#" ++ base00 t,
+                     fgHLight = "#" ++ base06 t,
+                     bgHLight = "#" ++ base01 t,
+                     borderColor = "#" ++ base04 t}
 
 tabTheme :: Base16 -> Theme -> Theme
-tabTheme p x = x {inactiveTextColor = base05 p,
-                  inactiveColor = base02 p,
-                  inactiveBorderColor = base03 p,
-                  urgentColor = base08 p,
-                  urgentTextColor = base09 p,
-                  urgentBorderColor = base0A p,
-                  activeTextColor = base07 p,
-                  activeColor = base00 p,
-                  activeBorderColor = base01 p}
+-- tabTheme p x = x {inactiveTextColor = base05 p,
+--                   inactiveColor = base02 p,
+--                   inactiveBorderColor = base03 p,
+--                   urgentColor = base08 p,
+--                   urgentTextColor = base09 p,
+--                   urgentBorderColor = base0A p,
+--                   activeTextColor = base07 p,
+--                   activeColor = base00 p,
+--                   activeBorderColor = base01 p}
+tabTheme _ = id
 
 myTheme :: Base16 -> Theme
-myTheme th = tabTheme th $ theme kavonForestTheme
+-- myTheme th = tabTheme th $ theme kavonForestTheme
+myTheme _ = defaultTheme {activeColor = "#00FF00"}
+
+
+myTabConfig = defaultTheme {
+  activeColor = "#1a1a1a"
+  , inactiveColor = "#000000"
+  , urgentColor = "#1a1a1a"
+  , activeTextColor = "#00ffff"
+  , inactiveTextColor = "#ffbe33"
+  , urgentTextColor = "#ff00ff"
+  , activeBorderColor = "#000000"
+  , inactiveBorderColor = "#1a1a1a"
+  , urgentBorderColor = "#000000"
+}
