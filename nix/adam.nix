@@ -48,7 +48,7 @@ in
       pass
       pidgin-with-plugins
       (python27Full.buildEnv.override {
-        extraLibs = with python27Packages; [ flake8 ipython pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pyopencl matplotlib wxPython pyqt5];
+        extraLibs = with python27Packages; [ flake8 ipython lark-parser pylint pyparsing html5lib reportlab lxml numpy scipy sphinx h5py pytest pyopencl matplotlib wxPython pyqt5];
         ignoreCollisions = true;
       })
       proselint
