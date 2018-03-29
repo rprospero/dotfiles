@@ -70,7 +70,9 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
+  services.syncthing.enable = true;
+  services.syncthing.user = "adam";
+  services.syncthing.dataDir = "/home/adam/.syncthing";
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
