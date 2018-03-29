@@ -1616,7 +1616,6 @@ bindings
 
   (general-define-key
    :states '(normal)
-   :keymaps '(prog-mode-map dired-mode-map)
     "i" #'ivy-imenu-anywhere)
 
   (general-simulate-keys
