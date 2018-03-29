@@ -1631,6 +1631,7 @@ bindings
   (general-define-key
    :states '(normal)
    :keymaps 'org-mode-map
+   "ce" 'org-export-dispatch
    "i" 'counsel-org-goto)
 
   (general-define-key
