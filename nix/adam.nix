@@ -40,6 +40,7 @@ in
       nodePackages.eslint
       nodePackages.jshint
       muchsync
+      mypy
       nix-prefetch-git
       notmuch
       offlineimap
