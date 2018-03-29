@@ -30,6 +30,7 @@ in
       # myWebHaskellEnv
       hunspell
       myDict
+      keepassx-community
       jre
       julia
       ledger
