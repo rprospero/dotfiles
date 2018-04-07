@@ -54,7 +54,7 @@ in
       })
       proselint
       ripgrep
-      sasview
+      # sasview
       super-user-spark
       texlive.combined.scheme-full
       tightvnc
