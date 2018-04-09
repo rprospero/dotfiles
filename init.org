@@ -174,12 +174,15 @@ Make everything pretty!
 Use diminish to stop minor modes from taking over the entire taskbar.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(diminish 'auto-revert-mode "")
-(diminish 'auto-fill-mode "")
-(diminish 'visual-line-mode "")
-(diminish 'flyspell-mode "")
-(diminish 'undo-tree-mode "")
-(diminish 'auto-fill-function "")
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'auto-revert-mode "")
+  (diminish 'auto-fill-mode "")
+  (diminish 'visual-line-mode "")
+  (diminish 'flyspell-mode "")
+  (diminish 'undo-tree-mode "")
+  (diminish 'auto-fill-function ""))
 
 
 #+END_SRC
