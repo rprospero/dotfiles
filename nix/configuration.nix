@@ -96,7 +96,8 @@ in
   # services.xserver.libinput.enable = true;
 
   # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.autoNumlock = true;
   # services.xserver.desktopManager.plasma5.enable = true;
 
   services.xserver.windowManager.xmonad = {

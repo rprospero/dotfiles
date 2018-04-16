@@ -1,7 +1,7 @@
 ! Base16 <%- scheme %>
 ! Scheme: <%- author %>
 
-#ifdef SRVR_nixos
+#ifdef SRVR_ndlt969a
   #define FIXED_FONT xft:iosevka:pixelsize=16:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=16:antialies=true:hinting=true
   #define EMACS_FIXED_FONT Iosevka-16
 #endif
