@@ -5,6 +5,12 @@ import           Data.Map.Strict as M (fromList, lookup)
 import           Data.Maybe (fromMaybe, fromJust)
 import           Data.Yaml
 import           GHC.Generics
+import Graphics.Icons.AllTheIcons
+import Graphics.Icons.FileIcon hiding (appleCode)
+import Graphics.Icons.FontAwesome hiding (terminalCode)
+import Graphics.Icons.Octicon hiding (terminalCode, calendarCode, globeCode, fileTextCode)
+import Graphics.Icons.Types
+import Graphics.Icons.Weather hiding (trainCode)
 import           Graphics.X11.ExtraTypes.XF86
 import           System.Directory (getDirectoryContents, doesDirectoryExist)
 import           System.FilePath ((</>),splitFileName)
@@ -20,6 +26,7 @@ import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.LayoutModifier
 import           XMonad.Layout.HintedGrid
+import           XMonad.Layout.Named
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.Tabbed
 import qualified XMonad.StackSet              as W
@@ -107,7 +114,7 @@ main = do
   putEnv "SAL_USE_VCLPLUGIN=gen"
   spawn "sh ~/setroot.sh"
   spawn "systemctl --user start taffybar"
-  theme <- fromMaybe defaultBase16 <$> decodeFile "/home/adam/Code/dotfiles/base16/oliveira.yaml"
+  theme <- fromMaybe defaultBase16 <$> decodeFile "/home/adam/Code/dotfiles/base16/theme.yaml"
   xmonad . docks . pagerHints $ withUrgencyHook NoUrgencyHook (myConfig theme)
 
 data NameSegment = Prefix String | Suffix String | Subst String String
@@ -153,7 +160,10 @@ instance Read MyShrinker where readsPrec _ s = [(MyShrinker,s)]
 instance Shrinker MyShrinker where
   shrinkIt = myShrinkText
 
-myLayoutHook theme = tabbedBottom MyShrinker myTabConfig ||| smartSpacing 10 (layoutHook def) ||| smartSpacing 10 (Grid False)
+myLayoutHook theme = named (iconPango listCode) (tabbedBottom MyShrinker $ myTabConfig theme)
+  ||| named (iconPango squareCode) Full
+  ||| named (iconPango arrowsVCode) (smartSpacing 10 (Tall 1 (3/100) (1/2)))
+  ||| named (iconPango thCode) (smartSpacing 10 (Grid False))
 
 myConfig theme = def {
                focusedBorderColor = "#" ++ base03 theme,
@@ -237,31 +247,14 @@ promptTheme t x = x {fgColor = "#" ++ base07 t,
                      bgHLight = "#" ++ base01 t,
                      borderColor = "#" ++ base04 t}
 
-tabTheme :: Base16 -> Theme -> Theme
--- tabTheme p x = x {inactiveTextColor = base05 p,
---                   inactiveColor = base02 p,
---                   inactiveBorderColor = base03 p,
---                   urgentColor = base08 p,
---                   urgentTextColor = base09 p,
---                   urgentBorderColor = base0A p,
---                   activeTextColor = base07 p,
---                   activeColor = base00 p,
---                   activeBorderColor = base01 p}
-tabTheme _ = id
-
-myTheme :: Base16 -> Theme
--- myTheme th = tabTheme th $ theme kavonForestTheme
-myTheme _ = defaultTheme {activeColor = "#00FF00"}
-
-
-myTabConfig = defaultTheme {
-  activeColor = "#1a1a1a"
-  , inactiveColor = "#000000"
-  , urgentColor = "#1a1a1a"
-  , activeTextColor = "#00ffff"
-  , inactiveTextColor = "#ffbe33"
-  , urgentTextColor = "#ff00ff"
-  , activeBorderColor = "#000000"
-  , inactiveBorderColor = "#1a1a1a"
-  , urgentBorderColor = "#000000"
+myTabConfig theme = def {
+  activeColor = "#" ++base01 theme
+  , inactiveColor = "#" ++base00 theme
+  , urgentColor = "#" ++base02 theme
+  , activeTextColor = "#" ++base06 theme
+  , inactiveTextColor = "#" ++base05 theme
+  , urgentTextColor = "#" ++base07 theme
+  , activeBorderColor = "#" ++base01 theme
+  , inactiveBorderColor = "#" ++base00 theme
+  , urgentBorderColor = "#" ++base02 theme
 }

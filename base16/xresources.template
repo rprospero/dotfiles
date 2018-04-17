@@ -6,6 +6,11 @@
   #define EMACS_FIXED_FONT Iosevka-16
 #endif
 
+#ifdef SRVR_ndw1748
+  #define FIXED_FONT xft:iosevka:pixelsize=12:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=12:antialies=true:hinting=true
+  #define EMACS_FIXED_FONT Iosevka-12
+#endif
+
 #ifndef EMACS_FIXED_FONT
   #define FIXED_FONT xft:iosevka:pixelsize=12:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=10:antialies=true:hinting=true
   #define EMACS_FIXED_FONT Iosevka-12
