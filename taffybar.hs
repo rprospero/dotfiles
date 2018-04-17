@@ -591,17 +591,6 @@ workspaceMangler "chat" = iconPango commentsCode
 workspaceMangler "media" = iconPango pictureOCode
 workspaceMangler x = escape x
 
-layoutMangler :: String -> String
-layoutMangler l
-  | "SmartSpacing " `isPrefixOf` l = layoutMangler . unwords . drop 2 . words $ l
-  | "Tall" == l = iconPango arrowsVCode
-  | "Mirror Tall" == l = iconPango arrowsHCode
-  | "Full" == l = iconPango squareCode
-  | "Grid False" == l = iconPango thCode
-  | "Tabbed Bottom Simplest" == l = iconPango listCode
-  | otherwise = l
-
-
 windowShortcuts :: [Parsec String () String]
 windowShortcuts = [
                    string "- Mozilla Firefox" >> return (iconPango firefoxCode),
@@ -664,7 +653,7 @@ main = do
   colors <- fromMaybe defaultBase16 <$> Yaml.decodeFile "/home/adam/Code/dotfiles/base16/oliveira.yaml"
   let clock = textClockNew Nothing (colorize ("#" <> base0A colors) "" "%a %b %_d %H:%M") 1
       pager = taffyPagerNew defaultPagerConfig {
-        activeLayout = layoutMangler,
+        activeLayout = id,
         activeWindow = windowMangler 80 . escape,
         activeWorkspace = colorize ("#" <> base0B colors) "" . workspaceMangler,
         hiddenWorkspace = colorize ("#" <> base0D colors) "" . workspaceMangler,

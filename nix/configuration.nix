@@ -104,7 +104,7 @@ in
     enable = true;
     enableContribAndExtras = true;
     extraPackages = haskellPackages: [
-      haskellPackages.taffybar haskellPackages.yaml
+      haskellPackages.taffybar haskellPackages.yaml icon-fonts-personal haskellPackages.yaml
     ];
   };
 
