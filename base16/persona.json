@@ -1,0 +1,35 @@
+{
+    "theme": {
+	"images": {
+	    "headerURL": ""
+	},
+	"colors": {
+	    "accentcolor": "#1a2217",
+	    "textcolor": "#6a7167",
+	    "toolbar_text": "#6a7167",
+	    "tab_selected": "#ff0018",
+	    "tab_text": "#8a9187",
+	    "popup_highlight_text": "#00ff11",
+	    "popup_border": "#000000",
+	    "tab_line": "#00fffb",
+	    "toolbar_bottom_separator": "#1a2217",
+	    "toolbar": "#1a2217",
+	    "toolbar_field": "#1a2217",
+	    "toolbar_field_text": "#6a7167",
+	    "button_background_active": "#ff0000",
+	    "icons": "#ff0003",
+	    "popup": "#ff0000",
+	    "popup_highlight": "#ff0000",
+	    "popup_text": "#ff0000",
+	    "toolbar_field_separator": "#6a7167",
+	    "toolbar_top_separator": "#2a3227",
+	    "toolbar_vertical_separator": "#374934",
+	    "toolbar_field_text_focus": "#ff0000",
+	    "toolbar_field_focus": "#ff0000",
+	    "toolbar_field_border": "#2a3227"
+	}
+    },
+    "name": "Oliverierra",
+    "manifest_version": 2,
+    "version": "1.0"
+}
