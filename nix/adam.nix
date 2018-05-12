@@ -4,7 +4,9 @@ let
 icon-fonts-personal = pkgs.haskellPackages.callPackage ./icon-fonts.nix {};
 myHaskellEnv = pkgs.haskellPackages.ghcWithHoogle (
   haskellPackages: with haskellPackages; [
-  aeson hlint icon-fonts-personal lens lens-xml mustache recursion-schemes reactive-banana xml yaml
+  # aeson hlint icon-fonts-personal lens lens-xml miso recursion-schemes recursion-schemes-ext reflex reflex-dom xml yaml
+  icon-fonts-personal random recursion-schemes recursion-schemes-ext
+]);
 ]);
 in
 
@@ -28,7 +30,7 @@ in
       gnumake
       gnupg
       graphviz
-      # myHaskellEnv
+      myHaskellEnv
       # myWebHaskellEnv
       hunspell
       myDict

@@ -1787,6 +1787,24 @@ evil-nerd-commenter sould never get working right
   (global-evil-matchit-mode 1))
 
 #+END_SRC
+
+*** evil numbers
+
+    This should allow for easier number manipulation in evil mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-numbers
+  :ensure t
+  :config
+  (general-define-key
+   :prefix 'nil
+   :states '(normal)
+   :infix "g"
+   "+" 'evil-numbers/inc-at-pt
+   "-" 'evil-numbers/dec-at-pt))
+
+#+END_SRC
+
 ** eyebrowse
 
 #+BEGIN_SRC emacs-lisp :tangle yes
