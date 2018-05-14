@@ -34,9 +34,10 @@ in
       # myWebHaskellEnv
       hunspell
       myDict
-      keepassx-community
+      imagemagick
       jre
       julia
+      keepassx-community
       ledger
       libreoffice
       myTaffybar
