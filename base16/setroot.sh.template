@@ -1,1 +1,2 @@
 xsetroot -solid '#<%- base["00"]["hex"] %>'
+xsetroot -cursor_name left_ptr -fg '#<%- base["00"]["hex"] %>' -bg '#<%- base["05"]["hex"] %>'

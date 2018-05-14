@@ -61,6 +61,7 @@
    `(mode-line-emphasis ((t (:foreground ,base06 :slant italic))))
    `(mode-line-highlight ((t (:foreground ,base0E :box nil :weight bold))))
    `(mode-line-inactive ((t (:background ,base01 :foreground ,base03 :box nil))))
+   `(mouse ((t (:foreground ,base05))))
    `(region ((t (:background ,base02))))
    `(secondary-selection ((t (:background ,base03))))
    `(error ((t (:foreground ,base08 :weight bold))))
