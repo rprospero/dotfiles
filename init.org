@@ -2144,16 +2144,6 @@ from time to time and see if anything has improved.
 (recentf-mode)
 
 #+END_SRC
-** smart-mode-line
-
- #+BEGIN_SRC emacs-lisp :tangle no
-(use-package smart-mode-line
-  :ensure t
-  :init
-  (smart-mode-line-enable)
-  :config
-  (sml/apply-theme 'respectful))
- #+END_SRC
 ** space-line 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2173,14 +2163,6 @@ from time to time and see if anything has improved.
   (spaceline-toggle-all-the-icons-git-ahead-on)
   (spaceline-toggle-all-the-icons-projectile-on))
 #+END_SRC
-
-
-** unbound
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package unbound
-  :ensure t)
- #+END_SRC
 
 
 ** yasnippets
