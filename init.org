@@ -1667,28 +1667,6 @@ bindings
   (setq general-default-non-normal-prefix "M-SPC")
   (setq general-default-states '(normal insert emacs))
 
-  (general-define-key
-   :infix "p"
-   :states '(normal emacs insert)
-   "xe" 'projectile-run-eshell
-   "xs" 'projectile-run-shell
-   "xt" 'projectile-run-term
-   "f" 'counsel-projectile
-   "b" 'counsel-projectile-switch-to-buffer
-   "d" 'projectile-find-dir
-   "D" 'projectile-dired
-   "p" 'counsel-projectile-switch-project
-   "P" 'projectile-test-project
-   "g" 'counsel-projectile-rg
-   "s" 'projectile-save-project-buffers
-   "B" 'projectile-ibuffer
-   "k" 'projectile-kill-buffers
-   "c" 'projectile-compile-project
-   "v" 'projectile-vc
-   "t" 'projectile-find-tag
-   "T" 'projectile-regenerate-tags
-   "R" 'projectile-replace-regexp
-   "r" 'projectile-run-project)
 
   (general-define-key
    :states '(normal)
@@ -2122,6 +2100,28 @@ from time to time and see if anything has improved.
 	    (format " {%s}" (projectile-project-name)))))
   :config
   (setq projectile-completion-system 'ivy)
+  (general-define-key
+   :infix "p"
+   :states '(normal emacs insert)
+   "xe" 'projectile-run-eshell
+   "xs" 'projectile-run-shell
+   "xt" 'projectile-run-term
+   "f" 'counsel-projectile
+   "b" 'counsel-projectile-switch-to-buffer
+   "d" 'projectile-find-dir
+   "D" 'projectile-dired
+   "p" 'counsel-projectile-switch-project
+   "P" 'projectile-test-project
+   "g" 'counsel-projectile-rg
+   "s" 'projectile-save-project-buffers
+   "B" 'projectile-ibuffer
+   "k" 'projectile-kill-buffers
+   "c" 'projectile-compile-project
+   "v" 'projectile-vc
+   "t" 'projectile-find-tag
+   "T" 'projectile-regenerate-tags
+   "R" 'projectile-replace-regexp
+   "r" 'projectile-run-project)
   (projectile-global-mode))
  #+END_SRC
 
