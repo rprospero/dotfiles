@@ -2101,7 +2101,7 @@ from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
-  :after (counsel projectile)
+  :after (counsel)
   :general
   (:infix "p"
    "f" 'counsel-projectile
