@@ -2109,7 +2109,7 @@ from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
-  :after '(counsel projectile)
+  :after (counsel projectile)
   :general
   (:infix "p"
    "f" 'counsel-projectile
@@ -2231,7 +2231,7 @@ Yasnippets provide programmable skeletons for filling out boilerplate
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package window-purpose
   :ensure t
-  :after '(ivy)
+  :after (ivy)
   :general
   (:infix "xr"
   "p" 'ivy-purpose-switch-buffer-with-some-purpose
