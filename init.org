@@ -2227,14 +2227,14 @@ Yasnippets provide programmable skeletons for filling out boilerplate
   :general
   (:infix "xr"
   "p" 'ivy-purpose-switch-buffer-with-some-purpose
-  "P" 'ivy-purpose-switch-buffer-with-some-purpose)
-  :bind
-  ("C-c C-, C-d" . purpose-toggle-window-purpose-dedicated)
-  ("C-c C-, C-D" . purpose-toggle-window-buffer-dedicated)
-  ("C-c C-, C-1" . purpose-delete-non-dedicated-windows)
-  ("C-c C-, C-b" . purpose-switch-buffer-with-purpose)
-  ("C-c C-, C-s" . purpose-save-window-layout)
-  ("C-c C-, C-l" . purpose-load-window-layout)
+  "P" 'ivy-purpose-switch-buffer-with-purpose)
+  (:infix ","
+	  "d" 'purpose-toggle-window-buffer-dedicated
+	  "D" 'purpose-toggle-window-purpose-dedicated
+	  "1" 'purpose-delete-non-dedicated-windows
+	  "b" 'purpose-switch-buffer-with-purpose
+	  "s" 'purpose-save-window-layout
+	  "l" 'purpose-load-window-layout)
   :config
   (purpose-mode)
   (purpose-x-kill-setup)
