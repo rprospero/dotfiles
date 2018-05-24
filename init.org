@@ -553,6 +553,18 @@ rest of evil.
 :ensure t)
 
 #+END_SRC
+** eshell
+*** fish completion
+
+When eshell can't find a completion, let fish take a shot at it
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package fish-completion
+  :after eshell
+  :ensure t
+  :config
+  (global-fish-completion-mode))
+#+END_SRC
 
 ** Images
 
