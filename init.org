@@ -75,10 +75,6 @@ bindings
    "ck" 'with-editor-cancel)
 
   (general-define-key
-   "/" 'swiper
-   "?" 'swiper-all)
-
-  (general-define-key
    :infix "x"
    "s" 'save-buffer
    "B" 'ibuffer
@@ -267,13 +263,10 @@ evil-nerd-commenter sould never get working right
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-numbers
   :ensure t
-  :config
-  (general-define-key
-   :prefix 'nil
-   :states '(normal)
-   :infix "g"
-   "+" 'evil-numbers/inc-at-pt
-   "-" 'evil-numbers/dec-at-pt))
+  :general
+  (:prefix 'nil :infix "g"
+  "+" 'evil-numbers/inc-at-pt
+  "-" 'evil-numbers/dec-at-pt))
 
 #+END_SRC
 
@@ -1235,7 +1228,7 @@ At some point, I need to turn this into a proper package.
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb))
   :general
-  (:states '(normal) :keymaps 'org-mode-map :infix "c"
+  (:keymaps 'org-mode-map :infix "c"
     "'" 'org-edit-special
     "vt" 'org-babel-tangle
     "d" 'org-deadline
@@ -1766,7 +1759,7 @@ projects (and not require greping my way around all of the time)
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package imenu-anywhere
-  :general (:states '(normal) "i" 'ivy-imenu-anywhere)
+  :general ("i" 'ivy-imenu-anywhere)
   :ensure t)
 
 #+END_SRC
@@ -1777,11 +1770,9 @@ projects (and not require greping my way around all of the time)
 
 (use-package eyebrowse
   :ensure t
-  :config
-  (eyebrowse-mode)
-  (general-define-key
-   :states '(normal insert emacs)
-   :infix "w"
+  :general
+  (:infix "w"
+   "j" 'eyebrowse-create-window-config
    "j" 'eyebrowse-next-window-config
    "k" 'eyebrowse-prev-window-config
    "r" 'eyebrowse-rename-window-config
@@ -1796,7 +1787,9 @@ projects (and not require greping my way around all of the time)
    "6" 'eyebrowse-switch-to-window-config-6
    "7" 'eyebrowse-switch-to-window-config-7
    "8" 'eyebrowse-switch-to-window-config-8
-   "9" 'eyebrowse-switch-to-window-config-9))
+   "9" 'eyebrowse-switch-to-window-config-9)
+  :config
+  (eyebrowse-mode))
 
 #+END_SRC
 ** flycheck
@@ -1998,8 +1991,9 @@ own hotkey.  Why not steal F5 from the browser?
            ("C-x 8 RET" . counsel-unicode-char)
            ("<f2> u" . counsel-unicode-char))
   :general
-  (:states '(normal) :keymaps 'org-mode-map "i" 'counsel-org-goto)
+  (:keymaps 'org-mode-map "i" 'counsel-org-goto)
   (:infix "x" "f" 'counsel-find-file)
+  ("/" 'swiper "?" 'swiper-all)
   :diminish counsel-mode
   :ensure t
   :config
@@ -2067,13 +2061,11 @@ from time to time and see if anything has improved.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-link
   :ensure t
+  :general
+  (:prefix 'nil :infil 'nil :keymaps 'org-mode-map
+  "M-o" 'ace-link-org)
   :config
-  (ace-link-setup-default)
-  (general-define-key
-   :prefix nil
-   :infix nil
-   :keymaps 'org-mode-map
-   "M-o" 'ace-link-org))
+  (ace-link-setup-default))
 #+END_SRC
 
 
@@ -2082,6 +2074,23 @@ from time to time and see if anything has improved.
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
   :ensure t
+  :general
+  (:infix "p"
+   "xe" 'projectile-run-eshell
+   "xs" 'projectile-run-shell
+   "xt" 'projectile-run-term
+   "d" 'projectile-find-dir
+   "D" 'projectile-dired
+   "P" 'projectile-test-project
+   "s" 'projectile-save-project-buffers
+   "B" 'projectile-ibuffer
+   "k" 'projectile-kill-buffers
+   "c" 'projectile-compile-project
+   "v" 'projectile-vc
+   "t" 'projectile-find-tag
+   "T" 'projectile-regenerate-tags
+   "R" 'projectile-replace-regexp
+   "r" 'projectile-run-project)
   :init
   (setq projectile-keymap-prefix (kbd "C-c C-p"))
   (setq projectile-mode-line
@@ -2092,38 +2101,23 @@ from time to time and see if anything has improved.
 	    (format " {%s}" (projectile-project-name)))))
   :config
   (setq projectile-completion-system 'ivy)
-  (general-define-key
-   :infix "p"
-   :states '(normal emacs insert)
-   "xe" 'projectile-run-eshell
-   "xs" 'projectile-run-shell
-   "xt" 'projectile-run-term
-   "f" 'counsel-projectile
-   "b" 'counsel-projectile-switch-to-buffer
-   "d" 'projectile-find-dir
-   "D" 'projectile-dired
-   "p" 'counsel-projectile-switch-project
-   "P" 'projectile-test-project
-   "g" 'counsel-projectile-rg
-   "s" 'projectile-save-project-buffers
-   "B" 'projectile-ibuffer
-   "k" 'projectile-kill-buffers
-   "c" 'projectile-compile-project
-   "v" 'projectile-vc
-   "t" 'projectile-find-tag
-   "T" 'projectile-regenerate-tags
-   "R" 'projectile-replace-regexp
-   "r" 'projectile-run-project)
   (projectile-global-mode))
  #+END_SRC
 
 
 *** counsel-projectile
 
-  #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
+  :after '(counsel projectile)
+  :general
+  (:infix "p"
+   "f" 'counsel-projectile
+   "b" 'counsel-projectile-switch-to-buffer
+   "p" 'counsel-projectile-switch-project
+   "g" 'counsel-projectile-rg)
   :ensure t)
- #+END_SRC
+#+END_SRC
 
 
 
@@ -2164,15 +2158,14 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package yasnippet
   :ensure t
-  :config
-  (setq yas-indent-line 'fixed)
-  (yas-global-mode)
-  (general-define-key
-   :states '(normal)
-   :keymaps 'yas-minor-mode-map
+  :general
+  (:keymaps 'yas-minor-mode-map
    "yv" 'yas-visit-snippet-file
    "yn" 'yas-new-snippet
-   "ys" 'yas-insert-snippet))
+   "ys" 'yas-insert-snippet)
+  :config
+  (setq yas-indent-line 'fixed)
+  (yas-global-mode))
 #+END_SRC
 
 *** yasnippets-mpa
