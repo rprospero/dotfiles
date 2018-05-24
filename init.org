@@ -766,6 +766,13 @@ Let's make our python prettier, too!
             (push '("sigma" . ?σ) prettify-symbols-alist)
             (push '("lambda" . ?λ) prettify-symbols-alist)
             (push '("**2" . ?²) prettify-symbols-alist)))
+
+(defun switch-to-python (&rest r)
+  (interactive)
+  (message "Switching! %S" r)
+  (switch-to-buffer-other-window "*Python*"))
+
+(advice-add 'run-python :after #'switch-to-python)
 #+END_SRC
 
 Add support to python mode for finding errors
