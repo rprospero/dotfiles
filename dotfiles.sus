@@ -12,6 +12,8 @@ card dotfiles {
      vimfx -> .config/vimfx
 
      gtk-3.0 -> .config/gtk-3.0
+
+     eshell_alias -> .emacs.d/eshell/alias
 }
 
 card taffybar {

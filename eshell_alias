@@ -1,0 +1,2 @@
+alias less view-file-other-window $1
+alias top proced
