@@ -41,12 +41,6 @@ Load the string package.  We need this for a lot of the other code.
   (setq evil-insert-state-modes
 	'(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
-  ;; (evil-add-hjkl-bindings
-  ;;   eww-mode-map 'emacs
-  ;;   (kbd "f") 'ace-link-eww
-  ;;   (kbd "o") 'eww
-  ;;   (kbd "r") 'eww-reload
-  ;;   (kbd "gr") 'eww-readable)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
 
@@ -958,29 +952,35 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 notmuch is a wonderful little utility for managing my mail
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-
 (use-package notmuch
+  :bind
+  (:map notmuch-search-mode-map
+	("a" . notmuch-search-mode-map))
+  :commands notmuch
   :ensure t
   :config
+  (defun my-notmuch-archive (&optional arg)
+    (interactive "p")
+    (kmacro-exec-ring-item (quote ([45 117 110 114 101 97 100 32 45 105 110 98 111 120 return] 0 "%d")) arg))
   (setq notmuch-archive-tags (quote ("-inbox" "-unread")))
   (set-face-attribute 'notmuch-search-unread-face nil
-	:foreground "#859900")
+		      :foreground "#859900")
   (setq notmuch-fcc-dirs
-   (quote
-    (("rprospero@gmail.com" . "Personal/[Gmail].Sent Mail")
-     ("adam.washington@stfc.ac.uk" . "Work/Sent -inbox -unread +sent"))))
+	(quote
+	 (("rprospero@gmail.com" . "Personal/[Gmail].Sent Mail")
+	  ("adam.washington@stfc.ac.uk" . "Work/Sent -inbox -unread +sent"))))
   (setq notmuch-hello-thousands-separator ",")
   (setq notmuch-saved-searches
-        (quote
-         ((:name "inbox" :query "tag:inbox" :key "i")
-          (:name "unread" :query "tag:unread" :key "u")
-          (:name "flagged" :query "tag:flagged" :key "f")
-          (:name "sent" :query "tag:sent" :key "t")
-          (:name "drafts" :query "tag:draft" :key "d")
-          (:name "all mail" :query "*" :key "a")
-          (:name "Today's mail" :query "date:0d..")
-          (:name "promotional" :query "to:promotional tag:inbox")
-          (:name "SasView" :query "Sas from:notifications@github.com")))))
+	(quote
+	 ((:name "inbox" :query "tag:inbox" :key "i")
+	  (:name "unread" :query "tag:unread" :key "u")
+	  (:name "flagged" :query "tag:flagged" :key "f")
+	  (:name "sent" :query "tag:sent" :key "t")
+	  (:name "drafts" :query "tag:draft" :key "d")
+	  (:name "all mail" :query "*" :key "a")
+	  (:name "Today's mail" :query "date:0d..")
+	  (:name "promotional" :query "to:promotional tag:inbox")
+	  (:name "SasView" :query "Sas from:notifications@github.com")))))
 
 #+END_SRC
 ** elfeed
@@ -1636,8 +1636,7 @@ Include useful mode hooks when moving into latex mode
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-window
   :ensure t
-  :bind
-  (("M-z" . ace-window))
+  :bind (("M-z" . ace-window))
   :config
   (setq aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
  #+END_SRC
@@ -1687,11 +1686,23 @@ Display icons when switching buffers
 
 #+END_SRC
 
+** avy
+
+I've been trying to get into avy, with moderate success.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package avy
+  :bind
+  (("M-d" . avy-goto-char-timer))
+  :ensure t)
+#+END_SRC
+
 ** company
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company
   :ensure t
+  :bind (("M-/" . company-complete))
   :config
   (add-hook 'prog-mode-hook 'company-mode)
   (setq company-dabbrev-code-modes
@@ -1897,21 +1908,6 @@ _q_uit		_=_ equalise
 #+END_SRC
 
 ** Key Bindings
-
-This is a place for my own personal key bindings.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(bind-key "M-/" 'hippie-expand)
-(bind-key "M-d" 'avy-goto-char-timer)
-
-(defun my-notmuch-archive (&optional arg)
-  (interactive "p")
-  (kmacro-exec-ring-item (quote ([45 117 110 114 101 97 100 32 45 105 110 98 111 120 return] 0 "%d")) arg))
-
-(bind-key "a" 'my-notmuch-archive 'notmuch-search-mode-map)
-
-#+END_SRC
 *** Kill this buffer
 
 I hate when emacs asks me which buffer to kill, because it's my
