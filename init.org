@@ -2082,6 +2082,7 @@ from time to time and see if anything has improved.
    "t" 'projectile-find-tag
    "T" 'projectile-regenerate-tags
    "R" 'projectile-replace-regexp
+   "E" 'projectile-edit-dir-locals
    "r" 'projectile-run-project)
   :init
   (setq projectile-keymap-prefix (kbd "C-c C-p"))
