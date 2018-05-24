@@ -612,14 +612,6 @@ Always revert images files without asking.
  #+END_SRC
 
 
-** pass
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package pass
-  :ensure t)
- #+END_SRC
-
-
 * Code
 
 
