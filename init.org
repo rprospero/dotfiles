@@ -631,6 +631,20 @@ there on the modeline.
 (set-face-foreground 'which-func (face-foreground font-lock-variable-name-face))
 
 #+END_SRC
+
+*** Skeletor
+
+Handles the generation of project skeletons
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package skeletor
+  :ensure t
+  :config
+  (setq skeletor-project-directory "~/Code"))
+
+#+END_SRC
+
 ** C♯
 
 Set the C♯ compiler for linux
