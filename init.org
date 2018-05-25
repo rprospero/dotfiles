@@ -983,8 +983,8 @@ notmuch is a wonderful little utility for managing my mail
      (:name "promotional" :query "to:promotional tag:inbox")
      (:name "SasView" :query "Sas from:notifications@github.com"))))
   :ensure t
-  :config
-  (set-face-attribute 'notmuch-search-unread-face nil :foreground "#859900"))
+  :custom-face
+  (notmuch-search-unread-face ((t (:foreground "#859900")))))
 #+END_SRC
 ** elfeed
 
@@ -1106,8 +1106,8 @@ org-mode agenda, allowing me to insert my outlook agenda directly into org.
 
 (use-package excorporate
   :ensure t
-  :config
-  (setq excorporate-configuration "adam.washington@stfc.ac.uk"))
+  :custom
+  (excorporate-configuration "adam.washington@stfc.ac.uk"))
 
 #+END_SRC
 
@@ -2132,13 +2132,14 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package yasnippet
   :ensure t
+  :custom
+  (yas-indent-line 'fixed)
   :general
   (:keymaps 'yas-minor-mode-map
    "yv" 'yas-visit-snippet-file
    "yn" 'yas-new-snippet
    "ys" 'yas-insert-snippet)
   :config
-  (setq yas-indent-line 'fixed)
   (yas-global-mode))
 #+END_SRC
 
