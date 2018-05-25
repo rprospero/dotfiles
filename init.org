@@ -97,6 +97,8 @@ frustrating
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-collection
   :after evil
+  :custom
+  (evil-collection-setup-minibuffer t)
   :ensure t
   :config
   (evil-collection-init))
@@ -588,14 +590,14 @@ Always revert images files without asking.
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
   :ensure t
+  :custom
+  (diff-switches "-u")
+  (magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
+  (magit-bury-buffer-function 'magit-mode-quit-window)
   :init
   (if
       (system-is-macbook)
-      (setq magit-git-executable "/usr/bin/git"))
-  :config
-  (setq diff-switches "-u")
-  (setq magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
-  (setq magit-bury-buffer-function 'magit-mode-quit-window))
+      (setq magit-git-executable "/usr/bin/git")))
  #+END_SRC
 ** magithub
 
@@ -640,8 +642,8 @@ Handles the generation of project skeletons
 
 (use-package skeletor
   :ensure t
-  :config
-  (setq skeletor-project-directory "~/Code"))
+  :custom
+  (skeletor-project-directory "~/Code"))
 
 #+END_SRC
 
@@ -671,8 +673,9 @@ Let's try and make elisp symbols pretty!
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package haskell-mode
   :ensure t
+  :custom
+  (haskell-tags-on-save t)
   :config
-  (setq haskell-tags-on-save t)
 
   (add-hook
    'haskell-mode-hook
@@ -867,18 +870,20 @@ I customise the eww bindings to make them more [[evil][VimFx]]
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package jabber
   :ensure t
+  :custom
+   (jabber-chat-buffer-show-avatar nil)
+   (jabber-vcard-avatars-retrieve nil)
+   (jabber-account-list
+    (let
+	((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
+      `(("rprospero@gmail.com"
+	 (:port . 5223)
+	 (:password . ,passwd)
+	 (:network-server . "talk.google.com")
+	 (:connection-type . ssl))))
   :defer t
   :config
   (progn
-   (let
-    ((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
-    (setq
-     jabber-account-list
-     `(("rprospero@gmail.com"
-        (:port . 5223)
-        (:password . ,passwd)
-        (:network-server . "talk.google.com")
-        (:connection-type . ssl)))))
    (defun x-urgency-hint (frame arg &optional source)
      (let* ((wm-hints (append (x-window-property
                                "WM_HINTS" frame "WM_HINTS" source nil t) nil))
@@ -895,12 +900,8 @@ I customise the eww bindings to make them more [[evil][VimFx]]
          ;;  :title jabber-activity-make-string
          ;;  :body jabber-activity-count-string)
          (x-urgency-hint (selected-frame) t))))
-   (setq jabber-chat-buffer-show-avatar nil)
-   (setq jabber-vcard-avatars-retrieve nil)
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
-   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
-
-
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy))))
  #+END_SRC
 
 
@@ -911,9 +912,9 @@ I customise the eww bindings to make them more [[evil][VimFx]]
              :bind (("C-c t" . twit))
 	     :hook (twittering-edit-mode . company-mode)
 	     :ensure t
-             :config
-             (setq twittering-use-master-password t)
-             (setq twittering-timer-interval 30))
+	     :custom
+             (twittering-use-master-password t)
+             (twittering-timer-interval 30))
  #+END_SRC
 
 
@@ -929,43 +930,23 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 ** gnus
 
  #+BEGIN_SRC emacs-lisp :tangle yes
+(defun gnus-keys () (local-set-key ["S-delete"] 'gnus-summary-delete-article))
+
 (use-package gnus
-  :config
-  (progn
-    (setq gnus-select-method '(nntp "news.gwene.org"))
-    (setq
-     gnus-secondary-select-methods
-     (quote
-      ((nnmaildir "Professional"
-                  (directory "~/Maildir/Professional"))
-       (nnmaildir "Work"
-                  (directory "~/Maildir/Work"))
-       (nnmaildir "Personal"
-                  (directory "~/Maildir/Personal")))))
-
-    (setq
-     send-mail-function
-     (quote smtpmail-send-it))
-    (setq
-     sendmail-program
-     "msmtp")
-    (setq
-     message-send-mail-function
-     (quote message-send-mail-with-sendmail))
-    (setq
-     message-sendmail-envelope-from
-     (quote header))
-    (setq
-     message-sendmail-extra-arguments
-     (quote ("--read-envelope-from")))
-    (setq
-     message-sendmail-f-is-evil
-     t)
-
-    (defun gnus-keys ()
-      (local-set-key ["S-delete"] 'gnus-summary-delete-article))
-
-    (add-hook 'gnus-summary-mode-hook 'gnus-keys)))
+  :custom
+  (gnus-select-method '(nntp "news.gwene.org"))
+  (send-mail-function (quote smtpmail-send-it))
+  (sendmail-program "msmtp")
+  (message-send-mail-function (quote message-send-mail-with-sendmail))
+  (message-sendmail-envelope-from (quote header))
+  (message-sendmail-extra-arguments (quote ("--read-envelope-from")))
+  (message-sendmail-f-is-evil t)
+  (gnus-secondary-select-methods
+   (quote
+    ((nnmaildir "Professional" (directory "~/Maildir/Professional"))
+     (nnmaildir "Work" (directory "~/Maildir/Work"))
+     (nnmaildir "Personal" (directory "~/Maildir/Personal")))))
+  :hook (gnus-summary-mode-hook . gnus-keys))
  #+END_SRC
 
 
@@ -975,35 +956,35 @@ notmuch is a wonderful little utility for managing my mail
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package notmuch
-  :bind
-  (:map notmuch-search-mode-map
-	("a" . notmuch-search-mode-map))
+  ;; :bind
+  ;; (:map notmuch-search-mode-map
+  ;; 	("a" . my-notmuch-archive))
   :commands notmuch
-  :ensure t
-  :config
+  :init
   (defun my-notmuch-archive (&optional arg)
     (interactive "p")
     (kmacro-exec-ring-item (quote ([45 117 110 114 101 97 100 32 45 105 110 98 111 120 return] 0 "%d")) arg))
-  (setq notmuch-archive-tags (quote ("-inbox" "-unread")))
-  (set-face-attribute 'notmuch-search-unread-face nil
-		      :foreground "#859900")
-  (setq notmuch-fcc-dirs
-	(quote
-	 (("rprospero@gmail.com" . "Personal/[Gmail].Sent Mail")
-	  ("adam.washington@stfc.ac.uk" . "Work/Sent -inbox -unread +sent"))))
-  (setq notmuch-hello-thousands-separator ",")
-  (setq notmuch-saved-searches
-	(quote
-	 ((:name "inbox" :query "tag:inbox" :key "i")
-	  (:name "unread" :query "tag:unread" :key "u")
-	  (:name "flagged" :query "tag:flagged" :key "f")
-	  (:name "sent" :query "tag:sent" :key "t")
-	  (:name "drafts" :query "tag:draft" :key "d")
-	  (:name "all mail" :query "*" :key "a")
-	  (:name "Today's mail" :query "date:0d..")
-	  (:name "promotional" :query "to:promotional tag:inbox")
-	  (:name "SasView" :query "Sas from:notifications@github.com")))))
-
+  :custom
+  (notmuch-archive-tags (quote ("-inbox" "-unread")))
+  (notmuch-fcc-dirs
+   (quote
+    (("rprospero@gmail.com" . "Personal/[Gmail].Sent Mail")
+     ("adam.washington@stfc.ac.uk" . "Work/Sent -inbox -unread +sent"))))
+  (notmuch-hello-thousands-separator ",")
+  (notmuch-saved-searches
+   (quote
+    ((:name "inbox" :query "tag:inbox" :key "i")
+     (:name "unread" :query "tag:unread" :key "u")
+     (:name "flagged" :query "tag:flagged" :key "f")
+     (:name "sent" :query "tag:sent" :key "t")
+     (:name "drafts" :query "tag:draft" :key "d")
+     (:name "all mail" :query "*" :key "a")
+     (:name "Today's mail" :query "date:0d..")
+     (:name "promotional" :query "to:promotional tag:inbox")
+     (:name "SasView" :query "Sas from:notifications@github.com"))))
+  :ensure t
+  :config
+  (set-face-attribute 'notmuch-search-unread-face nil :foreground "#859900"))
 #+END_SRC
 ** elfeed
 
@@ -1011,9 +992,8 @@ notmuch is a wonderful little utility for managing my mail
 (use-package elfeed
   :bind (("C-c c" . org-capture))
   :ensure t
-  :config
-  (setq
-   elfeed-feeds
+  :custom
+  (elfeed-feeds
    '(("http://www.xkcd.org/atom.xml" comic)
      ("http://phdcomics.com/gradfeed.php" comic)
      ("http://www.merriam-webster.com/wotd/feed/rss2" education)
@@ -1042,41 +1022,41 @@ notmuch is a wonderful little utility for managing my mail
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package slack
   :commands (slack-start)
-  :init
-  (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
-  (setq slack-prefer-current-team t)
+  :custom
+  (slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+  (slack-prefer-current-team t)
+  :general
+  (:keymaps 'slack-info-mode-map :infix ","
+	    "u" 'slack-room-update-messages)
+  (:keymaps 'slack-edit-message-mode-map :infix ","
+	    "k" 'slack-message-cancel-edit
+	    "s" 'slack-message-send-from-buffer
+	    "2" 'slack-message-embed-mention
+	    "3" 'slack-message-embed-channel)
+  (:keymaps 'slack-mode-map :infix ","
+	    "c" 'slack-buffer-kill
+	    "j" 'slack-buffer-goto-next-message
+	    "k" 'slack-buffer-goto-prev-message
+	    "ra" 'slack-message-add-reaction
+	    "rr" 'slack-message-remove-reaction
+	    "rs" 'slack-message-show-reaction-users
+	    "pl" 'slack-room-pins-list
+	    "pa" 'slack-message-pins-add
+	    "pr" 'slack-message-pins-remove
+	    "mm" 'slack-message-write-another-buffer
+	    "me" 'slack-message-edit
+	    "md" 'slack-message-delete
+	    "u" 'slack-room-update-messages
+	    "2" 'slack-message-embed-mention
+	    "3" 'slack-message-embed-channel)
   :config
-
   (slack-register-team
    :name "SasView"
    :client-id "165525662918.164903213860"
    :client-secret (funcall (plist-get (car (auth-source-search :max 1 :host "sasview.slack.com")) :secret))
    :token (funcall (plist-get (car (auth-source-search :max 1 :host "token.sasview.slack.com")) :secret))
-   :subscribed-channels '(general random build github trac jenkins))
+   :subscribed-channels '(general random build github trac jenkins)))
 
-  (evil-define-key 'normal slack-info-mode-map
-    ",u" 'slack-room-update-messages)
-  (evil-define-key 'normal slack-mode-map
-    ",c" 'slack-buffer-kill
-    ",ra" 'slack-message-add-reaction
-    ",rr" 'slack-message-remove-reaction
-    ",rs" 'slack-message-show-reaction-users
-    ",pl" 'slack-room-pins-list
-    ",pa" 'slack-message-pins-add
-    ",pr" 'slack-message-pins-remove
-    ",mm" 'slack-message-write-another-buffer
-    ",me" 'slack-message-edit
-    ",md" 'slack-message-delete
-    ",u" 'slack-room-update-messages
-    ",2" 'slack-message-embed-mention
-    ",3" 'slack-message-embed-channel
-    "\C-n" 'slack-buffer-goto-next-message
-    "\C-p" 'slack-buffer-goto-prev-message)
-   (evil-define-key 'normal slack-edit-message-mode-map
-    ",k" 'slack-message-cancel-edit
-    ",s" 'slack-message-send-from-buffer
-    ",2" 'slack-message-embed-mention
-    ",3" 'slack-message-embed-channel))
 
 #+END_SRC
 
@@ -1238,28 +1218,73 @@ At some point, I need to turn this into a proper package.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org
+  :ensure org-plus-contrib
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
+	 ("C-c a" . org-agenda)
+	 ("C-c b" . org-iswitchb))
   :general
   (:keymaps 'org-mode-map :infix "c"
-    "'" 'org-edit-special
-    "vt" 'org-babel-tangle
-    "d" 'org-deadline
-    "s" 'org-schedule
-    "e" 'org-export-dispatch)
+	    "'" 'org-edit-special
+	    "vt" 'org-babel-tangle
+	    "d" 'org-deadline
+	    "s" 'org-schedule
+	    "e" 'org-export-dispatch)
+  :custom
+  (org-agenda-files
+   (quote
+    ("~/org/sync.org"
+     "~/org/appointments.org"
+     "~/org/personal-notes.org")))
+  (calendar-latitude 53.3836)
+  (calendar-longitude 1.4669)
+  (org-agenda-window-setup 'current-window)
+  (org-agenda-start-on-weekday nil)
+  (org-return-follows-link t)
+  (org-imenu-depth 4)
+  (org-agenda-start-on-weekday nil)
+  (org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
+  (org-confirm-babel-evaluate nil)
+  (org-src-fontify-natively t)
+  (org-agenda-include-diary nil)
+  (org-src-preserve-indentation t)
+  (org-table-convert-region-max-lines 99999)
+  (org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
+  (org-file-apps
+   (quote
+    ((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . system))))
+  (org-capture-templates
+   (quote
+    (("m" "Unsorted Mail Tasks" entry
+      (file+headline "~/org/appointments.org" "Unsorted Mail")
+      "** TODO%?\n    SCHEDULED:%T\n\n    %a")
+     ("v" "Vocab" entry
+      (file+headline "~/org/appointments.org" "Vocab")
+      "** TODO %a\n    SCHEDULED:%T%?\n\n    %a"))))
+  (org-latex-listings (quote minted))
+  (org-latex-packages-alist (quote (("" "minted" nil))))
+  (org-latex-pdf-process
+   (quote
+    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+  (holiday-other-holidays
+   (quote
+    (
+     (holiday-float 5 1 -1 "Spring Bank Holiday")
+     (holiday-float 5 1 1 "May Day Bank Holiday")
+     (holiday-float 8 1 -1 "Late Summer Bank Holiday")
+     )))
+  (org-agenda-custom-commands
+   '(("c" . "My Custom Agendas")
+     ("cu" "Unscheduled TODO"
+      ((todo ""
+	     ((org-agenda-overriding-header "\nUnscheduled TODO")
+	      (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
+      nil
+      nil)))
   :config
-  (setq org-agenda-files
-	(quote
-	 ("~/org/sync.org"
-	  "~/org/appointments.org"
-	  "~/org/personal-notes.org")))
-  (setq calendar-latitude 53.3836)
-  (setq calendar-longitude 1.4669)
 
-  (setq org-agenda-window-setup 'current-window)
-  (setq org-agenda-start-on-weekday nil)
-  (setq org-return-follows-link t)
   (add-hook 'org-mode-hook
 	    (lambda ()
 	      (variable-pitch-mode t)
@@ -1278,46 +1303,6 @@ At some point, I need to turn this into a proper package.
      (nth 4 (split-string (diary-sunrise-sunset)))
      " Sunset"))
 
-  (setq org-imenu-depth 4)
-  (setq org-agenda-start-on-weekday nil)
-  (customize-set-variable 'org-babel-load-languages (quote ((emacs-lisp . t) (python . t))))
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-src-fontify-natively t)
-  (setq org-agenda-include-diary nil)
-  (setq org-src-preserve-indentation t)
-  (setq org-table-convert-region-max-lines 99999)
-  (setq org-agenda-day-face-function (quote jd:org-agenda-day-face-holidays-function))
-  (setq org-file-apps
-	(quote
-	 ((auto-mode . emacs)
-	  ("\\.mm\\'" . default)
-	  ("\\.x?html?\\'" . default)
-	  ("\\.pdf\\'" . system))))
-
-  (setq org-capture-templates
-	(quote
-	 (("m" "Unsorted Mail Tasks" entry
-	   (file+headline "~/org/appointments.org" "Unsorted Mail")
-	   "** TODO%?\n    SCHEDULED:%T\n\n    %a")
-	  ("v" "Vocab" entry
-	   (file+headline "~/org/appointments.org" "Vocab")
-	   "** TODO %a\n    SCHEDULED:%T%?\n\n    %a"))))
-
-
-  (setq org-latex-listings (quote minted))
-  (setq org-latex-packages-alist (quote (("" "minted" nil))))
-  (setq org-latex-pdf-process
-	(quote
-	 ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
-
-  (setq
-   holiday-other-holidays
-   (quote
-    (
-     (holiday-float 5 1 -1 "Spring Bank Holiday")
-     (holiday-float 5 1 1 "May Day Bank Holiday")
-     (holiday-float 8 1 -1 "Late Summer Bank Holiday")
-     )))
 
   (defface org-agenda-date-beam
     `((t  :foreground ,(face-attribute 'font-lock-keyword-face :foreground)
@@ -1358,7 +1343,7 @@ At some point, I need to turn this into a proper package.
 	  'org-agenda-date-beam)
 	 ((or weekend
 	      (-contains? categories "Holidays")
-	     (-contains? categories "Vacation"))
+	      (-contains? categories "Vacation"))
 	  'org-agenda-date-weekend)
 	 (t 'org-agenda-date)))))
 
@@ -1367,14 +1352,6 @@ At some point, I need to turn this into a proper package.
    (function
     my-org-agenda-day-face-holidays-function))
 					; (require 'org-notify)
-  (setq org-agenda-custom-commands
-	'(("c" . "My Custom Agendas")
-	  ("cu" "Unscheduled TODO"
-	   ((todo ""
-		  ((org-agenda-overriding-header "\nUnscheduled TODO")
-		   (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
-	   nil
-	   nil)))
 
 
   (require 'org-agenda)
@@ -1408,15 +1385,6 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
 (defun kdialog-appt-display (min-to-appt new-time msg)
   (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
 (setq appt-disp-window-function (function kdialog-appt-display))
-
-#+END_SRC
-
-We need the org-contrib package for some lesser known libraries
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package org-plus-contrib
-  :ensure t)
-
 
 #+END_SRC
 
