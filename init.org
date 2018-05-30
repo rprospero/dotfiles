@@ -325,39 +325,39 @@ of the code.
     ((mypaths
       (cond
        ((system-is-sheffield)
-        (list
-         "$NPM_PACKAGES/bin"
-         "/home/adam/.local/bin"
-         "/home/adam/bin"
-         "/usr/local/texlive/2015/bin/x86_64-linux"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server"
-         "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64"
-         "/home/adam/.cabal/bin"
-         "/home/adam/.npm-packages/bin/"
-         "/usr/local/bin"
-         "/home/adam/Science/LINUX64"
-         "/opt/maple18/bin"
-         "/usr/local/cuda-7.5/bin"
-         "/usr/bin"
-         "/bin"
-         (getenv "PATH")))
-         ((system-is-macbook)
-          (list
-           "/Users/adam/Library/Python/2.7/bin/"
-           "/Users/adam/.local/bin/"
-           "/opt/local/bin"
-           "/opt/local/sbin"
-           "/usr/local/bin"
-           "/usr/bin"
-           "/bin"
-           "/usr/sbin"
-           "/sbin"
-           "/opt/X11/bin"
-           "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
+	(list
+	 "$NPM_PACKAGES/bin"
+	 "/home/adam/.local/bin"
+	 "/home/adam/bin"
+	 "/usr/local/texlive/2015/bin/x86_64-linux"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/runtime/glnxa64"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/bin/glnxa64"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/os/glnxa64"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/native_threads"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64/server"
+	 "/usr/local/MATLAB/MATLAB_Compiler_Runtime/v82/sys/java/jre/glnxa64/jre/lib/amd64"
+	 "/home/adam/.cabal/bin"
+	 "/home/adam/.npm-packages/bin/"
+	 "/usr/local/bin"
+	 "/home/adam/Science/LINUX64"
+	 "/opt/maple18/bin"
+	 "/usr/local/cuda-7.5/bin"
+	 "/usr/bin"
+	 "/bin"
+	 (getenv "PATH")))
+	 ((system-is-macbook)
+	  (list
+	   "/Users/adam/Library/Python/2.7/bin/"
+	   "/Users/adam/.local/bin/"
+	   "/opt/local/bin"
+	   "/opt/local/sbin"
+	   "/usr/local/bin"
+	   "/usr/bin"
+	   "/bin"
+	   "/usr/sbin"
+	   "/sbin"
+	   "/opt/X11/bin"
+	   "/Library/Frameworks/Mono.framework/Versions/Current/Commands"))
 	 ((system-is-arch)
 	  (append
 	   (split-string (getenv "PATH") ":")
@@ -396,10 +396,10 @@ Let's set the default font and size
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (set-fontset-font "fontset-default" nil
-                  (font-spec :size 12 :name "DejaVu Sans"))
+		  (font-spec :size 12 :name "DejaVu Sans"))
 
 (set-fontset-font "fontset-default" nil
-                  (font-spec :size 20 :name "DejaVu Sans"))
+		  (font-spec :size 20 :name "DejaVu Sans"))
 
 #+END_SRC
 
@@ -656,9 +656,9 @@ Let's try and make elisp symbols pretty!
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (push '("<=" . ?≤) prettify-symbols-alist)
-            (push '("**2" . ?²) prettify-symbols-alist)))
+	  (lambda ()
+	    (push '("<=" . ?≤) prettify-symbols-alist)
+	    (push '("**2" . ?²) prettify-symbols-alist)))
 
 
 #+END_SRC
@@ -713,8 +713,8 @@ Let's try and make elisp symbols pretty!
     (goto-char (point-min))
     (let ((ref-list))
       (while (re-search-forward "^executable +\\(.+\\) *$" nil t)
-        (message "Insert")
-        (add-to-list 'ref-list (match-string 1)))
+	(message "Insert")
+	(add-to-list 'ref-list (match-string 1)))
       ref-list)))
 
 (defun pcomplete/cabal ()
@@ -764,19 +764,19 @@ Let's make our python prettier, too!
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (add-hook 'python-mode-hook
-          (lambda ()
-            (push '("<=" . ?≤) prettify-symbols-alist)
-            (push '(">=" . ?≥) prettify-symbols-alist)
-            (push '("!=" . ?≠) prettify-symbols-alist)
-            (push '("np.pi" . ?π) prettify-symbols-alist)
-            (push '("np.sum" . ?Σ) prettify-symbols-alist)
-            (push '("np.sqrt" . ?√) prettify-symbols-alist)
-            (push '("sqrt" . ?√) prettify-symbols-alist)
-            (push '("sum" . ?Σ) prettify-symbols-alist)
-            (push '("alpha" . ?α) prettify-symbols-alist)
-            (push '("sigma" . ?σ) prettify-symbols-alist)
-            (push '("lambda" . ?λ) prettify-symbols-alist)
-            (push '("**2" . ?²) prettify-symbols-alist)))
+	  (lambda ()
+	    (push '("<=" . ?≤) prettify-symbols-alist)
+	    (push '(">=" . ?≥) prettify-symbols-alist)
+	    (push '("!=" . ?≠) prettify-symbols-alist)
+	    (push '("np.pi" . ?π) prettify-symbols-alist)
+	    (push '("np.sum" . ?Σ) prettify-symbols-alist)
+	    (push '("np.sqrt" . ?√) prettify-symbols-alist)
+	    (push '("sqrt" . ?√) prettify-symbols-alist)
+	    (push '("sum" . ?Σ) prettify-symbols-alist)
+	    (push '("alpha" . ?α) prettify-symbols-alist)
+	    (push '("sigma" . ?σ) prettify-symbols-alist)
+	    (push '("lambda" . ?λ) prettify-symbols-alist)
+	    (push '("**2" . ?²) prettify-symbols-alist)))
 
 (defun switch-to-python (&rest r)
   (interactive)
@@ -800,7 +800,7 @@ Add mypy for doing type checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
-             :ensure t
+	     :ensure t
 	     :hook (prog-mode . rainbow-delimiters-mode))
  #+END_SRC
 ** Systemd
@@ -848,7 +848,7 @@ review again so that I can remember exactly how they work.  FIXME
 
 #+END_SRC
 
-** eww 
+** eww
 
  We will use =eww= as our default browser, with the option to escape
  to firefox if things get bad.
@@ -880,20 +880,20 @@ I customise the eww bindings to make them more [[evil][VimFx]]
   (progn
    (defun x-urgency-hint (frame arg &optional source)
      (let* ((wm-hints (append (x-window-property
-                               "WM_HINTS" frame "WM_HINTS" source nil t) nil))
-            (flags (car wm-hints)))
+			       "WM_HINTS" frame "WM_HINTS" source nil t) nil))
+	    (flags (car wm-hints)))
        (setcar wm-hints
-               (if arg
-                   (logior flags #x100)
-                 (logand flags (lognot #x100))))
+	       (if arg
+		   (logior flags #x100)
+		 (logand flags (lognot #x100))))
        (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
    (defun jabber-notify-taffy ()
      (if (equal "0" jabber-activity-count-string) t
        (progn
-         ;; (notifications-notify
-         ;;  :title jabber-activity-make-string
-         ;;  :body jabber-activity-count-string)
-         (x-urgency-hint (selected-frame) t))))
+	 ;; (notifications-notify
+	 ;;  :title jabber-activity-make-string
+	 ;;  :body jabber-activity-count-string)
+	 (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
    (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy))))
  #+END_SRC
@@ -903,12 +903,12 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package twittering-mode
-             :bind (("C-c t" . twit))
+	     :bind (("C-c t" . twit))
 	     :hook (twittering-edit-mode . company-mode)
 	     :ensure t
 	     :custom
-             (twittering-use-master-password t)
-             (twittering-timer-interval 30))
+	     (twittering-use-master-password t)
+	     (twittering-timer-interval 30))
  #+END_SRC
 
 
@@ -952,7 +952,7 @@ notmuch is a wonderful little utility for managing my mail
 (use-package notmuch
   ;; :bind
   ;; (:map notmuch-search-mode-map
-  ;; 	("a" . my-notmuch-archive))
+  ;;	("a" . my-notmuch-archive))
   :commands notmuch
   :init
   (defun my-notmuch-archive (&optional arg)
@@ -1156,8 +1156,8 @@ At some point, I need to turn this into a proper package.
 (defun adam-relative-date-format (begin end local)
      (pcase-let
 	 ((`(,month ,day ,year) local)
-       	  (`(,es ,em ,eh ,eD ,eM ,eY) begin)
-       	  (`(,bs ,bm ,bh ,bD ,bM ,bY) end))
+	  (`(,es ,em ,eh ,eD ,eM ,eY) begin)
+	  (`(,bs ,bm ,bh ,bD ,bM ,bY) end))
        (cond
 	((and (= day eD) (= month eM) (= year eY)
 	      (= day bD) (= month bM) (= year bY))
@@ -1166,7 +1166,7 @@ At some point, I need to turn this into a proper package.
 	 (format "%2d:%02d" eh em))
 	((and (= day bD) (= month bM) (= year bY))
 	 (format "%2d:%02d" bh bm))
-       	 "")))
+	 "")))
 
 (defun adam-parse-calendar-item (item)
   (setq result '(all-day ()))
@@ -1376,8 +1376,8 @@ Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
       (eq window-system 'x)
       (shell-command
        (concat "kdialog --title \"" title
-               "\" --passivepopup \""  msg
-               "\""))
+	       "\" --passivepopup \""  msg
+	       "\""))
     (message (concat title ": " msg))))
 
 (defun kdialog-appt-display (min-to-appt new-time msg)
@@ -1510,8 +1510,8 @@ Include useful mode hooks when moving into latex mode
 (defadvice LaTeX-fill-region-as-paragraph (around LaTeX-sentence-filling)
   "Start each sentence on a new line."
   (let ((from (ad-get-arg 0))
-        (to-marker (set-marker (make-marker) (ad-get-arg 1)))
-        tmp-end)
+	(to-marker (set-marker (make-marker) (ad-get-arg 1)))
+	tmp-end)
     (while (< from (marker-position to-marker))
       (forward-sentence)
       ;; might have gone beyond to-marker --- use whichever is smaller:
@@ -1519,9 +1519,9 @@ Include useful mode hooks when moving into latex mode
       ad-do-it
       (ad-set-arg 0 (setq from (point)))
       (unless (or
-               (bolp)
-               (looking-at "\\s *$"))
-        (LaTeX-newline)))
+	       (bolp)
+	       (looking-at "\\s *$"))
+	(LaTeX-newline)))
     (set-marker to-marker nil)))
 
 (ad-activate 'LaTeX-fill-region-as-paragraph)
@@ -1603,7 +1603,7 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
  #+END_SRC
 
 
-** Tidal 
+** Tidal
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (if
@@ -1940,7 +1940,7 @@ own hotkey.  Why not steal F5 from the browser?
     (interactive "P")
     ;;(message "force-reverting value is %s" force-reverting)
     (if (or force-reverting (not (buffer-modified-p)))
-        (revert-buffer :ignore-auto :noconfirm)
+	(revert-buffer :ignore-auto :noconfirm)
       (error "The buffer has been modified"))))
 
 #+END_SRC
@@ -1971,18 +1971,18 @@ own hotkey.  Why not steal F5 from the browser?
 (use-package counsel
   :demand t
   :bind   (("C-s" . swiper)
-           ("C-c C-r" . ivy-resume)
-           ("<f6>" . ivy-resume)
-           ("C-x b" . ivy-switch-buffer)
-           ("M-x" . counsel-M-x)
-           ("M-y" . counsel-yank-pop)
-           ("C-x C-f" . counsel-find-file)
-           ("<f1> f" . counsel-describe-function)
-           ("<f1> v" . counsel-describe-variable)
-           ("<f1> l" . counsel-load-library)
-           ("<f2> i" . counsel-info-lookup-symbol)
-           ("C-x 8 RET" . counsel-unicode-char)
-           ("<f2> u" . counsel-unicode-char))
+	   ("C-c C-r" . ivy-resume)
+	   ("<f6>" . ivy-resume)
+	   ("C-x b" . ivy-switch-buffer)
+	   ("M-x" . counsel-M-x)
+	   ("M-y" . counsel-yank-pop)
+	   ("C-x C-f" . counsel-find-file)
+	   ("<f1> f" . counsel-describe-function)
+	   ("<f1> v" . counsel-describe-variable)
+	   ("<f1> l" . counsel-load-library)
+	   ("<f2> i" . counsel-info-lookup-symbol)
+	   ("C-x 8 RET" . counsel-unicode-char)
+	   ("<f2> u" . counsel-unicode-char))
   :general
   (:keymaps 'org-mode-map
 	    "i" 'counsel-org-goto
@@ -2030,7 +2030,7 @@ from time to time and see if anything has improved.
   (setq-local counsel-dash-docsets
 	      '("HTML" "CSS")))
 
-(use-package counsel-dash 
+(use-package counsel-dash
   :ensure t
   :hook
   ((python-mode . python-set-docsets)
@@ -2064,7 +2064,7 @@ from time to time and see if anything has improved.
   :bind
   ("M-o" . link-hint-open-link))
  #+END_SRC
- 
+
 ** ace-link
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2141,7 +2141,7 @@ from time to time and see if anything has improved.
 (recentf-mode)
 
 #+END_SRC
-** space-line 
+** space-line
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
