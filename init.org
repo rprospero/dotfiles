@@ -2054,6 +2054,7 @@ from time to time and see if anything has improved.
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
   :ensure t
+  :demand t
   :general
   (:infix "p"
    "xe" 'projectile-run-eshell
@@ -2072,16 +2073,16 @@ from time to time and see if anything has improved.
    "R" 'projectile-replace-regexp
    "E" 'projectile-edit-dir-locals
    "r" 'projectile-run-project)
-  :init
-  (setq projectile-keymap-prefix (kbd "C-c C-p"))
-  (setq projectile-mode-line
-	'(:eval
-	  (if
-	      (file-remote-p default-directory)
-	      ""
-	    (format " {%s}" (projectile-project-name)))))
+  :custom
+  (projectile-keymap-prefix (kbd "C-c C-p"))
+  (projectile-mode-line
+   '(:eval
+     (if
+	 (file-remote-p default-directory)
+	 ""
+       (format " {%s}" (projectile-project-name)))))
+  (projectile-completion-system 'ivy)
   :config
-  (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
  #+END_SRC
 
