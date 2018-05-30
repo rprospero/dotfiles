@@ -61,6 +61,7 @@ in
       proselint
       ripgrep
       # sasview
+      sqlite
       super-user-spark
       texlive.combined.scheme-full
       tightvnc
