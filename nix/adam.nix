@@ -16,6 +16,7 @@ in
       baobab
       base16-builder
       binutils
+      cask
       davmail
       dropbox
       faba-icon-theme
