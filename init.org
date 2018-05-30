@@ -1048,6 +1048,8 @@ notmuch is a wonderful little utility for managing my mail
 
 ** Tramp
 
+Tramp is emacs' builtin system for handling remote files
+
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq my-tramp-ssh-completions
       '((tramp-parse-sconfig "~/.ssh/config")
