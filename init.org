@@ -133,13 +133,8 @@ frustrating
   :diminish evil-org-mode
   :ensure t
   :after org
-  :hook (org-mode . evil-org-mode)
-  :config
-  (require 'evil-org)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme))))
-
+  :hook ((org-mode . evil-org-mode)
+	 (evil-org-mode . evil-org-set-key-theme)))
 #+END_SRC
 
 *** evil-indent-plus
