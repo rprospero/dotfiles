@@ -7,7 +7,6 @@ myHaskellEnv = pkgs.haskellPackages.ghcWithHoogle (
   # aeson hlint icon-fonts-personal lens lens-xml miso recursion-schemes recursion-schemes-ext reflex reflex-dom xml yaml
   icon-fonts-personal random recursion-schemes recursion-schemes-ext
 ]);
-]);
 in
 
 {
