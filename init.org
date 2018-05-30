@@ -1990,23 +1990,35 @@ dependency in the future if this changes.  I need to check on this
 from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+(defun python-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3" "Qt_5")))
+
+(defun elisp-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("Emacs_Lisp")))
+
+(defun haskell-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("Haskell")))
+
+(defun html-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("HTML" "CSS")))
+
 (use-package counsel-dash 
   :ensure t
-  :config
-  (setq counsel-dash-browser-func 'eww)
-  (setq counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets")
-  (add-hook 'python-mode-hook
-	    (lambda () (setq-local counsel-dash-docsets
-			      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3" "Qt_5"))))
-  (add-hook 'elisp-mode
-	    (lambda () (setq-local counsel-dash-docsets
-			      '("Emacs_Lisp"))))
-  (add-hook 'haskell-mode
-	    (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
-  (add-hook 'html-mode
-	    (lambda () (setq-local counsel-dash-docsets '("HTML" "CSS"))))
-  (evil-define-key 'normal prog-mode-map
-    "zd" 'counsel-dash))
+  :hook
+  ((python-mode . python-set-docsets)
+   (elisp-mode . elisp-set-docsets)
+   (haskell-mode . haskell-set-docsets)
+   (html-mode . html-set-docsets))
+  :general
+  (:infix "z"
+  "d" 'counsel-dash)
+  :custom
+  (counsel-dash-browser-func 'eww)
+  (counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets"))
 
 #+END_SRC
 
