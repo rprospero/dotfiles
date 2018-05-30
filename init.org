@@ -1528,6 +1528,17 @@ Include useful mode hooks when moving into latex mode
 
 
 #+END_SRC
+
+*** auctex
+
+Auctex is a nice TeX environment for emacs.  I used it constantly in working on my thesis
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package auctex
+  :ensure t
+  :mode ("\\.tex\\'" . TeX-latex-mode))
+
+#+END_SRC
 ** Text Mode
 
  #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1734,6 +1745,15 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
   :config
   (add-to-list 'company-backends 'company-qml))
 
+
+#+END_SRC
+
+*** company-auctex
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package company-auctex
+  :ensure t
+  :after (company latex))
 
 #+END_SRC
 
