@@ -1217,10 +1217,7 @@ At some point, I need to turn this into a proper package.
   :ensure org-plus-contrib
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
-	 ("C-c b" . org-iswitchb)
-	 :map org-agenda-map
-	 ("RET" . org-agenda-goto)
-	 ("TAB" . org-agenda-switch-to))
+	 ("C-c b" . org-iswitchb))
   :hook
   ((org-mode-hook . auto-fill-mode)
    (org-mode-hook . flyspell-mode))
@@ -1357,7 +1354,8 @@ At some point, I need to turn this into a proper package.
     my-org-agenda-day-face-holidays-function))
 					; (require 'org-notify)
 
-
+  (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
+  (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
   (require 'org-agenda))
 #+END_SRC
 
