@@ -1217,7 +1217,13 @@ At some point, I need to turn this into a proper package.
   :ensure org-plus-contrib
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
-	 ("C-c b" . org-iswitchb))
+	 ("C-c b" . org-iswitchb)
+	 :map org-agenda-map
+	 ("RET" . org-agenda-goto)
+	 ("TAB" . org-agenda-switch-to))
+  :hook
+  ((org-mode-hook . auto-fill-mode)
+   (org-mode-hook . flyspell-mode))
   :general
   (:keymaps 'org-mode-map :infix "c"
 	    "'" 'org-edit-special
@@ -1279,15 +1285,17 @@ At some point, I need to turn this into a proper package.
 	      (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
       nil
       nil)))
+  :custom-face
+  (org-table ((t (:inherit 'fixed-pitch))))
+  (org-block ((t (:inherit 'fixed-pitch))))
+  (org-block-begin-line ((t (:inherit 'fixed-pitch))))
+  (org-block-end-line ((t (:inherit 'fixed-pitch))))
+  (org-verbatim ((t (:inherit 'fixed-pitch))))
   :config
 
   (add-hook 'org-mode-hook
 	    (lambda ()
-	      (variable-pitch-mode t)
-	      (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
+	      (face-remap-add-relative 'default :inherit 'variable-pitch)))
 
   (defun adam-org-sunrise ()
     (concat
@@ -1350,11 +1358,7 @@ At some point, I need to turn this into a proper package.
 					; (require 'org-notify)
 
 
-  (require 'org-agenda)
-  (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
-  (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
-  (add-hook 'org-mode-hook 'auto-fill-mode)
-  (add-hook 'org-mode-hook 'flyspell-mode))
+  (require 'org-agenda))
 #+END_SRC
 
 Display appointment reminders in X when available.  I stole this code
