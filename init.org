@@ -36,10 +36,16 @@ Load the string package.  We need this for a lot of the other code.
 (use-package evil
   :ensure t
   :init (setq evil-want-integration nil)
+  :hook (git-commit-mode . evil-insert-state)
+  :custom
+  (evil-escape-unordered-key-sequence t)
+  (evil-insert-state-modes
+   '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode
+   inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode
+   inferior-j-mode inferior-python-mode inferior-scheme-mode
+   inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode
+   reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   :config
-  (setq evil-escape-unordered-key-sequence t)
-  (setq evil-insert-state-modes
-	'(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
@@ -52,11 +58,11 @@ bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package general
   :ensure t
+  :custom
+  (general-default-prefix "SPC")
+  (general-default-non-normal-prefix "M-SPC")
+  (general-default-states '(normal insert emacs))
   :config
-  (setq general-default-prefix "SPC")
-  (setq general-default-non-normal-prefix "M-SPC")
-  (setq general-default-states '(normal insert emacs))
-
   (general-simulate-key "C-c C-c"
    :docstring "Run whatever the native mode's C-c C-c command would be"
    :name general-simulate-C-c_C-c-in-emacs-state)
@@ -113,9 +119,10 @@ frustrating
 (use-package which-key
   :diminish which-key-mode
   :ensure t
+  :custom
+  (which-key-show-operator-state-maps t)
   :config
-  (which-key-mode)
-  (setq which-key-show-operator-state-maps t))
+  (which-key-mode))
   #+END_SRC
 
 
@@ -133,13 +140,8 @@ frustrating
   :diminish evil-org-mode
   :ensure t
   :after org
-  :hook (org-mode . evil-org-mode)
-  :config
-  (require 'evil-org)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme))))
-
+  :hook ((org-mode . evil-org-mode)
+	 (evil-org-mode . evil-org-set-key-theme)))
 #+END_SRC
 
 *** evil-indent-plus
@@ -218,9 +220,10 @@ necessary.
 (use-package evil-escape
   :ensure t
   :diminish evil-escape-mode
+  :custom
+  (evil-escape-key-sequence "jk")
   :config
-  (evil-escape-mode)
-  (setq-default evil-escape-key-sequence "jk"))
+  (evil-escape-mode))
   #+END_SRC
 
 
@@ -546,15 +549,6 @@ Dired-collapse gets rid of annoying chains of single file directories
 
 #+END_SRC
 
-
-Dired imenu makes dired navigation so much more consistent with the
-rest of evil.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package dired-imenu
-:ensure t)
-
-#+END_SRC
 ** eshell
 *** fish completion
 
@@ -1062,6 +1056,8 @@ notmuch is a wonderful little utility for managing my mail
 
 ** Tramp
 
+Tramp is emacs' builtin system for handling remote files
+
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq my-tramp-ssh-completions
       '((tramp-parse-sconfig "~/.ssh/config")
@@ -1222,6 +1218,9 @@ At some point, I need to turn this into a proper package.
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
 	 ("C-c b" . org-iswitchb))
+  :hook
+  ((org-mode-hook . auto-fill-mode)
+   (org-mode-hook . flyspell-mode))
   :general
   (:keymaps 'org-mode-map :infix "c"
 	    "'" 'org-edit-special
@@ -1283,15 +1282,17 @@ At some point, I need to turn this into a proper package.
 	      (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp)))))
       nil
       nil)))
+  :custom-face
+  (org-table ((t (:inherit 'fixed-pitch))))
+  (org-block ((t (:inherit 'fixed-pitch))))
+  (org-block-begin-line ((t (:inherit 'fixed-pitch))))
+  (org-block-end-line ((t (:inherit 'fixed-pitch))))
+  (org-verbatim ((t (:inherit 'fixed-pitch))))
   :config
 
   (add-hook 'org-mode-hook
 	    (lambda ()
-	      (variable-pitch-mode t)
-	      (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
-	      (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)))
+	      (face-remap-add-relative 'default :inherit 'variable-pitch)))
 
   (defun adam-org-sunrise ()
     (concat
@@ -1353,12 +1354,9 @@ At some point, I need to turn this into a proper package.
     my-org-agenda-day-face-holidays-function))
 					; (require 'org-notify)
 
-
-  (require 'org-agenda)
   (bind-key "RET" 'org-agenda-goto org-agenda-mode-map)
   (bind-key [tab] 'org-agenda-switch-to org-agenda-mode-map)
-  (add-hook 'org-mode-hook 'auto-fill-mode)
-  (add-hook 'org-mode-hook 'flyspell-mode))
+  (require 'org-agenda))
 #+END_SRC
 
 Display appointment reminders in X when available.  I stole this code
@@ -1608,10 +1606,10 @@ Include useful mode hooks when moving into latex mode
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package emojify
   :ensure t
-  :init
-  (setq emojify-display-style 'unicode) ; :-)
-  (add-hook 'after-init-hook #'global-emojify-mode))
-
+  :custom
+  (emojify-display-style 'unicode) ; :-)
+  :config
+  (global-emojify-mode))
 
  #+END_SRC
 
@@ -1624,8 +1622,8 @@ Include useful mode hooks when moving into latex mode
 (use-package ace-window
   :ensure t
   :bind (("M-z" . ace-window))
-  :config
-  (setq aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
+  :custom
+  (aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
  #+END_SRC
 
 ** alert
@@ -1637,8 +1635,8 @@ really need to tweak the customisation.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package alert
   :commands (alert)
-  :init
-  (setq alert-default-style 'libnotify))
+  :custom
+  (alert-default-style 'libnotify))
 #+END_SRC
 
 
@@ -1690,8 +1688,8 @@ I've been trying to get into avy, with moderate success.
   :ensure t
   :hook (prog-mode . company-mode)
   :bind (("M-/" . company-complete))
-  :config
-  (setq company-dabbrev-code-modes
+  :custom
+  (company-dabbrev-code-modes
    (quote
     (prog-mode batch-file-mode csharp-mode css-mode erlang-mode haskell-mode
     jde-mode lua-mode python-mode purescript-mode)))
@@ -1951,6 +1949,7 @@ own hotkey.  Why not steal F5 from the browser?
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel
+  :demand t
   :bind   (("C-s" . swiper)
            ("C-c C-r" . ivy-resume)
            ("<f6>" . ivy-resume)
@@ -1965,16 +1964,21 @@ own hotkey.  Why not steal F5 from the browser?
            ("C-x 8 RET" . counsel-unicode-char)
            ("<f2> u" . counsel-unicode-char))
   :general
-  (:keymaps 'org-mode-map "i" 'counsel-org-goto)
-  (:infix "x" "f" 'counsel-find-file)
+  (:keymaps 'org-mode-map
+	    "i" 'counsel-org-goto
+	    "cq" 'counsel-org-tag)
+  (:infix "x" "f" 'counsel-find-file
+	  "8 RET" 'counsel-unicode-char)
   ("/" 'swiper "?" 'swiper-all)
   :diminish counsel-mode
   :ensure t
+  :custom
+  (ivy-use-virtual-buffers t)
+  (counsel-find-file-at-point t)
+  (counsel-mode t)
   :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq counsel-find-file-at-point t)
-  (setq counsel-mode t))
+  (ivy-mode 1))
+
   #+END_SRC
 
 **** counsel-dash
@@ -1990,23 +1994,35 @@ dependency in the future if this changes.  I need to check on this
 from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+(defun python-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3" "Qt_5")))
+
+(defun elisp-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("Emacs_Lisp")))
+
+(defun haskell-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("Haskell")))
+
+(defun html-set-docsets ()
+  (setq-local counsel-dash-docsets
+	      '("HTML" "CSS")))
+
 (use-package counsel-dash 
   :ensure t
-  :config
-  (setq counsel-dash-browser-func 'eww)
-  (setq counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets")
-  (add-hook 'python-mode-hook
-	    (lambda () (setq-local counsel-dash-docsets
-			      '("SciPy" "NumPy" "Matplotlib" "Python_2" "Python_3" "Qt_5"))))
-  (add-hook 'elisp-mode
-	    (lambda () (setq-local counsel-dash-docsets
-			      '("Emacs_Lisp"))))
-  (add-hook 'haskell-mode
-	    (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
-  (add-hook 'html-mode
-	    (lambda () (setq-local counsel-dash-docsets '("HTML" "CSS"))))
-  (evil-define-key 'normal prog-mode-map
-    "zd" 'counsel-dash))
+  :hook
+  ((python-mode . python-set-docsets)
+   (elisp-mode . elisp-set-docsets)
+   (haskell-mode . haskell-set-docsets)
+   (html-mode . html-set-docsets))
+  :general
+  (:infix "z"
+  "d" 'counsel-dash)
+  :custom
+  (counsel-dash-browser-func 'eww)
+  (counsel-dash-docsets-path "~/.local/share/Zeal/Zeal/docsets"))
 
 #+END_SRC
 
@@ -2047,6 +2063,7 @@ from time to time and see if anything has improved.
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
   :ensure t
+  :demand t
   :general
   (:infix "p"
    "xe" 'projectile-run-eshell
@@ -2065,16 +2082,16 @@ from time to time and see if anything has improved.
    "R" 'projectile-replace-regexp
    "E" 'projectile-edit-dir-locals
    "r" 'projectile-run-project)
-  :init
-  (setq projectile-keymap-prefix (kbd "C-c C-p"))
-  (setq projectile-mode-line
-	'(:eval
-	  (if
-	      (file-remote-p default-directory)
-	      ""
-	    (format " {%s}" (projectile-project-name)))))
+  :custom
+  (projectile-keymap-prefix (kbd "C-c C-p"))
+  (projectile-mode-line
+   '(:eval
+     (if
+	 (file-remote-p default-directory)
+	 ""
+       (format " {%s}" (projectile-project-name)))))
+  (projectile-completion-system 'ivy)
   :config
-  (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
  #+END_SRC
 
@@ -2083,7 +2100,7 @@ from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
-  :after (counsel)
+  :after (projectile counsel)
   :general
   (:infix "p"
    "f" 'counsel-projectile
@@ -2109,12 +2126,12 @@ from time to time and see if anything has improved.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
   :ensure t
-  :config
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+  :custom
+  (spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package spaceline-all-the-icons
   :ensure t
-  :after spaceline
+  :after (spaceline all-the-icons)
   :config
   (spaceline-all-the-icons-theme)
   (spaceline-toggle-all-the-icons-buffer-size-off)
@@ -2196,7 +2213,7 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 (use-package whitespace-cleanup-mode
   :ensure t
   :diminish whitespace-cleanup-mode
-  :init
+  :config
   (global-whitespace-cleanup-mode))
  #+END_SRC
 
