@@ -1946,6 +1946,7 @@ own hotkey.  Why not steal F5 from the browser?
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel
+  :demand t
   :bind   (("C-s" . swiper)
            ("C-c C-r" . ivy-resume)
            ("<f6>" . ivy-resume)
@@ -1960,16 +1961,21 @@ own hotkey.  Why not steal F5 from the browser?
            ("C-x 8 RET" . counsel-unicode-char)
            ("<f2> u" . counsel-unicode-char))
   :general
-  (:keymaps 'org-mode-map "i" 'counsel-org-goto)
-  (:infix "x" "f" 'counsel-find-file)
+  (:keymaps 'org-mode-map
+	    "i" 'counsel-org-goto
+	    "cq" 'counsel-org-tag)
+  (:infix "x" "f" 'counsel-find-file
+	  "8 RET" 'counsel-unicode-char)
   ("/" 'swiper "?" 'swiper-all)
   :diminish counsel-mode
   :ensure t
+  :custom
+  (ivy-use-virtual-buffers t)
+  (counsel-find-file-at-point t)
+  (counsel-mode t)
   :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq counsel-find-file-at-point t)
-  (setq counsel-mode t))
+  (ivy-mode 1))
+
   #+END_SRC
 
 **** counsel-dash
@@ -2091,7 +2097,7 @@ from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel-projectile
-  :after (counsel)
+  :after (projectile counsel)
   :general
   (:infix "p"
    "f" 'counsel-projectile
@@ -2204,7 +2210,7 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 (use-package whitespace-cleanup-mode
   :ensure t
   :diminish whitespace-cleanup-mode
-  :init
+  :config
   (global-whitespace-cleanup-mode))
  #+END_SRC
 
