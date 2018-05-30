@@ -36,10 +36,16 @@ Load the string package.  We need this for a lot of the other code.
 (use-package evil
   :ensure t
   :init (setq evil-want-integration nil)
+  :hook (git-commit-mode . evil-insert-state)
+  :custom
+  (evil-escape-unordered-key-sequence t)
+  (evil-insert-state-modes
+   '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode
+   inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode
+   inferior-j-mode inferior-python-mode inferior-scheme-mode
+   inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode
+   reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   :config
-  (setq evil-escape-unordered-key-sequence t)
-  (setq evil-insert-state-modes
-	'(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   (evil-mode)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
  #+END_SRC
@@ -52,11 +58,11 @@ bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package general
   :ensure t
+  :custom
+  (general-default-prefix "SPC")
+  (general-default-non-normal-prefix "M-SPC")
+  (general-default-states '(normal insert emacs))
   :config
-  (setq general-default-prefix "SPC")
-  (setq general-default-non-normal-prefix "M-SPC")
-  (setq general-default-states '(normal insert emacs))
-
   (general-simulate-key "C-c C-c"
    :docstring "Run whatever the native mode's C-c C-c command would be"
    :name general-simulate-C-c_C-c-in-emacs-state)
@@ -113,9 +119,10 @@ frustrating
 (use-package which-key
   :diminish which-key-mode
   :ensure t
+  :custom
+  (which-key-show-operator-state-maps t)
   :config
-  (which-key-mode)
-  (setq which-key-show-operator-state-maps t))
+  (which-key-mode))
   #+END_SRC
 
 
@@ -213,9 +220,10 @@ necessary.
 (use-package evil-escape
   :ensure t
   :diminish evil-escape-mode
+  :custom
+  (evil-escape-key-sequence "jk")
   :config
-  (evil-escape-mode)
-  (setq-default evil-escape-key-sequence "jk"))
+  (evil-escape-mode))
   #+END_SRC
 
 
@@ -1596,10 +1604,10 @@ Include useful mode hooks when moving into latex mode
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package emojify
   :ensure t
-  :init
-  (setq emojify-display-style 'unicode) ; :-)
-  (add-hook 'after-init-hook #'global-emojify-mode))
-
+  :custom
+  (emojify-display-style 'unicode) ; :-)
+  :config
+  (global-emojify-mode))
 
  #+END_SRC
 
@@ -1612,8 +1620,8 @@ Include useful mode hooks when moving into latex mode
 (use-package ace-window
   :ensure t
   :bind (("M-z" . ace-window))
-  :config
-  (setq aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
+  :custom
+  (aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
  #+END_SRC
 
 ** alert
@@ -1625,8 +1633,8 @@ really need to tweak the customisation.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package alert
   :commands (alert)
-  :init
-  (setq alert-default-style 'libnotify))
+  :custom
+  (alert-default-style 'libnotify))
 #+END_SRC
 
 
@@ -1678,8 +1686,8 @@ I've been trying to get into avy, with moderate success.
   :ensure t
   :hook (prog-mode . company-mode)
   :bind (("M-/" . company-complete))
-  :config
-  (setq company-dabbrev-code-modes
+  :custom
+  (company-dabbrev-code-modes
    (quote
     (prog-mode batch-file-mode csharp-mode css-mode erlang-mode haskell-mode
     jde-mode lua-mode python-mode purescript-mode)))
@@ -2116,12 +2124,12 @@ from time to time and see if anything has improved.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
   :ensure t
-  :config
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+  :custom
+  (spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package spaceline-all-the-icons
   :ensure t
-  :after spaceline
+  :after (spaceline all-the-icons)
   :config
   (spaceline-all-the-icons-theme)
   (spaceline-toggle-all-the-icons-buffer-size-off)
