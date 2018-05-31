@@ -38,7 +38,6 @@ Load the string package.  We need this for a lot of the other code.
   :init (setq evil-want-integration nil)
   :hook (git-commit-mode . evil-insert-state)
   :custom
-  (evil-escape-unordered-key-sequence t)
   (evil-insert-state-modes
    '(comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode
    inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode
@@ -139,6 +138,7 @@ frustrating
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-magit
+  :after (evil magit)
   :ensure t)
   #+END_SRC
 
@@ -148,7 +148,7 @@ frustrating
 (use-package evil-org
   :diminish evil-org-mode
   :ensure t
-  :after org
+  :after (org evil)
   :hook ((org-mode . evil-org-mode)
 	 (evil-org-mode . evil-org-set-key-theme)))
 #+END_SRC
@@ -159,6 +159,7 @@ source code
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-indent-plus
+  :after evil
   :ensure t
   :config
   (evil-indent-plus-default-bindings))
@@ -176,6 +177,7 @@ highlight to indicate that a 2f/2F will still find the correct word.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-quickscope
+  :after evil
   :ensure t
   :config
   (global-evil-quickscope-mode 1))
@@ -189,6 +191,7 @@ exact regions chosen.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-goggles
+  :after evil
   :ensure t
   :config
   (evil-goggles-mode))
@@ -205,6 +208,7 @@ necessary.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-text-object-python
+  :after evil
   :ensure t
   :hook (python-mode . evil-text-object-python-add-bindings))
 
@@ -216,6 +220,7 @@ necessary.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-matchit
+  :after evil
   :ensure t
   :config
   (global-evil-matchit-mode 1))
@@ -227,9 +232,11 @@ necessary.
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-escape
+  :after evil
   :ensure t
   :diminish evil-escape-mode
   :custom
+  (evil-escape-unordered-key-sequence t)
   (evil-escape-key-sequence "jk")
   :config
   (evil-escape-mode))
@@ -244,6 +251,7 @@ lines or characters I'm looking at 90% of the time when using evil.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package evil-easymotion
+  :after evil
   :ensure t
   :config
   (evilem-default-keybindings "RET"))
@@ -258,6 +266,7 @@ evil-nerd-commenter sould never get working right
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-commentary
+  :after evil
   :ensure t
   :config
   (evil-commentary-mode))
@@ -269,6 +278,7 @@ evil-nerd-commenter sould never get working right
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-numbers
+  :after evil
   :ensure t
   :general
   (:prefix 'nil :infix "g"
