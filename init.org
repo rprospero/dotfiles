@@ -2141,6 +2141,7 @@ Persp mode gives named window groups
   :after (spaceline all-the-icons)
   :config
   (spaceline-all-the-icons-theme)
+  (spaceline-all-the-icons--setup-git-ahead)
   (spaceline-toggle-all-the-icons-buffer-size-off)
   (spaceline-toggle-all-the-icons-time-off)
   (spaceline-toggle-all-the-icons-region-info-off)
