@@ -583,6 +583,7 @@ Always revert images files without asking.
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
+  :commands (magit)
   :custom
   (diff-switches "-u")
   (magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
@@ -606,7 +607,8 @@ Always revert images files without asking.
 ** ledger-mode
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package ledger-mode)
+(use-package ledger-mode
+  :mode "\\.ledger\\'")
  #+END_SRC
 
 
@@ -662,6 +664,7 @@ Let's try and make elisp symbols pretty!
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package haskell-mode
+  :mode "\\.hs\\'"
   :custom
   (haskell-tags-on-save t)
   :config
@@ -739,18 +742,9 @@ Let's try and make elisp symbols pretty!
 *** intero
 
   #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package intero)
+(use-package intero
+  :hook haskell-mode)
   #+END_SRC
-
-** flymake-jshint
-
- #+BEGIN_SRC emacs-lisp :tangle no
-(use-package flymake-jshint
-  :config
-  (flymake-jshint-load))
- #+END_SRC
-
-
 
 ** Python
 
@@ -853,19 +847,19 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package jabber
+  :commands (jabber-connect jabber-connect-all)
   :custom
    (jabber-chat-buffer-show-avatar nil)
    (jabber-vcard-avatars-retrieve nil)
-   (jabber-account-list
+  :config
+   (setq jabber-account-list
     (let
 	((passwd (funcall (plist-get (car (auth-source-search :max 1 :host "talk.google.com")) :secret))))
       `(("rprospero@gmail.com"
 	 (:port . 5223)
 	 (:password . ,passwd)
 	 (:network-server . "talk.google.com")
-	 (:connection-type . ssl))))
-  :defer t
-  :config
+	 (:connection-type . ssl)))))
   (progn
    (defun x-urgency-hint (frame arg &optional source)
      (let* ((wm-hints (append (x-window-property
@@ -884,7 +878,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 	 ;;  :body jabber-activity-count-string)
 	 (x-urgency-hint (selected-frame) t))))
    (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
-   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy))))
+   (add-hook 'jabber-activity-update-hook 'jabber-notify-taffy)))
  #+END_SRC
 
 
@@ -1045,14 +1039,17 @@ notmuch is a wonderful little utility for managing my mail
 Tramp is emacs' builtin system for handling remote files
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(setq my-tramp-ssh-completions
-      '((tramp-parse-sconfig "~/.ssh/config")
-	(tramp-parse-sknownhosts "~/.ssh/known_hosts")))
+(use-package tramp
+  :disabled t
+  :config
+  (setq my-tramp-ssh-completions
+	'((tramp-parse-sconfig "~/.ssh/config")
+	  (tramp-parse-sknownhosts "~/.ssh/known_hosts")))
 
-(mapc
- (lambda (method)
-   (tramp-set-completion-function method my-tramp-ssh-completions))
- '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh" "sshx"))
+  (mapc
+   (lambda (method)
+     (tramp-set-completion-function method my-tramp-ssh-completions))
+   '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh" "sshx")))
 
 #+END_SRC
 
@@ -1087,6 +1084,7 @@ org-mode agenda, allowing me to insert my outlook agenda directly into org.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package excorporate
+  :commands excorporate
   :custom
   (excorporate-configuration "adam.washington@stfc.ac.uk"))
 
@@ -1594,10 +1592,9 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package emojify
+  :hook ((text-mode jabber-console-mode) . emojify-mode)
   :custom
-  (emojify-display-style 'unicode) ; :-)
-  :config
-  (global-emojify-mode))
+  (emojify-display-style 'unicode)) ; :-)
 
  #+END_SRC
 
@@ -2136,11 +2133,12 @@ Persp mode gives named window groups
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
-  :after persp-mode
+  :demand t
   :custom
   (spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package spaceline-all-the-icons
+  :demand t
   :after (spaceline all-the-icons)
   :config
   (spaceline-all-the-icons-theme)
