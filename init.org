@@ -1970,6 +1970,7 @@ own hotkey.  Why not steal F5 from the browser?
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package counsel
+  :after ivy
   :demand t
   :bind   (("C-s" . swiper)
 	   ("C-c C-r" . ivy-resume)
