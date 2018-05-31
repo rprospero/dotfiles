@@ -985,6 +985,7 @@ notmuch is a wonderful little utility for managing my mail
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package elfeed
   :bind (("C-c c" . org-capture))
+  :commands (elfeed)
   :ensure t
   :custom
   (elfeed-feeds
