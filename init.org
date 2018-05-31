@@ -17,14 +17,14 @@ desire
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
+(customize-set-variable 'use-package-always-ensure t)
 
 #+END_SRC
 
 Load the string package.  We need this for a lot of the other code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package s
-  :ensure t)
+(use-package s)
 
 #+END_SRC
 
@@ -34,7 +34,7 @@ Load the string package.  We need this for a lot of the other code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil
-  :ensure t
+  :demand t
   :init (setq evil-want-integration nil)
   :hook (git-commit-mode . evil-insert-state)
   :custom
@@ -63,7 +63,6 @@ bindings
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package general
-  :ensure t
   :custom
   (general-default-prefix "SPC")
   (general-default-non-normal-prefix "M-SPC")
@@ -113,7 +112,6 @@ frustrating
   :after evil
   :custom
   (evil-collection-setup-minibuffer t)
-  :ensure t
   :config
   (evil-collection-init))
 
@@ -126,7 +124,6 @@ frustrating
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package which-key
   :diminish which-key-mode
-  :ensure t
   :custom
   (which-key-show-operator-state-maps t)
   :config
@@ -138,8 +135,7 @@ frustrating
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-magit
-  :after (evil magit)
-  :ensure t)
+  :after (evil magit))
   #+END_SRC
 
 *** evil org mode
@@ -147,7 +143,6 @@ frustrating
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-org
   :diminish evil-org-mode
-  :ensure t
   :after (org evil)
   :hook ((org-mode . evil-org-mode)
 	 (evil-org-mode . evil-org-set-key-theme)))
@@ -160,7 +155,6 @@ source code
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-indent-plus
   :after evil
-  :ensure t
   :config
   (evil-indent-plus-default-bindings))
 
@@ -178,7 +172,6 @@ highlight to indicate that a 2f/2F will still find the correct word.
 
 (use-package evil-quickscope
   :after evil
-  :ensure t
   :config
   (global-evil-quickscope-mode 1))
 
@@ -192,7 +185,6 @@ exact regions chosen.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-goggles
   :after evil
-  :ensure t
   :config
   (evil-goggles-mode))
 
@@ -209,7 +201,6 @@ necessary.
 
 (use-package evil-text-object-python
   :after evil
-  :ensure t
   :hook (python-mode . evil-text-object-python-add-bindings))
 
 #+END_SRC
@@ -221,7 +212,6 @@ necessary.
 
 (use-package evil-matchit
   :after evil
-  :ensure t
   :config
   (global-evil-matchit-mode 1))
 
@@ -233,7 +223,6 @@ necessary.
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-escape
   :after evil
-  :ensure t
   :diminish evil-escape-mode
   :custom
   (evil-escape-unordered-key-sequence t)
@@ -252,7 +241,6 @@ lines or characters I'm looking at 90% of the time when using evil.
 
 (use-package evil-easymotion
   :after evil
-  :ensure t
   :config
   (evilem-default-keybindings "RET"))
 
@@ -267,7 +255,6 @@ evil-nerd-commenter sould never get working right
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-commentary
   :after evil
-  :ensure t
   :config
   (evil-commentary-mode))
 #+END_SRC
@@ -279,7 +266,6 @@ evil-nerd-commenter sould never get working right
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-numbers
   :after evil
-  :ensure t
   :general
   (:prefix 'nil :infix "g"
   "+" 'evil-numbers/inc-at-pt
@@ -435,7 +421,6 @@ Use diminish to stop minor modes from taking over the entire taskbar.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package diminish
-  :ensure t
   :config
   (diminish 'auto-revert-mode "")
   (diminish 'auto-fill-mode "")
@@ -544,17 +529,15 @@ readable format, instead of just a raw byte counts
 Get dired to intergate with imenu, since that just makes sense.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package dired-imenu
-  :ensure t)
+(use-package dired-imenu)
 
 #+END_SRC
 
-Direct Quick Sort offers more sorting optins than just name and time
+Direct Quick Sort offers more sorting options than just name and time
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package dired-quick-sort
-  :ensure t
   :config
   (dired-quick-sort-setup))
 #+END_SRC
@@ -563,8 +546,7 @@ Dired-collapse gets rid of annoying chains of single file directories
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(use-package dired-collapse
-  :ensure t)
+(use-package dired-collapse)
 
 #+END_SRC
 
@@ -576,7 +558,6 @@ When eshell can't find a completion, let fish take a shot at it
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package fish-completion
   :after eshell
-  :ensure t
   :config
   (global-fish-completion-mode))
 #+END_SRC
@@ -602,7 +583,6 @@ Always revert images files without asking.
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
-  :ensure t
   :custom
   (diff-switches "-u")
   (magit-commit-arguments (quote ("--gpg-sign=0D2B93AB0C87BAF1")))
@@ -619,7 +599,6 @@ Always revert images files without asking.
 
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package magithub
-  :ensure t
   :after magit
   :config (magithub-feature-autoinject t))
 #+END_SRC
@@ -627,8 +606,7 @@ Always revert images files without asking.
 ** ledger-mode
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package ledger-mode
-  :ensure t)
+(use-package ledger-mode)
  #+END_SRC
 
 
@@ -654,7 +632,6 @@ Handles the generation of project skeletons
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package skeletor
-  :ensure t
   :custom
   (skeletor-project-directory "~/Code"))
 
@@ -685,7 +662,6 @@ Let's try and make elisp symbols pretty!
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package haskell-mode
-  :ensure t
   :custom
   (haskell-tags-on-save t)
   :config
@@ -763,14 +739,13 @@ Let's try and make elisp symbols pretty!
 *** intero
 
   #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package intero :ensure t)
+(use-package intero)
   #+END_SRC
 
 ** flymake-jshint
 
  #+BEGIN_SRC emacs-lisp :tangle no
 (use-package flymake-jshint
-  :ensure t
   :config
   (flymake-jshint-load))
  #+END_SRC
@@ -810,8 +785,7 @@ Add support to python mode for finding errors
 Add mypy for doing type checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package flycheck-mypy
-  :ensure t)
+(use-package flycheck-mypy)
 
 #+END_SRC
 
@@ -819,7 +793,6 @@ Add mypy for doing type checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
-	     :ensure t
 	     :hook (prog-mode . rainbow-delimiters-mode))
  #+END_SRC
 ** Systemd
@@ -827,8 +800,7 @@ Add mypy for doing type checking
 I need to be able to edit systemd service files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package systemd
-  :ensure t)
+(use-package systemd)
 
 #+END_SRC
 
@@ -841,8 +813,7 @@ Add nix-mode for editting nix files
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(use-package nix-mode
-  :ensure t)
+(use-package nix-mode)
 
 #+END_SRC
 * Communication Tools
@@ -882,7 +853,6 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package jabber
-  :ensure t
   :custom
    (jabber-chat-buffer-show-avatar nil)
    (jabber-vcard-avatars-retrieve nil)
@@ -924,7 +894,6 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 (use-package twittering-mode
 	     :bind (("C-c t" . twit))
 	     :hook (twittering-edit-mode . company-mode)
-	     :ensure t
 	     :custom
 	     (twittering-use-master-password t)
 	     (twittering-timer-interval 30))
@@ -934,8 +903,7 @@ I customise the eww bindings to make them more [[evil][VimFx]]
 ** sx
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package sx
-  :ensure t)
+(use-package sx)
  #+END_SRC
 
 
@@ -995,7 +963,6 @@ notmuch is a wonderful little utility for managing my mail
      (:name "Today's mail" :query "date:0d..")
      (:name "promotional" :query "to:promotional tag:inbox")
      (:name "SasView" :query "Sas from:notifications@github.com"))))
-  :ensure t
   :custom-face
   (notmuch-search-unread-face ((t (:foreground "#859900")))))
 #+END_SRC
@@ -1005,7 +972,6 @@ notmuch is a wonderful little utility for managing my mail
 (use-package elfeed
   :bind (("C-c c" . org-capture))
   :commands (elfeed)
-  :ensure t
   :custom
   (elfeed-feeds
    '(("http://www.xkcd.org/atom.xml" comic)
@@ -1121,7 +1087,6 @@ org-mode agenda, allowing me to insert my outlook agenda directly into org.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package excorporate
-  :ensure t
   :custom
   (excorporate-configuration "adam.washington@stfc.ac.uk"))
 
@@ -1468,8 +1433,7 @@ expected local contacting payment.
  should never need to think about it again.
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package htmlize
-  :ensure t)
+(use-package htmlize)
 
  #+END_SRC
 
@@ -1492,7 +1456,6 @@ in our org-mode files.  The manual can be found at
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package org-edna
-  :ensure t
   :config
   (org-edna-load))
 
@@ -1555,7 +1518,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package auctex
-  :ensure t
   :mode ("\\.tex\\'" . TeX-latex-mode))
 
 #+END_SRC
@@ -1586,7 +1548,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package langtool
-  :ensure t
   :config
   (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
  #+END_SRC
@@ -1597,8 +1558,7 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package writegood-mode
   :diminish writegood-mode
-  :hook (text-mode latex-mode org-mode)
-  :ensure t)
+  :hook (text-mode latex-mode org-mode))
  #+END_SRC
 
 * Toys
@@ -1607,7 +1567,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package encourage-mode
   :diminish encourage-mode
-  :ensure t
   :init (encourage-mode))
 
 
@@ -1616,8 +1575,7 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 ** selectric-mode
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package selectric-mode
-  :ensure t)
+(use-package selectric-mode)
 
 
  #+END_SRC
@@ -1636,7 +1594,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package emojify
-  :ensure t
   :custom
   (emojify-display-style 'unicode) ; :-)
   :config
@@ -1651,7 +1608,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-window
-  :ensure t
   :bind (("M-z" . ace-window))
   :custom
   (aw-keys '(?f ?j ?d ?k ?s ?l ?a ?g ?h ?r ?u ?e ?i ?w ?o ?n ?c ?m ?v )))
@@ -1676,8 +1632,7 @@ really need to tweak the customisation.
 Use the all-the-icons package to get icon fonts.
 
  #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package all-the-icons
-  :ensure t)
+(use-package all-the-icons)
  #+END_SRC
 
 Automatically display file icons in dired.
@@ -1685,7 +1640,6 @@ Automatically display file icons in dired.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package all-the-icons-dired
-  :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
 
 #+END_SRC
@@ -1694,7 +1648,6 @@ Display icons when switching buffers
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package all-the-icons-ivy
-  :ensure t
   :config
   (all-the-icons-ivy-setup))
 
@@ -1708,15 +1661,13 @@ I've been trying to get into avy, with moderate success.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package avy
   :bind
-  (("M-d" . avy-goto-char-timer))
-  :ensure t)
+  (("M-d" . avy-goto-char-timer)))
 #+END_SRC
 
 ** company
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company
-  :ensure t
   :hook (prog-mode . company-mode)
   :bind (("M-/" . company-complete))
   :custom
@@ -1733,7 +1684,6 @@ This should allow me to more easily type emoji.  Because that's what my life has
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-emoji
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-emoji))
 
@@ -1748,7 +1698,6 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-math
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-math-symbols-unicode))
 
@@ -1761,7 +1710,6 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-qml
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-qml))
 
@@ -1772,7 +1720,6 @@ Let's use company-math mode so that we don't have to keep using the TeX input me
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-auctex
-  :ensure t
   :after (company latex))
 
 #+END_SRC
@@ -1786,8 +1733,7 @@ projects (and not require greping my way around all of the time)
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package imenu-anywhere
-  :general (:keymaps 'override "i" 'ivy-imenu-anywhere)
-  :ensure t)
+  :general (:keymaps 'override "i" 'ivy-imenu-anywhere))
 
 #+END_SRC
 
@@ -1797,7 +1743,6 @@ projects (and not require greping my way around all of the time)
 
 (use-package eyebrowse
   :disabled t
-  :ensure t
   :general
   (:infix "w"
    "j" 'eyebrowse-create-window-config
@@ -1845,7 +1790,6 @@ projects (and not require greping my way around all of the time)
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package hydra
-  :ensure t
   :config
 
   (defhydra hydra-flycheck ()
@@ -1927,8 +1871,7 @@ _q_uit		_=_ equalise
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(use-package ivy-hydra
-  :ensure t)
+(use-package ivy-hydra)
 
 #+END_SRC
 
@@ -1969,7 +1912,6 @@ own hotkey.  Why not steal F5 from the browser?
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package keyfreq
-  :ensure t
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
@@ -1981,7 +1923,6 @@ own hotkey.  Why not steal F5 from the browser?
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ivy
   :general (:keymaps 'override :infix "x" "b" 'ivy-switch-buffer)
-  :ensure t
   :diminish ivy-mode)
  #+END_SRC
 
@@ -2013,7 +1954,6 @@ own hotkey.  Why not steal F5 from the browser?
 	  "8 RET" 'counsel-unicode-char)
   ("/" 'swiper "?" 'swiper-all)
   :diminish counsel-mode
-  :ensure t
   :custom
   (ivy-use-virtual-buffers t)
   (counsel-find-file-at-point t)
@@ -2053,7 +1993,6 @@ from time to time and see if anything has improved.
 	      '("HTML" "CSS")))
 
 (use-package counsel-dash
-  :ensure t
   :hook
   ((python-mode . python-set-docsets)
    (elisp-mode . elisp-set-docsets)
@@ -2072,7 +2011,6 @@ from time to time and see if anything has improved.
 
   #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flyspell-correct-ivy
-  :ensure t
   :config
   (require 'flyspell-correct-ivy))
   #+END_SRC
@@ -2082,7 +2020,6 @@ from time to time and see if anything has improved.
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package link-hint
-  :ensure t
   :bind
   ("M-o" . link-hint-open-link))
  #+END_SRC
@@ -2091,7 +2028,6 @@ from time to time and see if anything has improved.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ace-link
-  :ensure t
   :general
   (:prefix 'nil :infil 'nil :keymaps 'org-mode-map
   "M-o" 'ace-link-org)
@@ -2106,7 +2042,6 @@ Persp mode gives named window groups
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package persp-mode
-  :ensure t
   :general
   (:infix "w"
 	  :keymaps 'override
@@ -2138,7 +2073,6 @@ Persp mode gives named window groups
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
-  :ensure t
   :demand t
   :general
   (:infix "p"
@@ -2184,8 +2118,7 @@ Persp mode gives named window groups
    "f" 'counsel-projectile
    "b" 'counsel-projectile-switch-to-buffer
    "p" 'counsel-projectile-switch-project
-   "g" 'counsel-projectile-rg)
-  :ensure t)
+   "g" 'counsel-projectile-rg))
 #+END_SRC
 
 
@@ -2203,12 +2136,11 @@ Persp mode gives named window groups
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package spaceline
-  :ensure t
+  :after persp-mode
   :custom
   (spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package spaceline-all-the-icons
-  :ensure t
   :after (spaceline all-the-icons)
   :config
   (spaceline-all-the-icons-theme)
@@ -2226,7 +2158,6 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package yasnippet
-  :ensure t
   :custom
   (yas-indent-line 'fixed)
   :general
@@ -2289,7 +2220,6 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package whitespace-cleanup-mode
-  :ensure t
   :diminish whitespace-cleanup-mode
   :config
   (global-whitespace-cleanup-mode))
@@ -2300,7 +2230,6 @@ Yasnippets provide programmable skeletons for filling out boilerplate
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package window-purpose
-  :ensure t
   :after (ivy)
   :general
   (:infix "xr"
