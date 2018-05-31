@@ -1334,33 +1334,6 @@ At some point, I need to turn this into a proper package.
   (require 'org-agenda))
 #+END_SRC
 
-Display appointment reminders in X when available.  I stole this code
-from somewhere and should give proper credit.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(defun kdialog-popup (title msg)
-  "Show a popup if we're on X, or echo it otherwise; TITLE is the title
-of the message, MSG is the context.
-
-Code stolen from: http://emacs-fu.blogspot.co.uk/2009/11/showing-pop-ups.html
-"
-
-  (interactive)
-  (if
-      (eq window-system 'x)
-      (shell-command
-       (concat "kdialog --title \"" title
-	       "\" --passivepopup \""  msg
-	       "\""))
-    (message (concat title ": " msg))))
-
-(defun kdialog-appt-display (min-to-appt new-time msg)
-  (kdialog-popup (format "Appointment in %s minute(s)" min-to-appt) msg))
-(setq appt-disp-window-function (function kdialog-appt-display))
-
-#+END_SRC
-
 ** Calculate Local Contacting
 
 The code below calculates uses the org-calendar to calculate the
@@ -1456,24 +1429,6 @@ in our org-mode files.  The manual can be found at
 
 ** LaTeX
 
-Include useful mode hooks when moving into latex mode
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(setq TeX-PDF-mode t)
-(setq TeX-view-program-list (quote (("Okular" "okular --unique %o#src:%n%b"))))
-(setq TeX-view-program-selection
-   (quote
-    (((output-dvi style-pstricks)
-      "dvips and gv")
-     (output-dvi "Okular")
-     (output-pdf "Evince")
-     (output-html "xdg-open"))))
- #+END_SRC
-
  I like for each sentence in a LaTeX document to be its own line.
  That way, when I'm editing, only the relevant sections get marked in
  the version control, instead of the entire paragraph.  This code
@@ -1508,8 +1463,22 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package auctex
+  :custom
+  (TeX-PDF-mode t)
+  (TeX-view-program-list (quote (("Okular" "okular --unique %o#src:%n%b"))))
+  (TeX-view-program-selection
+   (quote
+    (((output-dvi style-pstricks)
+      "dvips and gv")
+     (output-dvi "Okular")
+     (output-pdf "Evince")
+     (output-html "xdg-open"))))
+  :hook
+  (LaTeX-mode-hook . visual-line-mode)
+  (LaTeX-mode-hook . auto-fill-mode)
+  (LaTeX-mode-hook . flyspell-mode)
+  (LaTeX-mode-hook . LaTeX-math-mode)
   :mode ("\\.tex\\'" . TeX-latex-mode))
-
 #+END_SRC
 ** Text Mode
 
@@ -1538,8 +1507,8 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package langtool
-  :config
-  (setq langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
+  :custom
+  (langtool-language-tool-jar "~/bin/LanguageTool-3.5/languagetool-commandline.jar"))
  #+END_SRC
 
 
