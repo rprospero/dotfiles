@@ -509,20 +509,13 @@ single directory.
 
 Dired is a wonderful way of handling directories.
 
-Setting dired-dwim-target causes dired to default to sending files to
-the directory in the other dired window, making copying files between
-two directories far more reasonable.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(setq dired-dwim-target t)
-
-#+END_SRC
-
-Adding the =h= switch onto dired listing gives file sizes in a human
-readable format, instead of just a raw byte counts
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(setq dired-listing-switches "-alh")
+(use-package dired
+  :commands dired
+  :custom
+  (dired-dwim-target t)
+  (dired-listing-switches "-alh"))
 
 #+END_SRC
 
