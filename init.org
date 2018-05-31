@@ -2117,7 +2117,10 @@ Persp mode gives named window groups
 	  "w" 'persp-save-state-to-file
 	  "W" 'persp-save-to-file-by-names
 	  "l" 'persp-load-state-from-file
-	  "L" 'persp-load-from-file-by-names))
+	  "L" 'persp-load-from-file-by-names)
+  :config
+  (persp-mode 1))
+
 
 #+END_SRC
 
