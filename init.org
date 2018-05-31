@@ -75,6 +75,7 @@ bindings
    :name general-simulate-C-c_C-c-in-emacs-state)
 
   (general-define-key
+   :keymaps 'override
    "cc" #'general-simulate-C-c_C-c-in-emacs-state)
 
   (general-define-key
@@ -83,6 +84,7 @@ bindings
 
   (general-define-key
    :infix "x"
+   :keymaps 'override
    "s" 'save-buffer
    "B" 'ibuffer
    "k" 'kill-this-buffer
@@ -1774,7 +1776,7 @@ projects (and not require greping my way around all of the time)
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package imenu-anywhere
-  :general ("i" 'ivy-imenu-anywhere)
+  :general (:keymaps 'override "i" 'ivy-imenu-anywhere)
   :ensure t)
 
 #+END_SRC
@@ -1968,7 +1970,7 @@ own hotkey.  Why not steal F5 from the browser?
 
  #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ivy
-  :general (:infix "x" "b" 'ivy-switch-buffer)
+  :general (:keymaps 'override :infix "x" "b" 'ivy-switch-buffer)
   :ensure t
   :diminish ivy-mode)
  #+END_SRC
@@ -2048,7 +2050,7 @@ from time to time and see if anything has improved.
    (haskell-mode . haskell-set-docsets)
    (html-mode . html-set-docsets))
   :general
-  (:infix "z"
+  (:keymaps 'override :infix "z"
   "d" 'counsel-dash)
   :custom
   (counsel-dash-browser-func 'eww)
@@ -2127,6 +2129,7 @@ Persp mode gives named window groups
   :demand t
   :general
   (:infix "p"
+   :keymaps 'override
    "xe" 'projectile-run-eshell
    "xs" 'projectile-run-shell
    "xt" 'projectile-run-term
@@ -2164,6 +2167,7 @@ Persp mode gives named window groups
   :after (projectile counsel)
   :general
   (:infix "p"
+   :keymaps 'override
    "f" 'counsel-projectile
    "b" 'counsel-projectile-switch-to-buffer
    "p" 'counsel-projectile-switch-project
