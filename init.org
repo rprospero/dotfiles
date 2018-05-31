@@ -1569,13 +1569,6 @@ Auctex is a nice TeX environment for emacs.  I used it constantly in working on 
 
  #+END_SRC
 
-** selectric-mode
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package selectric-mode)
-
-
- #+END_SRC
 
 
 ** Tidal
