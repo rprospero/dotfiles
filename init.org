@@ -1776,6 +1776,7 @@ projects (and not require greping my way around all of the time)
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package eyebrowse
+  :disabled t
   :ensure t
   :general
   (:infix "w"
@@ -2077,6 +2078,37 @@ from time to time and see if anything has improved.
   (ace-link-setup-default))
 #+END_SRC
 
+
+** persp
+
+Persp mode gives named window groups
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package persp-mode
+  :ensure t
+  :general
+  (:infix "w"
+	  :keymaps 'override
+	  "n" 'persp-next
+	  "p" 'persp-prev
+	  "s" 'persp-frame-switch
+	  "S" 'persp-window-switch
+	  "r" 'persp-rename
+	  "c" 'persp-copy
+	  "C" 'persp-kill
+	  "a" 'persp-add-buffer
+	  "b" 'persp-switch-to-buffer
+	  "t" 'persp-temporarily-display-buffer
+	  "i" 'persp-import-buffers
+	  "I" 'persp-import-win-conf
+	  "k" 'persp-remove-buffer
+	  "K" 'persp-kill-buffer
+	  "w" 'persp-save-state-to-file
+	  "W" 'persp-save-to-file-by-names
+	  "l" 'persp-load-state-from-file
+	  "L" 'persp-load-from-file-by-names))
+
+#+END_SRC
 
 ** projectile
 
