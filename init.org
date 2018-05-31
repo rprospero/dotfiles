@@ -47,8 +47,15 @@ Load the string package.  We need this for a lot of the other code.
    reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
   :config
   (evil-mode)
-  (add-hook 'git-commit-mode-hook #'evil-insert-state))
- #+END_SRC
+  (add-hook 'git-commit-mode-hook #'evil-insert-state)
+  (evil-define-operator evil-narrow-op (begin end type)
+    "Evil indirect *narrow* operator."
+    (interactive "<R>")
+    (cond ((buffer-narrowed-p) (widen))
+	  (t (narrow-to-region begin end))))
+
+  (define-key evil-motion-state-map (kbd "g n") #'evil-narrow-op))
+#+END_SRC
 
 *** general
 
