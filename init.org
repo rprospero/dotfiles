@@ -1786,33 +1786,27 @@ projects (and not require greping my way around all of the time)
     ("g" customize-apropos-groups "groups")
     ("o" customize-apropos-options "options"))
   (general-define-key
-   " f" 'hydra-apropos/body)
+   "h" 'hydra-apropos/body)
 
   (defhydra hydra-windows (:hint nil)
-   "
-Movement^^	^Resize^	^Split^         ^Dedicate^
-----------------------------------------------------------------
-_h_ ←		_H_ X←	_|_ vertical	_d_ purpose
-_j_ ↓		_J_ X↓^	_-_ horizontal	_D_ buffer
-_k_ ↑		_K_ X↑^	_x_ close
-_l_ →		_L_ X→
-_q_uit		_=_ equalise
-"
-   ("j" windmove-down)
-   ("k" windmove-up)
-   ("h" windmove-left)
-   ("l" windmove-right)
-   ("J" shrink-window)
-   ("K" enlarge-window)
-   ("H" shrink-window-horizontally)
-   ("L" enlarge-window-horizontally)
-   ("=" balance-windows)
-   ("-" split-window-below)
-   ("|" split-window-right)
-   ("x" delete-window)
-   ("d" purpose-toggle-window-purpose-dedicated)
-   ("D" purpose-toggle-window-buffer-dedicated)
-   ("q" nil))
+   " "
+   ("z" ace-window "ace" :column "Movement")
+   ("j" windmove-down "↓" :column "Movement")
+   ("k" windmove-up "↑" :column "Movement")
+   ("h" windmove-left "←" :column "Movement")
+   ("l" windmove-right "→" :column "Movement")
+   ("J" shrink-window "X↓" :column "Resize")
+   ("K" enlarge-window "X↑" :column "Resize")
+   ("H" shrink-window-horizontally "X←" :column "Resize")
+   ("L" enlarge-window-horizontally "X→" :column "Resize")
+   ("=" balance-windows "equalise" :column "Resize")
+   ("-" split-window-below "vertical" :column "Split")
+   ("|" split-window-right "horizontal" :column "Split")
+   ("x" delete-window "close" :column "Split")
+   ("d" purpose-toggle-window-purpose-dedicated "purpose" :column "Dedicate")
+   ("D" purpose-toggle-window-buffer-dedicated "buffer" :column "Dedicate")
+   ("q" nil "qui menu" :color blue :column nil))
+
   (general-define-key
    " W" 'hydra-windows/body))
 #+END_SRC
