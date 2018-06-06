@@ -1789,7 +1789,7 @@ projects (and not require greping my way around all of the time)
    "h" 'hydra-apropos/body)
 
   (defhydra hydra-windows (:hint nil)
-   " "
+   "Manage Windows"
    ("z" ace-window "ace" :column "Movement")
    ("j" windmove-down "↓" :column "Movement")
    ("k" windmove-up "↑" :column "Movement")
@@ -1805,7 +1805,7 @@ projects (and not require greping my way around all of the time)
    ("x" delete-window "close" :column "Split")
    ("d" purpose-toggle-window-purpose-dedicated "purpose" :column "Dedicate")
    ("D" purpose-toggle-window-buffer-dedicated "buffer" :column "Dedicate")
-   ("q" nil "qui menu" :color blue :column nil))
+   ("q" nil "quit" :color blue :column nil))
 
   (general-define-key
    " W" 'hydra-windows/body))
